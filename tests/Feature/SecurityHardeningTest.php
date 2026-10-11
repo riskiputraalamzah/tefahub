@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
 use Tests\TestCase;
 
@@ -26,6 +27,8 @@ class SecurityHardeningTest extends TestCase
 
     public function test_ai_chat_is_rate_limited(): void
     {
+        Http::fake();
+
         for ($attempt = 0; $attempt < 20; $attempt++) {
             $this->postJson(route('ai.chat'), ['message' => "Pertanyaan keamanan {$attempt}"])
                 ->assertOk();

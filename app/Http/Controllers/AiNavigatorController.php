@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
@@ -610,6 +609,11 @@ class AiNavigatorController extends Controller
 
     /**
      * Handle an incoming chat message with smart intent matching and offline resiliency.
+     *
+     * Priority order:
+     * 1. Gemini API — for any open-ended / conversational / question messages.
+     * 2. KB intent matching — only for exact short-form navigation commands.
+     * 3. Smart fallback — when API is unavailable.
      */
     public function chat(Request $request): JsonResponse
     {
@@ -621,68 +625,89 @@ class AiNavigatorController extends Controller
         ])->validate();
 
         $userMessage = trim((string) $request->input('message'));
-        $role = auth()->user()?->role ?? 'guest';
-        $cacheKey = 'ai_nav_v8_'.$role.'_'.md5(mb_strtolower($userMessage));
+        $history = is_array($request->input('history', [])) ? $request->input('history', []) : [];
 
-        // Use one cache read; database-backed caches would otherwise make two queries.
-        $cachedResponse = Cache::get($cacheKey);
-        if ($cachedResponse !== null) {
-            return response()->json($cachedResponse);
-        }
-
-        // 1. Answer explicit major-interest questions before broad knowledge-base matches.
+        // 1. KB matching for major recommendations (interest quiz)
         $majorRecommendation = $this->findMajorRecommendation($userMessage);
         if ($majorRecommendation !== null) {
-            Cache::put($cacheKey, $majorRecommendation, now()->addHours(24));
-
             return response()->json($majorRecommendation);
         }
 
-        // 2. Intent-based knowledge base matching (instant, accurate, 100% offline resilient)
+        // 2. KB matching for specific actionable school navigation queries
         $local = $this->matchIntent($userMessage);
         if ($local !== null) {
-            $result = [
+            return response()->json([
                 'answer' => $local['answer'],
                 'route' => $local['route'] ? $this->resolveRoute($local['route']) : null,
                 'label' => $local['label'],
                 'category' => $local['category'] ?? 'GENERAL',
-                'suggestions' => $local['suggestions'] ?? [
-                    'Bantuan Admin Sekolah',
-                    'Jelajahi Fitur Lain',
-                ],
+                'suggestions' => $local['suggestions'] ?? ['Bantuan Admin Sekolah', 'Jelajahi Fitur Lain'],
                 'source' => 'kb',
-            ];
-            Cache::put($cacheKey, $result, now()->addHours(24));
-
-            return response()->json($result);
+            ]);
         }
 
-        // 3. Try Gemini API for questions not covered by the TEFA-Hub knowledge base.
-        $history = $request->input('history', []);
+        // 3. Pure AI response from API key: handles all general questions, conversational queries, etc.
         try {
-            $geminiAnswer = $this->askGemini($userMessage, is_array($history) ? $history : []);
-            if ($geminiAnswer !== null) {
+            $geminiAnswer = $this->askGemini($userMessage, $history);
+            if ($geminiAnswer !== null && trim($geminiAnswer) !== '') {
                 $category = $this->detectCategory($userMessage);
                 $routeKey = $this->detectRelevantRouteKey($userMessage);
-                $result = [
+
+                return response()->json([
                     'answer' => $geminiAnswer,
                     'route' => $routeKey ? $this->resolveRoute($routeKey) : null,
                     'label' => $this->detectRelevantLabel($userMessage),
                     'category' => $category,
                     'suggestions' => $this->generateSuggestionsForCategory($category),
                     'source' => 'gemini',
-                ];
-                Cache::put($cacheKey, $result, now()->addHours(6));
-
-                return response()->json($result);
+                ]);
             }
         } catch (\Throwable $e) {
-            Log::info('Gemini API fallback triggered: '.$e->getMessage());
+            Log::info('Gemini API call exception: '.$e->getMessage());
         }
 
-        // Do not cache an unavailable-provider response. A later request may succeed
-        // as soon as the provider or network has recovered.
+        // 4. Fallback when AI API is unavailable
         return response()->json($this->generateSmartFallback($userMessage));
+    }
+
+    /**
+     * Determine whether a user message is open-ended / conversational.
+     * These must always go to Gemini first instead of the static KB.
+     */
+    private function isOpenEndedQuestion(string $message): bool
+    {
+        $lower = mb_strtolower(trim($message));
+
+        // If it's very short (≤ 4 words) and matches an exact KB greeting/command, use KB.
+        $wordCount = str_word_count($lower);
+        if ($wordCount <= 3) {
+            return false;
+        }
+
+        // Sentences over 6 words are almost always conversational.
+        if ($wordCount >= 6) {
+            return true;
+        }
+
+        // Contains Indonesian question/conversation markers.
+        $questionMarkers = [
+            'apa', 'bagaimana', 'berapa', 'kapan', 'dimana', 'siapa', 'kenapa', 'mengapa',
+            'apakah', 'boleh', 'bisa', 'gimana', 'tolong', 'jelaskan', 'ceritakan',
+            'bantu', 'tanya', 'minta', 'ingin tahu', 'mau tanya', 'mohon',
+        ];
+
+        foreach ($questionMarkers as $marker) {
+            if (str_contains($lower, $marker)) {
+                return true;
+            }
+        }
+
+        // Contains a question mark.
+        if (str_contains($message, '?')) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -690,22 +715,48 @@ class AiNavigatorController extends Controller
      *
      * @return array{answer: string, route: string|null, label: string|null, category?: string, suggestions?: string[]}|null
      */
+    /**
+     * Match user query against intent-based knowledge base.
+     *
+     * STRICT matching only — only exact or very close matches trigger KB responses.
+     * Open-ended / conversational messages are handled by Gemini before this runs.
+     */
     private function matchIntent(string $message): ?array
     {
-        $lower = mb_strtolower($message);
+        $lower = mb_strtolower(trim($message));
+        $wordCount = str_word_count($lower);
 
-        // Pass 1: Explicit service requests. Free-form questions must reach the AI
-        // provider instead of being forced into an only partially related template.
+        // Refuse to match if message is excessively long.
+        if ($wordCount > 30) {
+            return null;
+        }
+
+        // Comparison or multi-major queries should go to AI provider instead of single KB intent
+        $majors = ['rpl', 'tei', 'titl', 'tkr', 'tpm'];
+        $matchedMajorCount = 0;
+        foreach ($majors as $m) {
+            if ($this->containsPhrase($lower, $m)) {
+                $matchedMajorCount++;
+            }
+        }
+        if ($matchedMajorCount > 1 || str_contains($lower, 'perbedaan') || str_contains($lower, 'beda') || str_contains($lower, 'banding')) {
+            return null;
+        }
+
         $bestIntent = null;
         $bestIntentScore = 0;
 
         foreach ($this->intents as $entry) {
             foreach ($entry['intents'] as $intent) {
-                $intentLength = mb_strlen(str_replace(' ', '', $intent));
-                // Lower threshold to 6 chars (from 10) for common short intents like 'hai', 'halo'
-                $minLength = $intentLength <= 5 ? 3 : 6;
-                if ($intentLength >= $minLength && str_contains($lower, $intent)) {
-                    $score = mb_strlen($intent) * 4;
+                $intentChars = mb_strlen(str_replace(' ', '', $intent));
+
+                // Require the intent phrase to be at least 4 chars to avoid false positives.
+                if ($intentChars < 4) {
+                    continue;
+                }
+
+                if ($this->containsPhrase($lower, $intent)) {
+                    $score = mb_strlen($intent) * 5;
                     if ($score > $bestIntentScore) {
                         $bestIntentScore = $score;
                         $bestIntent = $entry;
@@ -718,25 +769,21 @@ class AiNavigatorController extends Controller
             return $bestIntent;
         }
 
-        // Pass 2: Keyword matching with lower threshold for longer descriptive keywords.
+        // Keyword pass — only match long multi-word phrases (≥ 10 chars) to prevent over-matching.
         $bestKeywordIntent = null;
         $bestKeywordScore = 0;
 
         foreach ($this->intents as $entry) {
             foreach ($entry['keywords'] as $keyword) {
-                $keywordLength = mb_strlen(str_replace(' ', '', $keyword));
-                if ($keywordLength >= 8 && $this->containsPhrase($lower, $keyword) && $keywordLength > $bestKeywordScore) {
-                    $bestKeywordScore = $keywordLength;
+                $keywordChars = mb_strlen(str_replace(' ', '', $keyword));
+                if ($keywordChars >= 10 && $this->containsPhrase($lower, $keyword) && $keywordChars > $bestKeywordScore) {
+                    $bestKeywordScore = $keywordChars;
                     $bestKeywordIntent = $entry;
                 }
             }
         }
 
-        if ($bestKeywordIntent !== null) {
-            return $bestKeywordIntent;
-        }
-
-        return null;
+        return $bestKeywordIntent;
     }
 
     /**
@@ -846,37 +893,43 @@ class AiNavigatorController extends Controller
         $fallbackModel = trim((string) config('services.ai_navigator.fallback_model'));
 
         if ($model === '') {
-            return null;
+            $model = 'gemini-3.1-flash-lite';
         }
 
-        $models = array_unique(array_filter([$model, $fallbackModel]));
+        $models = array_values(array_unique(array_filter([$model, $fallbackModel])));
 
         $systemInstruction = [
             'role' => 'user',
             'parts' => [[
-                'text' => 'Kamu adalah Tanya Tefa AI, asisten cerdas TEFA-Hub milik SMK Antartika 1 Sidoarjo. '
-                    .'Tugasmu adalah menjawab pertanyaan pengguna dengan ramah, informatif, dan relevan. '
-                    .'Konteks platform: TEFA-Hub adalah sistem manajemen vokasi terpadu yang mencakup PPDB Online, '
-                    .'Unit Produksi BLUD, Bursa Kerja BKK, PKL/Magang, Portal Akademik, dan fitur siswa/guru/admin. '
-                    .'Jurusan resmi di SMK Antartika 1 Sidoarjo: TPM (Teknik Pemesinan), TKR (Teknik Kendaraan Ringan), '
-                    .'RPL (Rekayasa Perangkat Lunak), TITL (Teknik Instalasi Tenaga Listrik), TEI (Teknik Elektronika Industri). '
-                    .'Aturan penting: '
-                    .'1. Jawab SESUAI pertanyaan pengguna - jangan paksakan jawaban ke topik lain. '
-                    .'2. Jika pertanyaan bersifat umum (bukan spesifik sekolah), jawab dengan wajar dan informatif. '
-                    .'3. Gunakan bahasa Indonesia yang natural, santai, dan tidak kaku. '
-                    .'4. Panjang jawaban sesuaikan dengan kompleksitas pertanyaan - bisa singkat untuk pertanyaan pendek, lebih detail untuk pertanyaan kompleks. '
-                    .'5. Jangan mengarang data spesifik seperti nomor telepon, nama guru, atau tanggal yang tidak kamu ketahui. '
-                    .'6. Jika tidak tahu jawaban spesifik, arahkan ke admin/TU sekolah dengan sopan.',
+                'text' => 'Kamu adalah Tanya Tefa AI, asisten virtual pintar, ramah, dan solutif resmi dari TEFA-Hub SMK Antartika 1 Sidoarjo. '
+                    .'Jawab semua pertanyaan umum maupun pertanyaan seputar sekolah secara murni, akurat, informatif, dan TEPAT SESUAI DENGAN APA YANG DITANYAKAN oleh pengguna. '
+                    .'Konteks SMK Antartika 1 Sidoarjo: '
+                    .'1. Profil Sekolah: SMK rujukan vokasi terakreditasi A berstatus SMK Pusat Keunggulan (SMK-PK) dan Badan Layanan Umum Daerah (BLUD). '
+                    .'2. 5 Konsentrasi Keahlian Unggulan: '
+                    .'   - TPM (Teknik Pemesinan): manufaktur mesin bubut/frais konvensional, pemrograman CNC, CAD/CAM, fabrikasi presisi industri. '
+                    .'   - TKR (Teknik Kendaraan Ringan): otomotif mobil, tune-up injeksi EFI, sistem rem/suspensi, diagnostik digital engine scanner. '
+                    .'   - RPL (Rekayasa Perangkat Lunak): pemrograman web modern (HTML, CSS, JS, PHP, Laravel), mobile apps, database SQL, UI/UX design. '
+                    .'   - TITL (Teknik Instalasi Tenaga Listrik): instalasi kelistrikan gedung/pabrik, perakitan panel distribusi, PLC, otomasi tenaga, energi terbarukan solar cell. '
+                    .'   - TEI (Teknik Elektronika Industri): mikrokontroler (Arduino, ESP32), sensor & IoT industri, robotika cerdas, kontrol sistem otomasi industri. '
+                    .'3. Fitur Utama TEFA-Hub: '
+                    .'   - PPDB Online: pendaftaran calon siswa baru, pengisian formulir, unggah berkas (KK, Akta, NISN, SKL/Rapor SMP), info jalur beasiswa dan seleksi. '
+                    .'   - Unit Produksi BLUD: etalase Teaching Factory karya siswa dan jasa industri dengan pembagian komisi bagi siswa. '
+                    .'   - BKK (Bursa Kerja Khusus) & PKL: lowongan kerja resmi dari industri mitra (DUDI), evaluasi kesiapan kerja, dan penempatan magang/PKL. '
+                    .'   - Portal Akademik: rekap nilai rapor vokasi terpadu, absensi kehadiran siswa, dan jadwal belajar. '
+                    .'ATURAN DAN GAYA MENJAWAB: '
+                    .'- SESUAI PERTANYAAN: Selalu jawab langsung apa yang ditanyakan user. Jika bertanya tentang materi/jurusan/pendaftaran/coding/apapun, berikan jawaban spesifik topik tersebut. '
+                    .'- BAHASA: Gunakan bahasa Indonesia yang ramah, sopan, komunikatif, dan alami (tidak kaku seperti robot). '
+                    .'- FORMAT: Gunakan formatting markdown (bold, bullet/numbered list) agar jawaban mudah dibaca dan menarik. '
+                    .'- REALISTIS: Jangan mengarang nomor telepon pribadi atau tanggal yang tidak pasti; sarankan ke Tata Usaha atau nomor layanan resmi sekolah jika butuh bantuan berkas fisik.',
             ]],
         ];
 
         // Build conversation history for multi-turn context
         $contents = [$systemInstruction];
 
-        // Add a model acknowledgement turn after system instruction
         $contents[] = [
             'role' => 'model',
-            'parts' => [['text' => 'Siap! Saya Tanya Tefa AI, asisten TEFA-Hub SMK Antartika 1 Sidoarjo. Ada yang bisa saya bantu?']],
+            'parts' => [['text' => 'Halo! Saya Tanya Tefa AI, siap membantu Anda seputar SMK Antartika 1 Sidoarjo dan sistem TEFA-Hub. Ada yang ingin Anda tanyakan?']],
         ];
 
         // Append previous conversation turns (max 6 turns = 3 exchanges)
@@ -897,7 +950,7 @@ class AiNavigatorController extends Controller
         $payload = [
             'contents' => $contents,
             'generationConfig' => [
-                'maxOutputTokens' => (int) config('services.ai_navigator.max_output_tokens', 400),
+                'maxOutputTokens' => (int) config('services.ai_navigator.max_output_tokens', 800),
                 'temperature' => 0.7,
                 'topP' => 0.9,
             ],
@@ -906,8 +959,8 @@ class AiNavigatorController extends Controller
         foreach ($models as $currentModel) {
             try {
                 $url = "{$baseUrl}/{$currentModel}:generateContent";
-                $response = Http::connectTimeout((int) config('services.ai_navigator.connect_timeout', 2))
-                    ->timeout((int) config('services.ai_navigator.timeout', 6))
+                $response = Http::connectTimeout((int) config('services.ai_navigator.connect_timeout', 4))
+                    ->timeout((int) config('services.ai_navigator.timeout', 12))
                     ->withHeaders([
                         'Content-Type' => 'application/json',
                         'X-goog-api-key' => $apiKey,
@@ -923,11 +976,11 @@ class AiNavigatorController extends Controller
                             return trim($part['text']);
                         }
                     }
+                } else {
+                    Log::warning("Gemini model {$currentModel} returned HTTP {$response->status()}");
                 }
-            } catch (\Throwable) {
-                // A network timeout should return the local contextual response
-                // immediately instead of making visitors wait for another timeout.
-                return null;
+            } catch (\Throwable $e) {
+                Log::warning("Gemini model {$currentModel} exception: ".$e->getMessage());
             }
         }
 

@@ -1,6 +1,20 @@
-{{-- ═══════════════════════════════════════════
-     PREMIUM TEFA-HUB ONBOARDING SPLASH ANIMATION (ONCE PER SESSION)
-     ═══════════════════════════════════════════ --}}
+<script>
+(function() {
+    try {
+        if (sessionStorage.getItem('tefa_hub_onboarding_seen')) {
+            document.documentElement.classList.add('tefa-skip-onboarding');
+        }
+    } catch(e) {}
+})();
+</script>
+<style>
+    html.tefa-skip-onboarding #tefaOnboarding {
+        display: none !important;
+        opacity: 0 !important;
+        visibility: hidden !important;
+        pointer-events: none !important;
+    }
+</style>
 <div id="tefaOnboarding" class="onboarding-overlay" role="presentation" aria-hidden="false">
     <div class="onboarding-container">
         {{-- Pure White Circular Logo Wrapper with Soft Light Shadow (No dark overlay) --}}
@@ -51,39 +65,28 @@
     document.body.classList.add('onboarding-active');
 
     function runOnboardingSequence() {
-        // Step 1: Gentle emergence of Logo Circle
+        // Step 1: Gentle fade-in emergence of Logo and Brand
         setTimeout(function() {
-            if (logoCircle) logoCircle.classList.add('is-popped');
-        }, 280);
-
-        // Step 2: Majestic, slow 360deg rotation begins (Duration ~2.7s)
-        setTimeout(function() {
-            if (logoImg) logoImg.classList.add('is-spinning');
-            if (logoCircle) logoCircle.classList.add('is-settled');
-        }, 750);
-
-        // Step 2.1: Brand text unfurls slowly & gracefully from behind the rotating logo (Duration ~2.6s)
-        setTimeout(function() {
+            if (logoCircle) logoCircle.classList.add('is-popped', 'is-settled');
             if (brandReveal) brandReveal.classList.add('is-revealed');
-        }, 1050);
+        }, 120);
 
-        // Step 3: Once fully settled (~3.7s), hold for exactly 1 second, then smoothly transition to homepage
+        // Step 2: Luxurious hold, then elegant fade-out transition to page
         setTimeout(function() {
             onboardingEl.classList.add('is-exiting');
             document.body.classList.remove('onboarding-active');
 
-            // Trigger scroll reveal observer for hero elements
             if (window.dispatchEvent) {
-                window.dispatchEvent(new Event('scroll'));
+                window.dispatchEvent(new CustomEvent('tefa-onboarding-done'));
             }
 
-            // Remove from interaction tree after smooth fade-out
+            // Remove from DOM after smooth fade-out
             setTimeout(function() {
                 onboardingEl.classList.add('is-done');
                 onboardingEl.style.display = 'none';
                 onboardingEl.setAttribute('aria-hidden', 'true');
-            }, 850);
-        }, 4750);
+            }, 650);
+        }, 1350);
     }
 
     if (document.readyState === 'loading') {

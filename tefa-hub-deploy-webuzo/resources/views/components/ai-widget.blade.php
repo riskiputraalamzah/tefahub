@@ -12,12 +12,19 @@
 {{-- Backdrop Overlay (Closes panel on tap outside) --}}
 <div id="ai-navigator-backdrop" class="ai-backdrop" aria-hidden="true"></div>
 
-{{-- Floating Trigger Button --}}
+{{-- Floating Trigger Button: Large Mascot Robot + Pill Sapaan (Matching Reference Image) --}}
 <button id="ai-toggle-btn" class="ai-trigger" type="button" aria-label="Buka Tanya Tefa AI" aria-expanded="false" aria-controls="ai-navigator-panel" title="Tanya Tefa AI">
-    <div class="ai-trigger-inner">
-        <img src="{{ asset('assets/ai.webp') }}" alt="Asisten Tanya Tefa AI" class="ai-trigger-img" width="42" height="42" loading="lazy">
-        <span class="ai-online-dot"></span>
+    {{-- Pill Sapaan Tepat di Atas / Samping Kepala Robot --}}
+    <div class="ai-pill-badge" id="ai-pill-badge" aria-hidden="true">
+        <span class="ai-pill-dot"></span>
+        <span class="ai-pill-text">Hai, tanya aku Tefa AI</span>
     </div>
+
+    {{-- Robot Mascot Container (Besar & Statis Sesuai Gambar) --}}
+    <div class="ai-mascot-wrap">
+        <img src="{{ asset('assets/image copy 5.png') }}" alt="Asisten Tanya Tefa AI" class="ai-mascot-img" width="130" height="140" loading="lazy">
+    </div>
+
     <span class="ai-trigger-badge" id="ai-notif-badge" style="display:none;"></span>
 </button>
 
@@ -28,7 +35,7 @@
     <div class="ai-header">
         <div class="ai-header-brand">
             <div class="ai-header-avatar">
-                <img src="{{ asset('assets/ai.webp') }}" alt="Tanya Tefa AI" class="ai-avatar-img" width="28" height="28">
+                <img src="{{ asset('assets/image copy 5.png') }}" alt="Tanya Tefa AI" class="ai-avatar-img" width="28" height="28">
                 <span class="ai-status-pulse"></span>
             </div>
             <div class="ai-header-info">
@@ -124,6 +131,7 @@
 
     let panel, backdrop, toggleBtn, closeBtn, conversation, form, field, submitBtn, quickActions, badge, greetCard, initLoading;
     let isOpen = false, isBusy = false, greeted = false;
+    let chatHistory = [];
     let hasPlayedAiGreeting = sessionStorage.getItem(AI_GREETING_KEY) === 'played';
 
     function speakAiGreeting() {
@@ -223,6 +231,9 @@
                 if (quickActions) quickActions.innerHTML = '';
 
                 appendQuestion(text);
+                chatHistory.push({ role: 'user', text: text });
+                if (chatHistory.length > 8) chatHistory = chatHistory.slice(-8);
+
                 if (field) field.value = '';
                 setBusy(true);
 
@@ -234,10 +245,15 @@
                             'X-CSRF-TOKEN': CSRF_TOKEN,
                             'Accept': 'application/json'
                         },
-                        body: JSON.stringify({ message: text }),
+                        body: JSON.stringify({
+                            message: text,
+                            history: chatHistory.slice(0, -1)
+                        }),
                     });
                     const data = await r.json();
                     setBusy(false);
+                    const replyText = data.answer || data.reply || 'Jawaban Anda telah diterima.';
+                    chatHistory.push({ role: 'model', text: replyText });
                     appendReply(data);
                 } catch {
                     setBusy(false);

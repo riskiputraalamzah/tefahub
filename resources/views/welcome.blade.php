@@ -11,9 +11,13 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('assets/css/landing.css') }}?v={{ filemtime(public_path('assets/css/landing.css')) }}">
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
 <body>
+
+    {{-- Cinematic GSAP Scroll Progress Indicator --}}
+    <div data-scroll-progress aria-hidden="true"></div>
 
     {{-- Premium Modern Onboarding Splash Preloader Animation --}}
     <x-onboarding />
@@ -28,24 +32,24 @@
         <div class="wrap">
 
             {{-- Left: copy & search --}}
-            <section class="hero-content reveal">
-                <div class="pill-badge">
+            <section class="hero-content">
+                <div class="pill-badge" data-anim="eyebrow">
                     <span class="pill-dot" aria-hidden="true"></span>
                     <span class="pill-text">Platform Resmi SMK Pusat Keunggulan &amp; BLUD</span>
                 </div>
 
-                <h1 class="hero-title">
+                <h1 class="hero-title" data-anim="hero-title">
                     <span class="l1"><span class="hi">Satu</span> Ekosistem Digital</span>
                     <span class="l2">untuk Seluruh</span>
                     <span class="l3">Perjalanan Siswa</span>
                 </h1>
 
-                <p class="hero-desc">
+                <p class="hero-desc" data-anim="hero-copy">
                     Akselerasikan potensi dan karier kejuruanmu dalam satu ekosistem terpercaya —
                     dari pembelajaran kurikulum industri berbasis SKKNI, unit produksi BLUD Teaching Factory, hingga rekrutmen kerja terverifikasi ke mitra DUDI nasional.
                 </p>
 
-                <div class="search-wrap">
+                <div class="search-wrap" data-anim="hero-actions">
                     <form id="heroSearchForm" class="search-box" role="search">
                         <span class="s-icon" aria-hidden="true">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
@@ -69,7 +73,7 @@
                     </form>
                 </div>
 
-                <a href="{{ route('ppdb.kuis') }}" class="hero-ai-discovery-link">
+                <a href="{{ route('ppdb.kuis') }}" class="hero-ai-discovery-link" data-anim="hero-actions">
                     <span aria-hidden="true">✨</span>
                     Coba AI Temukan Jurusanmu — hasil instan
                     <span aria-hidden="true">→</span>
@@ -77,7 +81,7 @@
             </section>
 
             {{-- Right: visual composition --}}
-            <section class="hero-visual reveal delay-1" aria-label="Visualisasi Siswa Tefa-Hub">
+            <section class="hero-visual" data-anim="hero-visual" aria-label="Visualisasi Siswa Tefa-Hub">
 
                 {{-- Modern Organic Vector Wavy Background (Unique Fluid Wave Shapes & Ambient Glow) --}}
                 <div class="hero-bubble-art" aria-hidden="true">
@@ -163,6 +167,7 @@
                         src="{{ asset('assets/image.webp') }}"
                         alt="Siswa dan Siswi SMK Tefa-Hub"
                         class="students-img"
+                        data-parallax
                     >
                 </div>
 
@@ -174,9 +179,9 @@
                     ];
                 @endphp
 
-                <div class="cards-row reveal delay-2">
+                <div class="cards-row" data-stagger>
                     @foreach ($heroCards as $card)
-                        <div class="card" role="button" tabindex="0"
+                        <div class="card" role="button" tabindex="0" data-stagger-item data-hover-card
                              onclick="window.location.href='{{ $card['href'] }}'">
                             {{-- Icon kiri --}}
                             <div class="card-icon">
@@ -204,7 +209,7 @@
     {{-- ═══════════════════════════════════════════
          PARTNER / MITRA LOGOS MARQUEE
          ═══════════════════════════════════════════ --}}
-    <section class="partners-section" aria-label="Mitra dan Partner Tefa-Hub">
+    <section class="partners-section" data-reveal aria-label="Mitra dan Partner Tefa-Hub">
         <p class="partners-label">Didukung &amp; Terintegrasi Bersama Mitra Industri Nasional</p>
         <div class="partners-track-wrapper" id="partnersWrapper">
             <div class="partners-track" id="partnersTrack">
@@ -291,12 +296,12 @@
         <div class="wrap">
 
             {{-- Left: Logo Image --}}
-            <div class="about-visual reveal-left">
-                <img src="{{ asset('assets/logo2.webp') }}" alt="Logo Tefa-Hub" class="about-logo-img">
+            <div class="about-visual" data-reveal>
+                <img src="{{ asset('assets/logo2.webp') }}" alt="Logo Tefa-Hub" class="about-logo-img" data-parallax>
             </div>
 
             {{-- Right: Content --}}
-            <div class="about-content reveal-right delay-1">
+            <div class="about-content" data-reveal>
                 <span class="about-category">TENTANG KAMI</span>
 
                 <h2 class="about-title">
@@ -317,7 +322,7 @@
     <section class="services-section" id="layanan">
         <div class="wrap">
 
-            <div class="services-header reveal">
+            <div class="services-header" data-reveal>
                 <h2 class="services-title">Layanan Unggulan Sekolah</h2>
                 <p class="services-desc">
                     Semua informasi dan kebutuhan sekolah dapat diakses dengan mudah dan praktis di satu tempat.
@@ -353,9 +358,9 @@
                 ];
             @endphp
 
-            <div class="services-grid stagger-group reveal">
+            <div class="services-grid" data-stagger>
                 @foreach ($services as $index => $service)
-                    <div class="service-card">
+                    <div class="service-card" data-stagger-item data-hover-card>
                         <div class="service-card-body">
                             <div class="service-icon">
                                 <img src="{{ asset('assets/' . $service['icon']) }}" alt="{{ $service['title'] }}">
@@ -380,7 +385,7 @@
         <div class="wrap">
 
             {{-- Left: Text & CTA --}}
-            <div class="showcase-content reveal-left">
+            <div class="showcase-content" data-reveal>
                 <span class="showcase-category">KARYA &amp; LAYANAN SISWA</span>
 
                 <h2 class="showcase-title">Dari Praktik Menjadi Karya Nyata</h2>
@@ -395,11 +400,11 @@
             </div>
 
             {{-- Right: Visual Mockup matching BKK page cards --}}
-            <div class="showcase-visual reveal-right delay-1">
+            <div class="showcase-visual" data-reveal>
                 <div class="showcase-cards">
-                    <div class="blud-card-frame showcase-card-layer showcase-card-1">
+                    <div class="blud-card-frame showcase-card-layer showcase-card-1" data-hover-card>
                         <div class="blud-card-image-wrap">
-                            <img src="{{ asset('assets/image copy 3.webp') }}" alt="Servis Berkala & Ganti Oli Mesin" class="blud-bg-img" loading="lazy" decoding="async">
+                            <img src="{{ asset('assets/image copy 3.webp') }}" alt="Servis Berkala & Ganti Oli Mesin" class="blud-bg-img" data-parallax loading="lazy" decoding="async">
                             <span class="blud-rating-badge">
                                 <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
                                 4.9
@@ -414,9 +419,9 @@
                             </div>
                         </div>
                     </div>
-                    <div class="blud-card-frame showcase-card-layer showcase-card-2">
+                    <div class="blud-card-frame showcase-card-layer showcase-card-2" data-hover-card>
                         <div class="blud-card-image-wrap">
-                            <img src="{{ asset('assets/image copy 3.webp') }}" alt="Tune-Up Injeksi & Servis Motor" class="blud-bg-img" loading="lazy" decoding="async">
+                            <img src="{{ asset('assets/image copy 3.webp') }}" alt="Tune-Up Injeksi & Servis Motor" class="blud-bg-img" data-parallax loading="lazy" decoding="async">
                             <span class="blud-rating-badge">
                                 <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
                                 5.0
@@ -444,12 +449,12 @@
         <div class="wrap">
 
             {{-- Left: ai.webp Image --}}
-            <div class="ai-visual reveal-left">
-                <img src="{{ asset('assets/ai.webp') }}" alt="Tefa AI Assistant" class="ai-img">
+            <div class="ai-visual" data-reveal>
+                <img src="{{ asset('assets/ai.webp') }}" alt="Tefa AI Assistant" class="ai-img" data-parallax>
             </div>
 
             {{-- Right: Content & 3 Cards --}}
-            <div class="ai-content reveal-right delay-1">
+            <div class="ai-content" data-reveal>
                 <span class="ai-category">BANTUAN CEPAT</span>
 
                 <h2 class="ai-title">Pusat Informasi &amp; Bantuan 24 Jam</h2>
@@ -478,9 +483,9 @@
                     ];
                 @endphp
 
-                <div class="ai-cards stagger-group reveal delay-2">
+                <div class="ai-cards" data-stagger>
                     @foreach ($aiFeatures as $index => $feat)
-                        <div class="ai-card">
+                        <div class="ai-card" data-stagger-item data-hover-card>
                             <div class="ai-card-icon">
                                 <img src="{{ asset('assets/' . $feat['icon']) }}" alt="{{ $feat['title'] }}">
                             </div>
@@ -499,7 +504,7 @@
          ═══════════════════════════════════════════ --}}
     <section class="cta-banner-section">
         <div class="wrap">
-            <div class="cta-banner-card reveal-scale">
+            <div class="cta-banner-card" data-reveal>
                 <h2 class="cta-banner-title">
                     Siapkan Masa Depanmu<br>
                     Bersama Tefa–Hub
@@ -523,43 +528,11 @@
     <x-ai-widget subtitle="Pusat Bantuan 24/7" />
 
     {{-- ═══════════════════════════════════════════
-         SCRIPTS: SCROLL REVEALS & SEARCH (120HZ OPTIMIZED)
+         SCRIPTS: SEARCH & DISCOVERY
          ═══════════════════════════════════════════ --}}
     <script>
     (function() {
-        let revealObserver = null;
-        function initWelcomeReveal() {
-            const revealElements = document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale, .stagger-group');
-            if (!revealElements.length) return;
-
-            if ('IntersectionObserver' in window) {
-                if (!revealObserver) {
-                    revealObserver = new IntersectionObserver((entries, obs) => {
-                        entries.forEach(entry => {
-                            if (entry.isIntersecting) {
-                                entry.target.classList.add('is-revealed');
-                                obs.unobserve(entry.target);
-                            }
-                        });
-                    }, {
-                        threshold: 0.08,
-                        rootMargin: '0px 0px -40px 0px'
-                    });
-                }
-
-                revealElements.forEach(el => {
-                    if (!el.classList.contains('is-revealed')) {
-                        revealObserver.observe(el);
-                    }
-                });
-            } else {
-                revealElements.forEach(el => el.classList.add('is-revealed'));
-            }
-        }
-
         function initWelcomePage() {
-            initWelcomeReveal();
-
             const heroSearchForm = document.getElementById('heroSearchForm');
             const heroSearchInput = document.getElementById('heroSearchInput');
             
@@ -610,7 +583,6 @@
 
         window.addEventListener('pageshow', function() {
             document.body.style.overflow = '';
-            initWelcomeReveal();
         });
     })();
     </script>

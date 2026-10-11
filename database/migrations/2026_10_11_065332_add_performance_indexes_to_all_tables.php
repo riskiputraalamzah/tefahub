@@ -110,6 +110,17 @@ return new class extends Migration
     /** Check whether an index already exists to keep migration idempotent. */
     private function indexExists(string $table, string $indexName): bool
     {
+        if (Schema::getConnection()->getDriverName() === 'sqlite') {
+            $indexes = DB::select("PRAGMA index_list('{$table}')");
+            foreach ($indexes as $index) {
+                if (($index->name ?? '') === $indexName) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         $indexes = DB::select("SHOW INDEX FROM `{$table}` WHERE Key_name = ?", [$indexName]);
 
         return count($indexes) > 0;
