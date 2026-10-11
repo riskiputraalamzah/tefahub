@@ -922,33 +922,30 @@
                 </div>
             </div>
 
-            {{-- ───────────────────────────────────────────
-                 PANEL 6: GALERI DOKUMENTASI
-                 ─────────────────────────────────────────── --}}
             <div class="profil-tab-pane" id="tab-galeri" role="tabpanel" aria-labelledby="tab-btn-galeri">
                 <div class="profil-galeri-grid">
                     
-                    <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 14px rgba(15,23,42,0.03);">
-                        <img src="{{ asset('assets/image copy 3.png') }}" alt="Gedung SMK Antartika 1 Sidoarjo" style="width: 100%; height: 200px; object-fit: cover; display: block;">
-                        <div style="padding: 14px 16px;">
-                            <strong style="display: block; font-size: 0.92rem; color: #0f172a; margin-bottom: 4px;">Gerbang Utama &amp; Gedung Pembelajaran</strong>
-                            <span style="font-size: 0.78rem; color: #64748b;">Kampus SMK Antartika 1 Sidoarjo</span>
+                    <div class="profil-galeri-card">
+                        <img src="{{ asset('assets/image copy 3.png') }}" alt="Gedung SMK Antartika 1 Sidoarjo" class="profil-galeri-img">
+                        <div class="profil-galeri-info">
+                            <strong class="profil-galeri-title">Gerbang Utama &amp; Gedung Pembelajaran</strong>
+                            <span class="profil-galeri-sub">Kampus SMK Antartika 1 Sidoarjo</span>
                         </div>
                     </div>
 
-                    <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 14px rgba(15,23,42,0.03);">
-                        <img src="{{ asset('assets/image copy.png') }}" alt="Kepala Sekolah & Manajemen" style="width: 100%; height: 200px; object-fit: cover; display: block;">
-                        <div style="padding: 14px 16px;">
-                            <strong style="display: block; font-size: 0.92rem; color: #0f172a; margin-bottom: 4px;">Kepemimpinan &amp; Manajemen Vokasi</strong>
-                            <span style="font-size: 0.78rem; color: #64748b;">Pimpinan dan Tenaga Pendidik Profesional</span>
+                    <div class="profil-galeri-card">
+                        <img src="{{ asset('assets/image copy.png') }}" alt="Kepala Sekolah &amp; Manajemen" class="profil-galeri-img">
+                        <div class="profil-galeri-info">
+                            <strong class="profil-galeri-title">Kepemimpinan &amp; Manajemen Vokasi</strong>
+                            <span class="profil-galeri-sub">Pimpinan dan Tenaga Pendidik Profesional</span>
                         </div>
                     </div>
 
-                    <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 14px rgba(15,23,42,0.03);">
-                        <img src="{{ asset('assets/logo.png') }}" alt="Teaching Factory TefaHub" style="width: 100%; height: 200px; object-fit: contain; padding: 24px; background: #f8fafc; display: block;">
-                        <div style="padding: 14px 16px;">
-                            <strong style="display: block; font-size: 0.92rem; color: #0f172a; margin-bottom: 4px;">Ekosistem Teaching Factory</strong>
-                            <span style="font-size: 0.78rem; color: #64748b;">Kemitraan Industri &amp; Unit Produksi Nyata</span>
+                    <div class="profil-galeri-card">
+                        <img src="{{ asset('assets/logo.png') }}" alt="Teaching Factory TefaHub" class="profil-galeri-img" style="object-fit: contain; padding: 24px; background: #f8fafc;">
+                        <div class="profil-galeri-info">
+                            <strong class="profil-galeri-title">Ekosistem Teaching Factory</strong>
+                            <span class="profil-galeri-sub">Kemitraan Industri &amp; Unit Produksi Nyata</span>
                         </div>
                     </div>
 
@@ -1632,6 +1629,14 @@
          ═══════════════════════════════════════════ --}}
     <script>
     (function() {
+        function scrollTabIntoView(container, btn) {
+            if (!container || !btn) return;
+            const cRect = container.getBoundingClientRect();
+            const bRect = btn.getBoundingClientRect();
+            const offset = (bRect.left - cRect.left) - (container.clientWidth / 2) + (btn.clientWidth / 2);
+            container.scrollBy({ left: offset, behavior: 'smooth' });
+        }
+
         // 1. Top Pill Navigation Tabs Switcher
         function initNavPillTabs() {
             const tabsBar = document.querySelector('.profil-nav-tabs-bar');
@@ -1657,9 +1662,7 @@
                 });
                 btn.classList.add('is-active');
                 btn.setAttribute('aria-selected', 'true');
-                if (typeof btn.scrollIntoView === 'function') {
-                    btn.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
-                }
+                scrollTabIntoView(tabsBar, btn);
 
                 // Update tab panes
                 requestAnimationFrame(function() {
@@ -1693,9 +1696,7 @@
                 const activeBtn = filterBar.querySelector('.profil-mitra-tab-btn.is-active');
                 if (activeBtn) activeBtn.classList.remove('is-active');
                 btn.classList.add('is-active');
-                if (typeof btn.scrollIntoView === 'function') {
-                    btn.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
-                }
+                scrollTabIntoView(filterBar, btn);
 
                 const selectedSector = btn.getAttribute('data-sector');
                 requestAnimationFrame(function() {

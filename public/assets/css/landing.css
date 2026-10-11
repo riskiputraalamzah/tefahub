@@ -24,15 +24,27 @@
     --gradient: linear-gradient(135deg, var(--blue), var(--purple));
 }
 
-html, body {
-    width: 100%;
-    max-width: 100vw;
-    min-height: 100vh;
-    overflow-x: hidden;
+html {
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: clip !important;
     scroll-behavior: smooth;
     -webkit-text-size-adjust: 100%;
+}
+
+body {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-height: 100vh;
+    overflow-x: clip !important;
+    position: relative;
     scrollbar-width: none;
     -ms-overflow-style: none;
+}
+
+body > * {
+    max-width: 100% !important;
+    min-width: 0 !important;
 }
 
 /* ── HIDE SCROLLBARS GLOBALLY WITHOUT UNIVERSAL DOM OVERHEAD ── */
@@ -1124,6 +1136,7 @@ body.onboarding-active {
     margin-bottom: 0;
     display: -webkit-box;
     -webkit-line-clamp: 2;
+    line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
 }
@@ -1670,6 +1683,7 @@ body.onboarding-active {
     margin: 0;
     display: -webkit-box;
     -webkit-line-clamp: 2;
+    line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
 }
@@ -2753,6 +2767,7 @@ body.ai-panel-open .ai-trigger {
         line-height: 1.4;
         display: -webkit-box;
         -webkit-line-clamp: 2;
+        line-clamp: 2;
         -webkit-box-orient: vertical;
         overflow: hidden;
     }
@@ -2857,7 +2872,7 @@ body.ai-panel-open .ai-trigger {
     .card-icon { width: 40px; height: 40px; border-radius: 10px; }
     .card-head { gap: 2px; }
     .card-title { font-size: 13px; font-weight: 700; white-space: normal; line-height: 1.25; }
-    .card-desc { font-size: 11px; line-height: 1.4; color: var(--subtle); -webkit-line-clamp: 2; }
+    .card-desc { font-size: 11px; line-height: 1.4; color: var(--subtle); -webkit-line-clamp: 2; line-clamp: 2; }
     .btn-arrow { width: 28px; height: 28px; }
     .btn-arrow img { width: 12px; height: 12px; }
     .search-box { height: 48px; padding: 4px 6px 4px 16px; }
