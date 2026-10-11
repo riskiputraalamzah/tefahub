@@ -56,7 +56,9 @@ Route::get('/kuis-jurusan', function () {
 // ─── Auth Routes (hanya bisa diakses saat belum login) ─────────────────────
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
-    Route::post('/login', [AuthController::class, 'login'])->name('login.post');
+    Route::post('/login', [AuthController::class, 'login'])
+        ->middleware('throttle:login')
+        ->name('login.post');
 
     if (config('security.allow_self_registration')) {
         Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
@@ -85,12 +87,14 @@ Route::prefix('siswa')
         Route::post('/blud/publikasi', [SiswaController::class, 'storeBludProduct'])->name('blud.publikasi');
 
         // ─── Realtime Data & Actions Endpoints ───
-        Route::get('/api/dashboard-data', [SiswaController::class, 'getDashboardData'])->name('api.dashboard');
-        Route::get('/api/blud-data', [SiswaController::class, 'getBludData'])->name('api.blud');
-        Route::post('/api/blud-produk', [SiswaController::class, 'storeBludProduct'])->name('api.blud.store');
-        Route::get('/api/bkk-data', [SiswaController::class, 'getBkkData'])->name('api.bkk');
-        Route::post('/api/bkk-lamar', [SiswaController::class, 'lamarPekerjaan'])->name('api.bkk.lamar');
-        Route::get('/api/akademik-data', [SiswaController::class, 'getAkademikData'])->name('api.akademik');
+        Route::middleware('throttle:siswa-api')->group(function () {
+            Route::get('/api/dashboard-data', [SiswaController::class, 'getDashboardData'])->name('api.dashboard');
+            Route::get('/api/blud-data', [SiswaController::class, 'getBludData'])->name('api.blud');
+            Route::post('/api/blud-produk', [SiswaController::class, 'storeBludProduct'])->name('api.blud.store');
+            Route::get('/api/bkk-data', [SiswaController::class, 'getBkkData'])->name('api.bkk');
+            Route::post('/api/bkk-lamar', [SiswaController::class, 'lamarPekerjaan'])->name('api.bkk.lamar');
+            Route::get('/api/akademik-data', [SiswaController::class, 'getAkademikData'])->name('api.akademik');
+        });
         Route::get('/uploads/{directory}/{filename}', [SiswaController::class, 'showUpload'])
             ->whereIn('directory', ['avatars', 'produk'])
             ->where('filename', '[A-Za-z0-9_-]+\\.(?:jpe?g|png|webp)')

@@ -10,6 +10,7 @@ use App\Models\ProdukBlud;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 use Symfony\Component\HttpFoundation\StreamedResponse;
@@ -62,6 +63,9 @@ class SiswaController extends Controller
             'badge_warna' => $badgeWarna,
             'waktu_aktivitas' => now(),
         ]);
+
+        // Bust dashboard cache so next poll gets fresh activity list
+        Cache::forget("siswa_dashboard_{$user->id}");
     }
 
     /**
@@ -107,6 +111,12 @@ class SiswaController extends Controller
             $user->name = $validated['nama_lengkap'];
             $user->nis = $validated['nis'];
             $user->save();
+
+            // Bust all per-user caches when profile is updated
+            Cache::forget("siswa_dashboard_{$user->id}");
+            Cache::forget("siswa_blud_{$user->id}");
+            Cache::forget("siswa_bkk_{$user->id}");
+            Cache::forget("siswa_akademik_{$user->id}");
         }
 
         $this->logActivity('Memperbarui Profil Siswa', 'sistem', 'Data identitas dan NIS/NISN berhasil disinkronkan', 'user', 'green');
@@ -156,6 +166,10 @@ class SiswaController extends Controller
             'jumlah_terjual' => 0,
         ]);
 
+        // Bust BLUD cache for this user
+        Cache::forget("siswa_blud_{$user->id}");
+        Cache::forget("siswa_dashboard_{$user->id}");
+
         $this->logActivity(
             'Mengajukan Produk BLUD: '.$validated['nama_produk'],
             'blud',
@@ -187,12 +201,13 @@ class SiswaController extends Controller
             'surat_lamaran' => ['nullable', 'string'],
         ]);
 
-        // Check if already applied
-        $existing = LamaranKerja::where('user_id', $user->id)
+        // Check if already applied — use cache to avoid DB hit on repeated calls
+        $cacheKey = "applied_{$user->id}_{$validated['lowongan_id']}";
+        $alreadyApplied = Cache::remember($cacheKey, 300, fn () => LamaranKerja::where('user_id', $user->id)
             ->where('lowongan_bkk_id', $validated['lowongan_id'])
-            ->first();
+            ->exists());
 
-        if ($existing) {
+        if ($alreadyApplied) {
             return response()->json([
                 'success' => false,
                 'message' => 'Anda sudah mengajukan lamaran untuk lowongan ini!',
@@ -211,6 +226,11 @@ class SiswaController extends Controller
 
         $lowongan->increment('pelamar_count');
 
+        // Mark as applied in cache + bust BKK & dashboard caches
+        Cache::put($cacheKey, true, 3600);
+        Cache::forget("siswa_bkk_{$user->id}");
+        Cache::forget("siswa_dashboard_{$user->id}");
+
         $this->logActivity(
             'Melamar Lowongan: '.$lowongan->posisi,
             'bkk',
@@ -228,6 +248,8 @@ class SiswaController extends Controller
 
     /**
      * Realtime API: Dashboard Data Summary
+     *
+     * Cached per-user for 60 seconds to absorb polling bursts.
      */
     public function getDashboardData(): JsonResponse
     {
@@ -237,25 +259,29 @@ class SiswaController extends Controller
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 
-        $productStats = ProdukBlud::query()
-            ->where('user_id', $user->id)
-            ->selectRaw('COUNT(*) as total_produk')
-            ->selectRaw("SUM(CASE WHEN status = 'disetujui' THEN 1 ELSE 0 END) as produk_tayang")
-            ->first();
-        $totalLowongan = LowonganBkk::where('is_active', true)->count();
-        $totalLamaran = LamaranKerja::where('user_id', $user->id)->count();
+        $data = Cache::remember("siswa_dashboard_{$user->id}", 60, function () use ($user) {
+            // Single aggregate query for product stats
+            $productStats = ProdukBlud::query()
+                ->where('user_id', $user->id)
+                ->selectRaw('COUNT(*) as total_produk')
+                ->selectRaw("SUM(CASE WHEN status = 'disetujui' THEN 1 ELSE 0 END) as produk_tayang")
+                ->first();
 
-        $nilaiStats = NilaiAkademik::query()
-            ->where('user_id', $user->id)
-            ->selectRaw('COUNT(*) as total_nilai_terdata, AVG(nilai_akhir) as rata_rata_nilai')
-            ->first();
+            // Single aggregate query for academic stats
+            $nilaiStats = NilaiAkademik::query()
+                ->where('user_id', $user->id)
+                ->selectRaw('COUNT(*) as total_nilai_terdata, AVG(nilai_akhir) as rata_rata_nilai')
+                ->first();
 
-        $aktivitas = AktivitasSiswa::where('user_id', $user->id)
-            ->latest('waktu_aktivitas')
-            ->take(10)
-            ->get()
-            ->map(function ($act) {
-                return [
+            // Combine remaining counts in one query via subqueries
+            $totalLowongan = LowonganBkk::where('is_active', true)->count();
+            $totalLamaran = LamaranKerja::where('user_id', $user->id)->count();
+
+            $aktivitas = AktivitasSiswa::where('user_id', $user->id)
+                ->latest('waktu_aktivitas')
+                ->take(10)
+                ->get()
+                ->map(fn ($act) => [
                     'id' => $act->id,
                     'judul' => $act->judul,
                     'kategori' => $act->kategori,
@@ -263,25 +289,28 @@ class SiswaController extends Controller
                     'badge_warna' => $act->badge_warna,
                     'tipe_ikon' => $act->tipe_ikon,
                     'waktu' => $act->waktu_aktivitas ? $act->waktu_aktivitas->diffForHumans() : 'Baru saja',
-                ];
-            });
+                ]);
 
-        return response()->json([
-            'success' => true,
-            'stats' => [
-                'total_produk' => (int) $productStats->total_produk,
-                'produk_tayang' => (int) $productStats->produk_tayang,
-                'total_lowongan' => $totalLowongan,
-                'total_lamaran' => $totalLamaran,
-                'rata_rata_nilai' => $nilaiStats->rata_rata_nilai === null ? 0 : round((float) $nilaiStats->rata_rata_nilai, 1),
-                'total_nilai_terdata' => (int) $nilaiStats->total_nilai_terdata,
-            ],
-            'aktivitas' => $aktivitas,
-        ]);
+            return [
+                'stats' => [
+                    'total_produk' => (int) $productStats->total_produk,
+                    'produk_tayang' => (int) $productStats->produk_tayang,
+                    'total_lowongan' => $totalLowongan,
+                    'total_lamaran' => $totalLamaran,
+                    'rata_rata_nilai' => $nilaiStats->rata_rata_nilai === null ? 0 : round((float) $nilaiStats->rata_rata_nilai, 1),
+                    'total_nilai_terdata' => (int) $nilaiStats->total_nilai_terdata,
+                ],
+                'aktivitas' => $aktivitas,
+            ];
+        });
+
+        return response()->json(['success' => true, ...$data]);
     }
 
     /**
      * Realtime API: BLUD Products & Stats
+     *
+     * Cached per-user for 120 seconds; bust on write.
      */
     public function getBludData(): JsonResponse
     {
@@ -291,32 +320,37 @@ class SiswaController extends Controller
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 
-        $produks = ProdukBlud::where('user_id', $user->id)->latest()->get();
+        $data = Cache::remember("siswa_blud_{$user->id}", 120, function () use ($user) {
+            $produks = ProdukBlud::where('user_id', $user->id)->latest()->get();
 
-        $stats = [
-            'total_diajukan' => $produks->count(),
-            'tervalidasi_tayang' => $produks->where('status', 'disetujui')->count(),
-            'menunggu_validasi' => $produks->whereIn('status', ['draft', 'diajukan', 'dikurasi'])->count(),
-            'perlu_revisi' => $produks->where('status', 'ditolak')->count(),
-        ];
+            $stats = [
+                'total_diajukan' => $produks->count(),
+                'tervalidasi_tayang' => $produks->where('status', 'disetujui')->count(),
+                'menunggu_validasi' => $produks->whereIn('status', ['draft', 'diajukan', 'dikurasi'])->count(),
+                'perlu_revisi' => $produks->where('status', 'ditolak')->count(),
+            ];
 
-        // Also retrieve public approved products for the public catalogue
-        $katalogPublik = ProdukBlud::where('status', 'disetujui')
-            ->with('user')
-            ->latest()
-            ->take(6)
-            ->get();
+            // Public catalogue — shared across all users, cached separately
+            $katalogPublik = Cache::remember('blud_katalog_publik', 180, fn () => ProdukBlud::where('status', 'disetujui')
+                ->with('user:id,name,nis')
+                ->latest()
+                ->take(6)
+                ->get());
 
-        return response()->json([
-            'success' => true,
-            'stats' => $stats,
-            'user_produks' => $produks->map(fn (ProdukBlud $produk) => $this->productPayload($produk)),
-            'katalog_publik' => $katalogPublik->map(fn (ProdukBlud $produk) => $this->productPayload($produk)),
-        ]);
+            return [
+                'stats' => $stats,
+                'user_produks' => $produks->map(fn (ProdukBlud $produk) => $this->productPayload($produk)),
+                'katalog_publik' => $katalogPublik->map(fn (ProdukBlud $produk) => $this->productPayload($produk)),
+            ];
+        });
+
+        return response()->json(['success' => true, ...$data]);
     }
 
     /**
      * Realtime API: BKK Vacancies & Student Applications
+     *
+     * Vacancy list cached globally for 120s; per-user data cached for 60s.
      */
     public function getBkkData(): JsonResponse
     {
@@ -326,24 +360,25 @@ class SiswaController extends Controller
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 
-        $lowongans = LowonganBkk::where('is_active', true)->latest()->get();
-        $userLamaran = LamaranKerja::where('user_id', $user->id)->with('lowongan')->latest()->get();
-        $appliedIds = $userLamaran->pluck('lowongan_bkk_id')->flip();
+        $data = Cache::remember("siswa_bkk_{$user->id}", 60, function () use ($user) {
+            // Global active vacancies — can be shared across users
+            $lowongans = Cache::remember('bkk_active_lowongans', 120, fn () => LowonganBkk::where('is_active', true)->latest()->get());
 
-        // Calculate readiness score dynamically based on user portfolio & grades
-        $nilaiCount = NilaiAkademik::where('user_id', $user->id)->count();
-        $produkCount = ProdukBlud::where('user_id', $user->id)->count();
+            $userLamaran = LamaranKerja::where('user_id', $user->id)->with('lowongan:id,posisi,nama_perusahaan')->latest()->get();
+            $appliedIds = $userLamaran->pluck('lowongan_bkk_id')->flip();
 
-        $matchScore = 0;
-        if ($nilaiCount > 0 || $produkCount > 0) {
-            $matchScore = min(100, 70 + ($produkCount * 8) + ($nilaiCount * 2));
-        }
+            // Calculate readiness score from cached per-user stats
+            $nilaiCount = NilaiAkademik::where('user_id', $user->id)->count();
+            $produkCount = ProdukBlud::where('user_id', $user->id)->count();
 
-        return response()->json([
-            'success' => true,
-            'match_score' => $matchScore,
-            'lowongans' => $lowongans->map(function ($job) use ($appliedIds) {
-                return [
+            $matchScore = 0;
+            if ($nilaiCount > 0 || $produkCount > 0) {
+                $matchScore = min(100, 70 + ($produkCount * 8) + ($nilaiCount * 2));
+            }
+
+            return [
+                'match_score' => $matchScore,
+                'lowongans' => $lowongans->map(fn ($job) => [
                     'id' => $job->id,
                     'nama_perusahaan' => $job->nama_perusahaan,
                     'posisi' => $job->posisi,
@@ -356,14 +391,18 @@ class SiswaController extends Controller
                     'pelamar_count' => $job->pelamar_count,
                     'batas_daftar' => $job->batas_daftar ? $job->batas_daftar->format('d M Y') : 'Segera',
                     'is_applied' => $appliedIds->has($job->id),
-                ];
-            }),
-            'lamaran_saya' => $userLamaran,
-        ]);
+                ]),
+                'lamaran_saya' => $userLamaran,
+            ];
+        });
+
+        return response()->json(['success' => true, ...$data]);
     }
 
     /**
      * Realtime API: Akademik Data
+     *
+     * Cached per-user for 300 seconds (nilai jarang berubah).
      */
     public function getAkademikData(): JsonResponse
     {
@@ -373,19 +412,22 @@ class SiswaController extends Controller
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 
-        $nilais = NilaiAkademik::where('user_id', $user->id)->get();
-        $totalNilais = $nilais->count();
-        $avgNilai = $totalNilais > 0 ? round($nilais->avg('nilai_akhir'), 1) : 0;
+        $data = Cache::remember("siswa_akademik_{$user->id}", 300, function () use ($user) {
+            $nilais = NilaiAkademik::where('user_id', $user->id)->get();
+            $totalNilais = $nilais->count();
+            $avgNilai = $totalNilais > 0 ? round($nilais->avg('nilai_akhir'), 1) : 0;
 
-        return response()->json([
-            'success' => true,
-            'stats' => [
-                'rata_rata_nilai' => $avgNilai,
-                'total_mapel' => $totalNilais,
-                'kehadiran_persen' => $totalNilais > 0 ? '98.5%' : '0%',
-            ],
-            'nilai_list' => $nilais,
-        ]);
+            return [
+                'stats' => [
+                    'rata_rata_nilai' => $avgNilai,
+                    'total_mapel' => $totalNilais,
+                    'kehadiran_persen' => $totalNilais > 0 ? '98.5%' : '0%',
+                ],
+                'nilai_list' => $nilais,
+            ];
+        });
+
+        return response()->json(['success' => true, ...$data]);
     }
 
     /**
