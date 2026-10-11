@@ -547,6 +547,27 @@ html, body {
     color: #ffffff;
 }
 
+/* ── Prestasi & Galeri Grids ── */
+.profil-prestasi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.profil-galeri-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+}
+
+@media (max-width: 640px) {
+    .profil-prestasi-grid,
+    .profil-galeri-grid {
+        grid-template-columns: 1fr;
+        gap: 14px;
+    }
+}
+
 /* Responsive Rules for Dashboard Grid */
 @media (max-width: 1080px) {
     .profil-dash-grid {
@@ -1727,7 +1748,7 @@ html, body {
 }
 
 /* ============================================================
-   10. MOBILE & TABLET RESPONSIVENESS (FLUID & SMOOTH)
+   10. MOBILE & TABLET RESPONSIVENESS (FLUID & OPTIMIZED)
    ============================================================ */
 @media (max-width: 1024px) {
     .profil-deco-dots-center {
@@ -1743,7 +1764,7 @@ html, body {
     .profil-lead-grid,
     .profil-contact-grid {
         grid-template-columns: 1fr;
-        gap: 36px;
+        gap: 32px;
     }
     .profil-jurusan-grid {
         grid-template-columns: repeat(2, 1fr);
@@ -1751,38 +1772,78 @@ html, body {
     .profil-jurusan-grid .profil-jurusan-card:nth-child(5) {
         grid-column: span 2;
     }
+    .profil-dash-grid {
+        grid-template-columns: 1fr;
+    }
 }
 
 @media (max-width: 768px) {
     .profil-wrap {
-        padding: 0 18px;
+        padding: 0 16px;
     }
     
     .profil-hero-section {
-        padding: 24px 0 44px;
+        padding: 24px 0 36px;
+    }
+    
+    .profil-badge-pill {
+        font-size: 0.78rem;
+        padding: 5px 12px;
+        margin-bottom: 12px;
     }
     
     .profil-hero-title {
-        font-size: 2.1rem;
-        line-height: 1.18;
+        font-size: 1.85rem;
+        line-height: 1.2;
+        margin-bottom: 12px;
     }
     
     .profil-hero-lead {
-        font-size: 0.94rem;
-        line-height: 1.62;
-        margin-bottom: 24px;
+        font-size: 0.9rem;
+        line-height: 1.6;
+        margin-bottom: 20px;
     }
 
+    /* Hero Stats in modern cards on mobile */
     .profil-stats-row {
         flex-direction: column;
-        align-items: flex-start;
-        gap: 16px;
+        align-items: stretch;
+        gap: 10px;
         width: 100%;
-        margin-bottom: 26px;
+        margin-bottom: 22px;
     }
 
     .profil-stat-box {
         width: 100%;
+        box-sizing: border-box;
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        padding: 12px 14px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        box-shadow: 0 2px 6px rgba(15, 23, 42, 0.03);
+    }
+
+    .profil-stat-icon {
+        width: 36px;
+        height: 36px;
+        border-radius: 10px;
+        flex-shrink: 0;
+    }
+
+    .profil-stat-icon svg {
+        width: 18px;
+        height: 18px;
+    }
+
+    .profil-stat-label {
+        font-size: 0.7rem;
+    }
+
+    .profil-stat-value {
+        font-size: 0.92rem;
     }
 
     .profil-hero-cta-wrap {
@@ -1794,21 +1855,26 @@ html, body {
         justify-content: center;
         text-align: center;
         box-sizing: border-box;
+        padding: 12px 20px;
+        font-size: 0.9rem;
     }
 
     .profil-hero-img-card {
-        height: 240px;
-        border-radius: 22px;
-        border-width: 4px;
+        height: 220px;
+        border-radius: 18px;
+        border-width: 3px;
+        margin-top: 14px;
     }
 
     .profil-floating-location-card {
         position: relative;
         bottom: auto;
         right: auto;
-        margin-top: 14px;
+        margin-top: 12px;
         width: 100%;
         box-sizing: border-box;
+        border-radius: 14px;
+        padding: 12px 14px;
         justify-content: flex-start;
     }
 
@@ -1821,137 +1887,337 @@ html, body {
         display: none;
     }
 
-    .profil-hero-meta-grid {
-        grid-template-columns: 1fr;
+    /* Horizontal Nav Tabs Mobile (Smooth touch scroll chips) */
+    .profil-nav-tabs-section {
+        padding: 14px 0 8px;
+    }
+
+    .profil-nav-tabs-bar {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        gap: 6px;
+        padding: 4px 2px 8px;
+        scroll-snap-type: x mandatory;
+        display: flex;
+        flex-wrap: nowrap;
+    }
+    .profil-nav-tabs-bar::-webkit-scrollbar {
+        display: none;
+    }
+
+    .profil-nav-tab-btn {
+        scroll-snap-align: start;
+        flex-shrink: 0;
+        padding: 8px 16px;
+        font-size: 0.8rem;
+        gap: 6px;
+    }
+
+    .profil-nav-tab-btn svg {
+        width: 15px;
+        height: 15px;
+    }
+
+    /* Main Dashboard Section Mobile */
+    .profil-main-dashboard-section {
+        padding: 18px 0 44px;
+    }
+
+    .profil-dash-grid {
+        grid-template-columns: 1fr !important;
+        gap: 16px;
+    }
+
+    .profil-dash-card {
+        padding: 20px 16px;
+        border-radius: 16px;
+    }
+
+    .profil-dash-card + .profil-dash-card {
+        margin-top: 16px;
+    }
+
+    .profil-dash-title {
+        font-size: 1.2rem;
+    }
+
+    .profil-dash-desc {
+        font-size: 0.85rem;
+        line-height: 1.6;
+        margin-bottom: 16px;
+    }
+
+    .profil-feature-grid {
+        grid-template-columns: 1fr !important;
+        gap: 10px !important;
+    }
+
+    .profil-feature-card {
+        padding: 12px 14px;
+        border-radius: 12px;
+    }
+
+    .profil-keahlian-card {
+        padding: 20px 16px;
+        border-radius: 16px;
+        margin-top: 16px;
+    }
+
+    .profil-jurusan-row-grid {
+        grid-template-columns: 1fr !important;
+        gap: 8px !important;
+    }
+
+    .profil-jurusan-mini-card {
+        padding: 10px 12px;
+        border-radius: 10px;
+    }
+
+    .profil-info-card {
+        padding: 20px 16px;
+        border-radius: 16px;
+    }
+
+    .profil-info-item {
+        grid-template-columns: 18px 80px 1fr;
         gap: 8px;
+        font-size: 0.8rem;
     }
-    
-    .profil-hero-cta-group {
-        width: 100%;
-        flex-direction: column;
+
+    .profil-join-card {
+        padding: 20px 16px;
+        border-radius: 16px;
+        margin-top: 16px;
     }
-    
-    .profil-hero-cta-group .profil-btn-primary,
-    .profil-hero-cta-group .profil-btn-secondary {
+
+    .profil-join-btn {
         width: 100%;
         justify-content: center;
-        text-align: center;
         box-sizing: border-box;
     }
 
-    .profil-hero-img-wrapper {
-        height: 220px;
-    }
-
-    .profil-floating-badge {
-        padding: 10px 12px;
-        bottom: 10px;
-        left: 10px;
-        right: 10px;
-        gap: 10px;
-    }
-    .profil-floating-icon {
-        width: 32px;
-        height: 32px;
-        border-radius: 8px;
-    }
-    .profil-floating-text h4 {
-        font-size: 0.82rem;
-    }
-    .profil-floating-text p {
-        font-size: 0.7rem;
-    }
-
+    /* Section Titles Mobile */
     .profil-section-title {
-        font-size: 1.65rem;
+        font-size: 1.55rem;
+        line-height: 1.25;
     }
     
     .profil-section-desc {
-        font-size: 0.9rem;
+        font-size: 0.88rem;
+        line-height: 1.6;
     }
 
-    /* Clean vertical stacks for all grids on mobile (No side scroll / no swipe glitch) */
+    /* Jurusan Grid Mobile */
     .profil-jurusan-grid {
         grid-template-columns: 1fr !important;
-        gap: 14px !important;
+        gap: 12px !important;
     }
     .profil-jurusan-grid .profil-jurusan-card:nth-child(5) {
         grid-column: auto;
     }
     .profil-jurusan-card {
-        padding: 22px 18px !important;
+        padding: 18px 16px !important;
+        border-radius: 14px;
+    }
+    .profil-jurusan-name {
+        font-size: 1.12rem;
     }
 
+    /* Mitra Industri Section Mobile */
+    .profil-mitra-section {
+        padding: 44px 0;
+    }
+    .profil-mitra-filter-bar {
+        overflow-x: auto;
+        flex-wrap: nowrap;
+        justify-content: flex-start;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        padding-bottom: 8px;
+        gap: 6px;
+        margin-bottom: 20px;
+        scroll-snap-type: x mandatory;
+    }
+    .profil-mitra-filter-bar::-webkit-scrollbar {
+        display: none;
+    }
+    .profil-mitra-tab-btn {
+        scroll-snap-align: start;
+        flex-shrink: 0;
+        padding: 6px 14px;
+        font-size: 0.78rem;
+    }
     .profil-mitra-grid {
         grid-template-columns: 1fr !important;
-        gap: 10px !important;
+        gap: 8px !important;
     }
     .profil-mitra-card {
-        padding: 14px 16px !important;
+        padding: 12px 14px !important;
+        border-radius: 12px;
+    }
+    .profil-mitra-name {
+        font-size: 0.88rem;
+    }
+    .profil-mitra-cta-box {
+        padding: 20px 16px;
+        border-radius: 14px;
+        margin-top: 24px;
     }
 
+    /* Fasilitas Section Mobile */
+    .profil-fasilitas-section {
+        padding: 44px 0;
+    }
     .profil-fasilitas-grid {
         grid-template-columns: 1fr !important;
-        gap: 18px !important;
+        gap: 16px !important;
     }
     .profil-fasilitas-col {
-        padding: 22px 16px !important;
+        padding: 20px 16px !important;
+        border-radius: 18px;
+    }
+    .profil-fasilitas-col-title {
+        font-size: 1.2rem;
+    }
+    .profil-fasilitas-item {
+        padding: 10px 12px;
     }
 
+    /* Visi & Misi Mobile */
+    .profil-visi-grid {
+        grid-template-columns: 1fr !important;
+        gap: 16px !important;
+    }
     .profil-visi-card,
-    .profil-karakter-card,
-    .profil-ekskul-banner,
-    .profil-contact-info-card {
-        padding: 22px 16px;
+    .profil-karakter-card {
+        padding: 20px 16px;
+        border-radius: 16px;
     }
-
     .profil-visi-text {
-        font-size: 1.15rem;
+        font-size: 1.05rem;
     }
-
     .profil-bmw-pills {
-        grid-template-columns: repeat(3, 1fr);
-        gap: 6px;
+        grid-template-columns: 1fr;
+        gap: 8px;
     }
     .profil-bmw-pill {
-        padding: 10px 4px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 12px;
+        padding: 10px 14px;
+        border-radius: 10px;
     }
     .profil-bmw-letter {
-        font-size: 1.1rem;
+        font-size: 1.25rem;
     }
     .profil-bmw-label {
-        font-size: 0.68rem;
+        font-size: 0.8rem;
+        text-align: left;
+    }
+    .profil-5r-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
     }
 
-    .profil-principal-card {
+    /* Ekskul Section Mobile */
+    .profil-ekskul-section {
+        padding: 44px 0;
+    }
+    .profil-ekskul-banner {
         padding: 24px 16px;
+        border-radius: 18px;
+        margin-bottom: 24px;
+    }
+    .profil-ekskul-banner-grid {
+        grid-template-columns: 1fr !important;
+        gap: 18px;
+    }
+    .profil-ekskul-banner-title {
+        font-size: 1.5rem;
+    }
+    .profil-ekskul-banner-desc {
+        font-size: 0.88rem;
+    }
+
+    /* Kepemimpinan Section Mobile */
+    .profil-lead-section {
+        padding: 44px 0;
+    }
+    .profil-lead-grid {
+        grid-template-columns: 1fr !important;
+        gap: 20px;
+    }
+    .profil-principal-card {
+        padding: 22px 16px;
+        border-radius: 18px;
     }
     .profil-principal-avatar {
-        width: 100px;
-        height: 100px;
+        width: 105px;
+        height: 105px;
     }
     .profil-principal-name {
-        font-size: 1.18rem;
+        font-size: 1.15rem;
     }
-
     .profil-management-boxes {
-        grid-template-columns: 1fr;
-        gap: 12px;
+        grid-template-columns: 1fr !important;
+        gap: 10px;
+    }
+    .profil-mgmt-box {
+        padding: 16px 14px;
+        border-radius: 12px;
     }
 
-    .profil-map-iframe {
-        height: 240px;
+    /* Kontak & Peta Section Mobile */
+    .profil-contact-section {
+        padding: 44px 0;
     }
-    
+    .profil-contact-grid {
+        grid-template-columns: 1fr !important;
+        gap: 20px;
+    }
+    .profil-contact-info-card {
+        padding: 24px 16px;
+        border-radius: 18px;
+    }
+    .profil-contact-info-title {
+        font-size: 1.35rem;
+    }
+    .profil-contact-detail-list {
+        gap: 14px;
+        margin-bottom: 24px;
+    }
+    .profil-map-iframe {
+        height: 220px;
+    }
     .profil-map-footer {
         flex-direction: column;
         align-items: stretch;
         gap: 12px;
-        padding: 16px;
+        padding: 14px 16px;
     }
     .profil-map-footer .profil-btn-secondary {
         text-align: center;
         justify-content: center;
+    }
+}
+
+@media (max-width: 420px) {
+    .profil-wrap {
+        padding: 0 10px;
+    }
+    .profil-hero-title {
+        font-size: 1.62rem;
+    }
+    .profil-section-title {
+        font-size: 1.38rem;
+    }
+    .profil-info-item {
+        grid-template-columns: 18px 72px 1fr;
+        font-size: 0.76rem;
     }
 }
 

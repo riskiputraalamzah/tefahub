@@ -881,7 +881,7 @@
                  PANEL 5: PRESTASI SEKOLAH & SISWA
                  ─────────────────────────────────────────── --}}
             <div class="profil-tab-pane" id="tab-prestasi" role="tabpanel" aria-labelledby="tab-btn-prestasi">
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
+                <div class="profil-prestasi-grid">
                     
                     <div class="profil-dash-card">
                         <div class="profil-dash-head">
@@ -926,7 +926,7 @@
                  PANEL 6: GALERI DOKUMENTASI
                  ─────────────────────────────────────────── --}}
             <div class="profil-tab-pane" id="tab-galeri" role="tabpanel" aria-labelledby="tab-btn-galeri">
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px;">
+                <div class="profil-galeri-grid">
                     
                     <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 14px rgba(15,23,42,0.03);">
                         <img src="{{ asset('assets/image copy 3.png') }}" alt="Gedung SMK Antartika 1 Sidoarjo" style="width: 100%; height: 200px; object-fit: cover; display: block;">
@@ -1657,6 +1657,9 @@
                 });
                 btn.classList.add('is-active');
                 btn.setAttribute('aria-selected', 'true');
+                if (typeof btn.scrollIntoView === 'function') {
+                    btn.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+                }
 
                 // Update tab panes
                 requestAnimationFrame(function() {
@@ -1690,6 +1693,9 @@
                 const activeBtn = filterBar.querySelector('.profil-mitra-tab-btn.is-active');
                 if (activeBtn) activeBtn.classList.remove('is-active');
                 btn.classList.add('is-active');
+                if (typeof btn.scrollIntoView === 'function') {
+                    btn.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+                }
 
                 const selectedSector = btn.getAttribute('data-sector');
                 requestAnimationFrame(function() {
