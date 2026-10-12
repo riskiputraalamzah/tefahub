@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
@@ -648,7 +649,18 @@ class AiNavigatorController extends Controller
 
         // 3. Pure AI response from API key: handles all general questions, conversational queries, etc.
         try {
-            $geminiAnswer = $this->askGemini($userMessage, $history);
+            $cacheKey = empty($history)
+                ? 'ai_chat_'.md5(mb_strtolower(trim($userMessage)))
+                : 'ai_chat_'.md5(mb_strtolower(trim($userMessage)).'_'.serialize($history));
+
+            $geminiAnswer = Cache::get($cacheKey);
+            if ($geminiAnswer === null) {
+                $geminiAnswer = $this->askGemini($userMessage, $history);
+                if ($geminiAnswer !== null && trim($geminiAnswer) !== '') {
+                    Cache::put($cacheKey, $geminiAnswer, 86400); // Cache 24 hours
+                }
+            }
+
             if ($geminiAnswer !== null && trim($geminiAnswer) !== '') {
                 $category = $this->detectCategory($userMessage);
                 $routeKey = $this->detectRelevantRouteKey($userMessage);

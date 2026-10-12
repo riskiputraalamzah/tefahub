@@ -21,8 +21,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     <!-- CSS Assets -->
-    <link rel="stylesheet" href="{{ asset('assets/css/landing.css') }}?v={{ filemtime(public_path('assets/css/landing.css')) }}">
-    <link rel="stylesheet" href="{{ asset('assets/css/ppdb.daftar.css') }}?v={{ filemtime(public_path('assets/css/ppdb.daftar.css')) }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/landing.css') }}?v={{ config('app.asset_version', '1.0') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/ppdb.daftar.css') }}?v={{ config('app.asset_version', '1.0') }}">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
 <body class="ppdb-daftar-body">

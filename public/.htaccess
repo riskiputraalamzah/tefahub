@@ -55,11 +55,6 @@
     Header append Vary User-Agent env=!dont-vary
 </IfModule>
 
-# ── Keep-Alive connections (mengurangi TCP handshake overhead) ────────────────
-<IfModule mod_headers.c>
-    Header set Connection keep-alive
-</IfModule>
-
 # ── Cache Headers ─────────────────────────────────────────────────────────────
 <IfModule mod_headers.c>
     <Files "sw.js">
@@ -93,11 +88,9 @@
 </IfModule>
 FileETag None
 
-# ── Expires Headers (browser caching) ────────────────────────────────────────
+# ── Expires Headers for Static Assets ─────────────────────────────────────────
 <IfModule mod_expires.c>
     ExpiresActive On
-    ExpiresByType text/html "access plus 0 seconds"
-    ExpiresByType application/json "access plus 0 seconds"
     ExpiresByType text/css "access plus 7 days"
     ExpiresByType application/javascript "access plus 7 days"
     ExpiresByType image/png "access plus 7 days"

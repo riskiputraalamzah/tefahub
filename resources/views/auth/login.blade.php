@@ -13,7 +13,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
     <!-- Login Page CSS -->
-    <link rel="stylesheet" href="{{ asset('assets/css/auth.login.css') }}?v={{ filemtime(public_path('assets/css/auth.login.css')) }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/auth.login.css') }}?v={{ config('app.asset_version', '1.0') }}">
 </head>
 <body>
 
