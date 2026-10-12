@@ -61,6 +61,9 @@ return [
             'engine' => null,
             'options' => extension_loaded('pdo_mysql') ? array_filter([
                 Mysql::ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
+                PDO::ATTR_PERSISTENT => env('DB_PERSISTENT', false),
+                PDO::ATTR_TIMEOUT => 10,
+                PDO::MYSQL_ATTR_INIT_COMMAND => "SET SESSION wait_timeout=60, interactive_timeout=60, net_read_timeout=20, net_write_timeout=20, sql_mode='STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION'",
             ]) : [],
         ],
 
