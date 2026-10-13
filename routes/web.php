@@ -50,7 +50,7 @@ Route::get('/ppdb/kuis', function () {
 })->name('ppdb.kuis');
 
 Route::get('/kuis-jurusan', function () {
-    return view('kuis-jurusan');
+    return redirect()->route('ppdb.kuis');
 })->name('kuis-jurusan');
 
 // ─── Auth Routes (hanya bisa diakses saat belum login) ─────────────────────

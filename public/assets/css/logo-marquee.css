@@ -1,0 +1,351 @@
+/* ══════════════════════════════════════════════════════════════════════════════
+   INFINITE LOGO MARQUEE WITH SEQUENTIAL AUTO SPOTLIGHT
+   ══════════════════════════════════════════════════════════════════════════════ */
+
+.logo-marquee-section {
+    position: relative;
+    padding: 72px 0 84px;
+    background: #ffffff;
+    border-top: 1px solid rgba(226, 232, 240, 0.7);
+    border-bottom: 1px solid rgba(226, 232, 240, 0.7);
+    overflow: hidden;
+}
+
+.logo-marquee-container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 24px;
+    text-align: center;
+}
+
+.logo-marquee-header {
+    margin-bottom: 44px;
+}
+
+.logo-marquee-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 14px;
+    background: rgba(37, 99, 235, 0.08);
+    border: 1px solid rgba(37, 99, 235, 0.2);
+    border-radius: 9999px;
+    font-size: 0.8125rem;
+    font-weight: 700;
+    color: #2563eb;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+}
+
+.logo-marquee-pill-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #2563eb;
+    box-shadow: 0 0 8px #2563eb;
+    animation: marqueeDotPulse 2s infinite ease-in-out;
+}
+
+@keyframes marqueeDotPulse {
+    0%, 100% { opacity: 0.6; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.3); }
+}
+
+.logo-marquee-title {
+    font-size: clamp(1.6rem, 3vw, 2.35rem);
+    font-weight: 800;
+    color: #0f172a;
+    line-height: 1.25;
+    letter-spacing: -0.02em;
+    margin: 0 0 10px;
+}
+
+.logo-marquee-subtitle {
+    font-size: 0.95rem;
+    color: #64748b;
+    max-width: 640px;
+    margin: 0 auto;
+    line-height: 1.6;
+}
+
+/* ── Marquee Visual Wrapper ────────────────────────────────────────── */
+.logo-marquee-stage {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    /* Gradient mask on left and right for seamless entrance & exit */
+    mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
+}
+
+.marquee-row-wrapper {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    padding: 6px 0;
+}
+
+.marquee-track {
+    display: flex;
+    width: max-content;
+    will-change: transform;
+}
+
+/* Row 1: Left to Right */
+.marquee-track-ltr {
+    animation: marqueeScrollLtr 32s linear infinite;
+}
+
+/* Row 2: Right to Left */
+.marquee-track-rtl {
+    animation: marqueeScrollRtl 38s linear infinite;
+}
+
+/* Row 3: Left to Right (slightly faster for visual depth) */
+.marquee-track-ltr-fast {
+    animation: marqueeScrollLtr 29s linear infinite;
+}
+
+@keyframes marqueeScrollRtl {
+    0% { transform: translate3d(0, 0, 0); }
+    100% { transform: translate3d(-50%, 0, 0); }
+}
+
+@keyframes marqueeScrollLtr {
+    0% { transform: translate3d(-50%, 0, 0); }
+    100% { transform: translate3d(0, 0, 0); }
+}
+
+/* Pause on hover */
+.marquee-row-wrapper:hover .marquee-track {
+    animation-play-state: paused;
+}
+
+.marquee-group {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding: 0 9px;
+    flex-shrink: 0;
+}
+
+/* ── Logo Card ─────────────────────────────────────────────────────── */
+.marquee-logo-card {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 175px;
+    height: 84px;
+    padding: 14px 20px;
+    background: #ffffff;
+    border: 1px solid rgba(226, 232, 240, 0.9);
+    border-radius: 14px;
+    box-shadow: 0 2px 6px rgba(15, 23, 42, 0.04);
+    box-sizing: border-box;
+    cursor: default;
+    user-select: none;
+    /* Default: Grayscale with balanced opacity */
+    filter: grayscale(100%) opacity(0.52);
+    transform: scale(1);
+    transition:
+        filter 0.55s cubic-bezier(0.16, 1, 0.3, 1),
+        transform 0.55s cubic-bezier(0.16, 1, 0.3, 1),
+        box-shadow 0.55s cubic-bezier(0.16, 1, 0.3, 1),
+        border-color 0.55s cubic-bezier(0.16, 1, 0.3, 1),
+        background-color 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.marquee-logo-card img {
+    max-width: 130px;
+    max-height: 52px;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    display: block;
+    pointer-events: none;
+    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ── Active Sequential Spotlight State ────────────────────────────── */
+.marquee-logo-card.is-spotlight {
+    filter: grayscale(0%) opacity(1) brightness(1.05) saturate(1.15);
+    transform: scale(1.07);
+    background: #ffffff;
+    border-color: rgba(37, 99, 235, 0.5);
+    box-shadow:
+        0 0 28px -4px rgba(37, 99, 235, 0.35),
+        0 10px 22px -6px rgba(15, 23, 42, 0.12);
+    z-index: 5;
+}
+
+.marquee-logo-card.is-spotlight img {
+    transform: scale(1.03);
+}
+
+/* Hover fallback when user interacts */
+.marquee-logo-card:hover {
+    filter: grayscale(0%) opacity(1) brightness(1.04);
+    border-color: rgba(37, 99, 235, 0.4);
+    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.2);
+}
+
+/* ── Responsive Adaptations ────────────────────────────────────────── */
+@media (max-width: 768px) {
+    .logo-marquee-section {
+        padding: 56px 0 64px;
+    }
+
+    .logo-marquee-header {
+        margin-bottom: 32px;
+    }
+
+    .logo-marquee-stage {
+        gap: 14px;
+        mask-image: linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%);
+        -webkit-mask-image: linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%);
+    }
+
+    .marquee-group {
+        gap: 12px;
+        padding: 0 6px;
+    }
+
+    .marquee-logo-card {
+        width: 140px;
+        height: 70px;
+        padding: 10px 14px;
+        border-radius: 12px;
+    }
+
+    .marquee-logo-card img {
+        max-width: 105px;
+        max-height: 42px;
+    }
+
+    .marquee-logo-card.is-spotlight {
+        transform: scale(1.05);
+    }
+}
+
+@media (max-width: 480px) {
+    .marquee-logo-card {
+        width: 125px;
+        height: 64px;
+        padding: 8px 12px;
+    }
+
+    .marquee-logo-card img {
+        max-width: 95px;
+        max-height: 38px;
+    }
+}
+
+/* ── Accessibility: Prefers Reduced Motion ─────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+    .marquee-track-ltr,
+    .marquee-track-rtl,
+    .marquee-track-ltr-fast {
+        animation-duration: 90s !important;
+    }
+
+    .marquee-logo-card {
+        transition-duration: 0.2s !important;
+    }
+}
+
+/* ── ECOSYSTEM SUPPORTERS SECTION (Before Footer) ─────────────────── */
+.supporters-section {
+    padding: 38px 0 54px;
+    background: #ffffff;
+    border-top: 1px solid rgba(241, 245, 249, 1);
+    width: 100%;
+    overflow: hidden;
+}
+
+.supporters-header {
+    text-align: center;
+    margin-bottom: 22px;
+}
+
+.supporters-label {
+    font-size: 0.8125rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #64748b;
+    margin: 0;
+}
+
+.supporters-marquee-stage {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    /* Gradient mask on left and right for seamless entrance & exit */
+    mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
+}
+
+.supporters-track {
+    display: flex;
+    width: max-content;
+    will-change: transform;
+    animation: marqueeScrollRtl 26s linear infinite;
+}
+
+.supporters-marquee-stage:hover .supporters-track {
+    animation-play-state: paused;
+}
+
+.supporters-group {
+    display: flex;
+    align-items: center;
+    gap: 52px;
+    padding: 0 26px;
+    flex-shrink: 0;
+}
+
+.supporter-logo-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    padding: 4px;
+}
+
+.supporter-logo-item img {
+    max-height: 48px;
+    max-width: 155px;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    filter: none; /* Full original colors */
+    opacity: 0.92;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.supporter-logo-item:hover img {
+    opacity: 1;
+    transform: scale(1.08);
+}
+
+@media (max-width: 768px) {
+    .supporters-section {
+        padding: 28px 0 40px;
+    }
+    .supporters-group {
+        gap: 34px;
+        padding: 0 17px;
+    }
+    .supporter-logo-item img {
+        max-height: 38px;
+        max-width: 120px;
+    }
+}
+

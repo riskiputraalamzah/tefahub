@@ -28,8 +28,9 @@ html {
     width: 100% !important;
     max-width: 100% !important;
     overflow-x: clip !important;
-    scroll-behavior: smooth;
-    -webkit-overflow-scrolling: touch;
+    /* scroll-behavior: smooth is deliberately removed — Lenis (app.js) manages
+       all smooth scrolling via its RAF loop. Native smooth-scroll conflicts
+       with Lenis on anchor clicks and can cause double-easing. */
     -webkit-text-size-adjust: 100%;
 }
 
@@ -172,7 +173,10 @@ body.onboarding-active {
                 padding 2.6s cubic-bezier(0.16, 1, 0.3, 1);
     padding-left: 0;
     z-index: 2;
-    will-change: max-width, opacity;
+    /* will-change: max-width is not GPU-compositable (max-width triggers layout).
+       Use will-change: auto so no useless compositor layer is promoted here.
+       The inner transform animation is what matters for perf. */
+    will-change: auto;
 }
 
 .onboarding-brand-reveal.is-revealed {

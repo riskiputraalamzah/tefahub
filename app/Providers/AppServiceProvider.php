@@ -23,8 +23,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // AI chat: 60 req/min per IP
-        RateLimiter::for('ai-chat', fn (Request $request) => Limit::perMinute(60)->by($request->ip()));
+        // AI chat: 20 req/min per IP (configurable via AI_CHAT_RATE_LIMIT)
+        RateLimiter::for('ai-chat', fn (Request $request) => Limit::perMinute((int) env('AI_CHAT_RATE_LIMIT', 20))->by($request->ip()));
 
         // Registration: 10 per hour per IP
         RateLimiter::for('registration', fn (Request $request) => Limit::perHour(10)->by($request->ip()));

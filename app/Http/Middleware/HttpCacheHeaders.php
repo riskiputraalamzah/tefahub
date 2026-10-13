@@ -28,10 +28,24 @@ class HttpCacheHeaders
             return $response;
         }
 
-        // Public landing pages — can be cached by browser & CDN for 5 minutes
-        $publicRoutes = ['home', 'bkk', 'profil', 'pkl', 'ppdb', 'ppdb.daftar', 'ppdb.kuis', 'kuis-jurusan'];
-        if (in_array($request->route()?->getName(), $publicRoutes, true)) {
-            $response->headers->set('Cache-Control', 'public, max-age=300, stale-while-revalidate=60');
+        // Public landing pages — can be cached by browser & CDN
+        $staticRoutes = ['home', 'bkk', 'profil', 'pkl', 'ppdb', 'ppdb.kuis', 'kuis-jurusan'];
+        $isStaticLanding = in_array($request->route()?->getName(), $staticRoutes, true)
+            || $request->is(['/', 'bkk', 'profil', 'pkl', 'ppdb', 'ppdb/kuis', 'kuis-jurusan']);
+
+        if ($isStaticLanding) {
+            $response->headers->set('Cache-Control', 'public, max-age=3600, s-maxage=86400, stale-while-revalidate=600');
+            // Remove cookies for unauthenticated visitors so CDNs (Cloudflare) and proxies can edge-cache
+            if ($request->user() === null) {
+                $response->headers->remove('Set-Cookie');
+            }
+
+            return $response;
+        }
+
+        // PPDB registration form requires active session & CSRF
+        if ($request->route()?->getName() === 'ppdb.daftar' || $request->is('ppdb/daftar')) {
+            $response->headers->set('Cache-Control', 'private, no-cache, no-store, must-revalidate');
 
             return $response;
         }

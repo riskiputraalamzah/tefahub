@@ -11,6 +11,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('assets/css/landing.css') }}?v={{ config('app.asset_version', '1.0') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/sambutan.css') }}?v={{ config('app.asset_version', '1.0') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/logo-marquee.css') }}?v={{ config('app.asset_version', '1.0') }}">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
@@ -207,87 +209,14 @@
     </main>
 
     {{-- ═══════════════════════════════════════════
-         PARTNER / MITRA LOGOS MARQUEE
+         SAMBUTAN KEPALA SEKOLAH
          ═══════════════════════════════════════════ --}}
-    <section class="partners-section" data-reveal aria-label="Mitra dan Partner Tefa-Hub">
-        <p class="partners-label">Didukung &amp; Terintegrasi Bersama Mitra Industri Nasional</p>
-        <div class="partners-track-wrapper" id="partnersWrapper">
-            <div class="partners-track" id="partnersTrack">
-                {{-- Group 1 --}}
-                <div class="partners-track-group">
-                    <div class="partner-logo-item">
-                        <img src="{{ asset('assets/L1.webp') }}" alt="Jagoan Hosting Innovation Competition">
-                    </div>
-                    <div class="partner-logo-item">
-                        <img src="{{ asset('assets/L2.webp') }}" alt="Jagoan Hosting">
-                    </div>
-                    <div class="partner-logo-item">
-                        <img src="{{ asset('assets/L3.webp') }}" alt="Komdigi">
-                    </div>
-                    <div class="partner-logo-item">
-                        <img src="{{ asset('assets/L4.webp') }}" alt="Garuda Spark Innovation Hub">
-                    </div>
-                    <div class="partner-logo-item">
-                        <img src="{{ asset('assets/L5.webp') }}" alt="Ngalup.co">
-                    </div>
-                </div>
-                {{-- Group 2 --}}
-                <div class="partners-track-group" aria-hidden="true">
-                    <div class="partner-logo-item">
-                        <img src="{{ asset('assets/L1.webp') }}" alt="">
-                    </div>
-                    <div class="partner-logo-item">
-                        <img src="{{ asset('assets/L2.webp') }}" alt="">
-                    </div>
-                    <div class="partner-logo-item">
-                        <img src="{{ asset('assets/L3.webp') }}" alt="">
-                    </div>
-                    <div class="partner-logo-item">
-                        <img src="{{ asset('assets/L4.webp') }}" alt="">
-                    </div>
-                    <div class="partner-logo-item">
-                        <img src="{{ asset('assets/L5.webp') }}" alt="">
-                    </div>
-                </div>
-                {{-- Group 3 --}}
-                <div class="partners-track-group" aria-hidden="true">
-                    <div class="partner-logo-item">
-                        <img src="{{ asset('assets/L1.webp') }}" alt="">
-                    </div>
-                    <div class="partner-logo-item">
-                        <img src="{{ asset('assets/L2.webp') }}" alt="">
-                    </div>
-                    <div class="partner-logo-item">
-                        <img src="{{ asset('assets/L3.webp') }}" alt="">
-                    </div>
-                    <div class="partner-logo-item">
-                        <img src="{{ asset('assets/L4.webp') }}" alt="">
-                    </div>
-                    <div class="partner-logo-item">
-                        <img src="{{ asset('assets/L5.webp') }}" alt="">
-                    </div>
-                </div>
-                {{-- Group 4 --}}
-                <div class="partners-track-group" aria-hidden="true">
-                    <div class="partner-logo-item">
-                        <img src="{{ asset('assets/L1.webp') }}" alt="">
-                    </div>
-                    <div class="partner-logo-item">
-                        <img src="{{ asset('assets/L2.webp') }}" alt="">
-                    </div>
-                    <div class="partner-logo-item">
-                        <img src="{{ asset('assets/L3.webp') }}" alt="">
-                    </div>
-                    <div class="partner-logo-item">
-                        <img src="{{ asset('assets/L4.webp') }}" alt="">
-                    </div>
-                    <div class="partner-logo-item">
-                        <img src="{{ asset('assets/L5.webp') }}" alt="">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+    <x-sambutan-kepsek />
+
+    {{-- ═══════════════════════════════════════════
+         INFINITE LOGO MARQUEE WITH SEQUENTIAL AUTO SPOTLIGHT
+         ═══════════════════════════════════════════ --}}
+    <x-logo-marquee />
 
     {{-- ═══════════════════════════════════════════
          ABOUT SECTION
@@ -296,12 +225,12 @@
         <div class="wrap">
 
             {{-- Left: Logo Image --}}
-            <div class="about-visual" data-reveal>
+            <div class="about-visual" data-reveal="left">
                 <img src="{{ asset('assets/logo2.webp') }}" alt="Logo Tefa-Hub" class="about-logo-img" data-parallax>
             </div>
 
             {{-- Right: Content --}}
-            <div class="about-content" data-reveal>
+            <div class="about-content" data-reveal="right">
                 <span class="about-category">TENTANG KAMI</span>
 
                 <h2 class="about-title">
@@ -322,7 +251,7 @@
     <section class="services-section" id="layanan">
         <div class="wrap">
 
-            <div class="services-header" data-reveal>
+            <div class="services-header" data-reveal="scale">
                 <h2 class="services-title">Layanan Unggulan Sekolah</h2>
                 <p class="services-desc">
                     Semua informasi dan kebutuhan sekolah dapat diakses dengan mudah dan praktis di satu tempat.
@@ -385,7 +314,7 @@
         <div class="wrap">
 
             {{-- Left: Text & CTA --}}
-            <div class="showcase-content" data-reveal>
+            <div class="showcase-content" data-reveal="left">
                 <span class="showcase-category">KARYA &amp; LAYANAN SISWA</span>
 
                 <h2 class="showcase-title">Dari Praktik Menjadi Karya Nyata</h2>
@@ -400,7 +329,7 @@
             </div>
 
             {{-- Right: Visual Mockup matching BKK page cards --}}
-            <div class="showcase-visual" data-reveal>
+            <div class="showcase-visual" data-reveal="right">
                 <div class="showcase-cards">
                     <div class="blud-card-frame showcase-card-layer showcase-card-1" data-hover-card>
                         <div class="blud-card-image-wrap">
@@ -449,12 +378,12 @@
         <div class="wrap">
 
             {{-- Left: ai.webp Image --}}
-            <div class="ai-visual" data-reveal>
+            <div class="ai-visual" data-reveal="left">
                 <img src="{{ asset('assets/ai.webp') }}" alt="Tefa AI Assistant" class="ai-img" data-parallax>
             </div>
 
             {{-- Right: Content & 3 Cards --}}
-            <div class="ai-content" data-reveal>
+            <div class="ai-content" data-reveal="right">
                 <span class="ai-category">BANTUAN CEPAT</span>
 
                 <h2 class="ai-title">Pusat Informasi &amp; Bantuan 24 Jam</h2>
@@ -504,7 +433,7 @@
          ═══════════════════════════════════════════ --}}
     <section class="cta-banner-section">
         <div class="wrap">
-            <div class="cta-banner-card" data-reveal>
+            <div class="cta-banner-card" data-reveal="scale">
                 <h2 class="cta-banner-title">
                     Siapkan Masa Depanmu<br>
                     Bersama Tefa–Hub
@@ -517,6 +446,38 @@
                 <a href="{{ Route::has('login') ? route('login') : '#login' }}" class="cta-banner-btn">
                     Mulai Sekarang
                 </a>
+            </div>
+        </div>
+    </section>
+
+    {{-- ═══════════════════════════════════════════
+         ECOSYSTEM SUPPORTERS & INITIATIVE PARTNERS
+         ═══════════════════════════════════════════ --}}
+    <section class="supporters-section" aria-label="Ekosistem Pendukung dan Inisiatif Kolaborasi">
+        <div class="supporters-header">
+            <p class="supporters-label">Inisiatif Kolaboratif &amp; Ekosistem Pendukung</p>
+        </div>
+        <div class="supporters-marquee-stage">
+            <div class="supporters-track">
+                @for ($set = 0; $set < 4; $set++)
+                    <div class="supporters-group" @if($set > 0) aria-hidden="true" @endif>
+                        <div class="supporter-logo-item" title="Jagoan Hosting Innovation Competition">
+                            <img src="{{ asset('assets/L1.webp') }}" alt="Jagoan Hosting Innovation Competition" loading="lazy">
+                        </div>
+                        <div class="supporter-logo-item" title="Jagoan Hosting">
+                            <img src="{{ asset('assets/L2.webp') }}" alt="Jagoan Hosting" loading="lazy">
+                        </div>
+                        <div class="supporter-logo-item" title="Kementerian Komunikasi dan Digital">
+                            <img src="{{ asset('assets/L3.webp') }}" alt="Kementerian Komunikasi dan Digital" loading="lazy">
+                        </div>
+                        <div class="supporter-logo-item" title="Garuda Spark Innovation Hub">
+                            <img src="{{ asset('assets/L4.webp') }}" alt="Garuda Spark Innovation Hub" loading="lazy">
+                        </div>
+                        <div class="supporter-logo-item" title="Ngalup.co">
+                            <img src="{{ asset('assets/L5.webp') }}" alt="Ngalup.co" loading="lazy">
+                        </div>
+                    </div>
+                @endfor
             </div>
         </div>
     </section>
