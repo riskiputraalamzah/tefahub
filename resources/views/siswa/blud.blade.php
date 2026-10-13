@@ -278,15 +278,9 @@
                 }).join('');
             }
 
-            function escapeHtml(str) {
-                if (!str) return '';
-                return String(str)
-                    .replace(/&/g, '&amp;')
-                    .replace(/</g, '&lt;')
-                    .replace(/>/g, '&gt;')
-                    .replace(/"/g, '&quot;')
-                    .replace(/'/g, '&#039;');
-            }
+            const escapeHtml = window.escapeHtml || function(str) {
+                return str ? String(str).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m])) : '';
+            };
 
             // Listen for product added event
             window.addEventListener('bludProductAdded', function() {

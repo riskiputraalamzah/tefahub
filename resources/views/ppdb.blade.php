@@ -32,10 +32,18 @@
 </head>
 <body class="ppdb-body">
 
+    {{-- Accessibility: Skip to Main Content --}}
+    <a href="#mainContent" class="skip-to-content">Lewati ke Konten Utama</a>
+
     {{-- Unified Landing Header & Navbar --}}
     <x-landing-header :active="'ppdb'" />
 
-    <main class="ppdb-main-wrap">
+    {{-- Accessible Breadcrumb Navigation --}}
+    <x-breadcrumbs :items="[
+        ['label' => 'PPDB 2026/2027', 'url' => '']
+    ]" />
+
+    <main class="ppdb-main-wrap" id="mainContent">
 
         <!-- ═══════════════════════════════════════════════════════════
              1. HERO BANNER SECTION (WITH IMAGE COPY 7.WEBP)
@@ -509,7 +517,7 @@
 
                 <div class="quiz-banner-visual">
                     <img 
-                        src="{{ asset('assets/image copy 2.png') }}" 
+                        src="{{ asset('assets/image copy 2.webp') }}" 
                         alt="Temukan Program Keahlian 5 Jurusan Unggulan SMK Antartika 1 Sidoarjo" 
                         class="quiz-banner-right-img"
                         loading="eager"

@@ -86,9 +86,9 @@
                 </div>
             </div>
 
-            <!-- Right Background Image (image copy 4.png) with Gradient Fade & Botanical Leaves -->
+            <!-- Right Background Image (image copy 4.webp) with Gradient Fade & Botanical Leaves -->
             <div class="reg-hero-image-wrap">
-                <img src="{{ asset('assets/image copy 4.png') }}" alt="Gedung SMK Antartika 1 Sidoarjo" class="reg-hero-school-img">
+                <img src="{{ asset('assets/image copy 4.webp') }}" alt="Gedung SMK Antartika 1 Sidoarjo" class="reg-hero-school-img">
                 <div class="reg-hero-img-gradient"></div>
                 <!-- Decorative Botanical Leaf Accent -->
                 <svg class="reg-botanical-leaf" viewBox="0 0 140 120" fill="none" xmlns="http://www.w3.org/2000/svg">

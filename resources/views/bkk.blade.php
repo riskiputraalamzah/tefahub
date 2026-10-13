@@ -20,16 +20,25 @@
 </head>
 <body>
 
+    {{-- Accessibility: Skip to Main Content --}}
+    <a href="#mainContent" class="skip-to-content">Lewati ke Konten Utama</a>
+
     {{-- Unified Landing Header & Navbar --}}
     <x-landing-header :active="'bkk'" />
+
+    {{-- Accessible Breadcrumb Navigation --}}
+    <x-breadcrumbs :items="[
+        ['label' => 'Layanan', 'url' => url('/#layanan')],
+        ['label' => 'Bursa Kerja Khusus (BKK)', 'url' => '']
+    ]" />
 
     {{-- ═══════════════════════════════════════════
          BKK HERO SECTION WITH GRADIENT GLOWS & BACKGROUND IMAGE
          ═══════════════════════════════════════════ --}}
-    <section class="bkk-hero-section">
-        {{-- Background image.png Artwork (Subtle & Elegant) --}}
+    <section class="bkk-hero-section" id="mainContent">
+        {{-- Background image.webp Artwork (Subtle & Elegant) --}}
         <div class="bkk-hero-bg-artwork" aria-hidden="true">
-            <img src="{{ asset('assets/image.png') }}" alt="" class="bkk-hero-bg-img">
+            <img src="{{ asset('assets/image.webp') }}" alt="" class="bkk-hero-bg-img">
         </div>
 
         {{-- Background Eclipse Glow Accents --}}

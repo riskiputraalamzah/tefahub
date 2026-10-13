@@ -29,9 +29,8 @@
                         <a href="{{ route('ppdb') }}" class="dropdown-item {{ $active === 'ppdb' ? 'active-item' : '' }}">PPDB</a>
                         <a href="{{ route('kuis-jurusan') }}" class="dropdown-item {{ $active === 'kuis' ? 'active-item' : '' }}">Kuis Jurusan ⚡</a>
                         <a href="{{ route('ppdb.daftar') }}" class="dropdown-item {{ $active === 'ppdb-daftar' ? 'active-item' : '' }}">Pendaftaran Online</a>
-                        <a href="{{ url('/#blud') }}" class="dropdown-item {{ $active === 'blud' ? 'active-item' : '' }}">BLUD</a>
-                        <a href="{{ route('bkk') }}" class="dropdown-item {{ $active === 'bkk' ? 'active-item' : '' }}">BKK</a>
-                        <a href="{{ route('pkl') }}" class="dropdown-item {{ $active === 'pkl' ? 'active-item' : '' }}">PKL</a>
+                        <a href="{{ route('bkk') }}" class="dropdown-item {{ $active === 'bkk' ? 'active-item' : '' }}">BKK (Bursa Kerja)</a>
+                        <a href="{{ route('pkl') }}" class="dropdown-item {{ $active === 'pkl' ? 'active-item' : '' }}">PKL &amp; Magang Industri</a>
                     </div>
                 </li>
 
@@ -102,9 +101,8 @@
                 <li><a href="{{ route('ppdb') }}" class="mobile-sublink {{ $active === 'ppdb' ? 'active' : '' }}">PPDB</a></li>
                 <li><a href="{{ route('kuis-jurusan') }}" class="mobile-sublink {{ $active === 'kuis' ? 'active' : '' }}">Kuis Jurusan ⚡</a></li>
                 <li><a href="{{ route('ppdb.daftar') }}" class="mobile-sublink {{ $active === 'ppdb-daftar' ? 'active' : '' }}">Pendaftaran Online</a></li>
-                <li><a href="{{ url('/#blud') }}" class="mobile-sublink {{ $active === 'blud' ? 'active' : '' }}">BLUD</a></li>
-                <li><a href="{{ route('bkk') }}" class="mobile-sublink {{ $active === 'bkk' ? 'active' : '' }}">BKK</a></li>
-                <li><a href="{{ route('pkl') }}" class="mobile-sublink {{ $active === 'pkl' ? 'active' : '' }}">PKL</a></li>
+                <li><a href="{{ route('bkk') }}" class="mobile-sublink {{ $active === 'bkk' ? 'active' : '' }}">BKK (Bursa Kerja)</a></li>
+                <li><a href="{{ route('pkl') }}" class="mobile-sublink {{ $active === 'pkl' ? 'active' : '' }}">PKL &amp; Magang Industri</a></li>
             </ul>
         </li>
 

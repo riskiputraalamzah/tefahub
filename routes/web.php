@@ -84,13 +84,11 @@ Route::prefix('siswa')
         Route::get('/riwayat', [SiswaController::class, 'riwayat'])->name('riwayat');
         Route::get('/tanya-tefa', [SiswaController::class, 'tanyaTefa'])->name('tanya-tefa');
         Route::post('/profile', [SiswaController::class, 'updateProfile'])->name('profile.update');
-        Route::post('/blud/publikasi', [SiswaController::class, 'storeBludProduct'])->name('blud.publikasi');
-
         // ─── Realtime Data & Actions Endpoints ───
         Route::middleware('throttle:siswa-api')->group(function () {
+            Route::post('/blud/publikasi', [SiswaController::class, 'storeBludProduct'])->name('blud.publikasi');
             Route::get('/api/dashboard-data', [SiswaController::class, 'getDashboardData'])->name('api.dashboard');
             Route::get('/api/blud-data', [SiswaController::class, 'getBludData'])->name('api.blud');
-            Route::post('/api/blud-produk', [SiswaController::class, 'storeBludProduct'])->name('api.blud.store');
             Route::get('/api/bkk-data', [SiswaController::class, 'getBkkData'])->name('api.bkk');
             Route::post('/api/bkk-lamar', [SiswaController::class, 'lamarPekerjaan'])->name('api.bkk.lamar');
             Route::get('/api/akademik-data', [SiswaController::class, 'getAkademikData'])->name('api.akademik');

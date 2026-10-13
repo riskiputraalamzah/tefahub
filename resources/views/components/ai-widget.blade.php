@@ -22,7 +22,7 @@
 
     {{-- Robot Mascot Container (Besar & Statis Sesuai Gambar) --}}
     <div class="ai-mascot-wrap">
-        <img src="{{ asset('assets/image copy 5.png') }}" alt="Asisten Tanya Tefa AI" class="ai-mascot-img" width="130" height="140" loading="lazy">
+        <img src="{{ asset('assets/image copy 5.webp') }}" alt="Asisten Tanya Tefa AI" class="ai-mascot-img" width="130" height="140" loading="lazy">
     </div>
 
     <span class="ai-trigger-badge" id="ai-notif-badge" style="display:none;"></span>
@@ -35,7 +35,7 @@
     <div class="ai-header">
         <div class="ai-header-brand">
             <div class="ai-header-avatar">
-                <img src="{{ asset('assets/image copy 5.png') }}" alt="Tanya Tefa AI" class="ai-avatar-img" width="28" height="28">
+                <img src="{{ asset('assets/image copy 5.webp') }}" alt="Tanya Tefa AI" class="ai-avatar-img" width="28" height="28">
                 <span class="ai-status-pulse"></span>
             </div>
             <div class="ai-header-info">

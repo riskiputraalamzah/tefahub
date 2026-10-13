@@ -72,9 +72,12 @@ function initLayeredScrollEffects(force) {
         ".principal-section",
         ".logo-marquee-section",
         ".about-section",
+        ".value-prop-section",
         ".services-section",
         ".showcase-section",
+        ".facilities-section",
         ".ai-section",
+        ".alumni-section",
         ".cta-banner-section",
         ".supporters-section",
         ".main-footer",
@@ -108,26 +111,22 @@ function initLayeredScrollEffects(force) {
     }
 
     _revealObserver = new IntersectionObserver(
-        (entries, obs) => {
+        (entries) => {
             entries.forEach((entry) => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add("is-revealed");
-                    obs.unobserve(entry.target);
+                } else {
+                    // Re-trigger animation when scrolled out of viewport
+                    entry.target.classList.remove("is-revealed");
                 }
             });
         },
         // Refined threshold & margin: launches upward lift with generous lead time
-        { threshold: 0.05, rootMargin: "0px 0px -25px 0px" }
+        { threshold: 0.06, rootMargin: "0px 0px -30px 0px" }
     );
 
     targets.forEach((el) => {
-        const rect = el.getBoundingClientRect();
-        if (rect.top < vh * 0.85 && rect.bottom > 0) {
-            // Already well inside initial viewport — reveal immediately.
-            el.classList.add("is-revealed");
-        } else if (!el.classList.contains("is-revealed")) {
-            _revealObserver.observe(el);
-        }
+        _revealObserver.observe(el);
     });
 }
 
@@ -231,6 +230,17 @@ function boot() {
         { once: true }
     );
 }
+
+// ── Shared Helpers ──────────────────────────────────────────────────────────
+window.escapeHtml = function (str) {
+    if (!str) return "";
+    return String(str)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+};
 
 if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", boot, { once: true });

@@ -15,7 +15,7 @@
                 </a>
 
                 <p class="footer-bio">
-                    Platform ekosistem digital terpadu untuk pendidikan vokasi SMK: Akademik, Teaching Factory (BLUD), dan Bursa Kerja Khusus (BKK).
+                    Platform ekosistem digital terpadu untuk pendidikan vokasi SMK: Akademik, Teaching Factory, Praktik Kerja Lapangan (PKL), dan Bursa Kerja Khusus (BKK).
                 </p>
 
                 <div class="footer-socials">
@@ -40,9 +40,8 @@
                 <ul class="footer-links">
                     <li><a href="{{ url('/') }}">Beranda</a></li>
                     <li><a href="{{ route('profil') }}">Profil Sekolah</a></li>
-                    <li><a href="{{ route('ppdb') }}">PPDB</a></li>
-                    <li><a href="{{ url('/#blud') }}">BLUD</a></li>
-                    <li><a href="{{ url('/#pkl') }}">PKL &amp; Industri</a></li>
+                    <li><a href="{{ route('ppdb') }}">PPDB Online</a></li>
+                    <li><a href="{{ route('pkl') }}">PKL &amp; Kemitraan Industri</a></li>
                     <li><a href="{{ route('bkk') }}">Career Center (BKK)</a></li>
                 </ul>
             </div>
@@ -63,24 +62,25 @@
             <div class="footer-col footer-col-newsletter">
                 <h3 class="footer-col-title">INFORMASI &amp; KONTAK</h3>
                 <p class="newsletter-desc">
-                    Dapatkan kabar kegiatan sekolah, update BLUD, dan lowongan karir industri terbaru.
+                    Dapatkan kabar kegiatan sekolah, agenda PKL, sertifikasi industri, dan bursa lowongan kerja terbaru.
                 </p>
                 <div class="footer-contact-mini">
                     <span class="contact-pill">Email: info@tefahub.sch.id</span>
                     <span class="contact-pill">WA: +62 812-3456-7890</span>
                 </div>
-                <form action="#newsletter" method="POST" class="newsletter-box" onsubmit="event.preventDefault(); alert('Terima kasih telah berlangganan!');">
+                <form id="footerNewsletterForm" class="newsletter-box" onsubmit="handleFooterNewsletter(event, this)">
                     @csrf
                     <input
                         type="email"
+                        id="newsletterEmail"
                         placeholder="Alamat email Anda..."
                         class="newsletter-input"
                         required
                         aria-label="Alamat email newsletter"
                     >
-                    <button type="submit" class="newsletter-btn" aria-label="Kirim langganan">
-                        <span>Kirim</span>
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:14px; height:14px;" aria-hidden="true">
+                    <button type="submit" class="newsletter-btn" id="newsletterBtn" aria-label="Kirim langganan">
+                        <span id="newsletterBtnText">Kirim</span>
+                        <svg id="newsletterBtnIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:14px; height:14px;" aria-hidden="true">
                             <line x1="5" y1="12" x2="19" y2="12"/>
                             <polyline points="12 5 19 12 12 19"/>
                         </svg>
@@ -103,4 +103,92 @@
         </div>
 
     </div>
+
+    {{-- Interactive Floating Feedback Toast --}}
+    <div id="footerNewsletterToast" class="footer-toast" role="status" aria-live="polite" aria-atomic="true">
+        <div class="footer-toast-content">
+            <svg class="footer-toast-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+            </svg>
+            <div class="footer-toast-body">
+                <strong class="footer-toast-title">Pendaftaran Buletin Berhasil!</strong>
+                <p class="footer-toast-text">Terima kasih, email Anda telah terdaftar untuk menerima informasi resmi sekolah.</p>
+            </div>
+        </div>
+    </div>
 </footer>
+
+<style>
+.footer-toast {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 999999;
+    max-width: 380px;
+    background: #0f172a;
+    border: 1px solid rgba(16, 185, 129, 0.4);
+    box-shadow: 0 12px 36px -4px rgba(0, 0, 0, 0.45);
+    border-radius: 14px;
+    padding: 14px 18px;
+    opacity: 0;
+    transform: translateY(20px) scale(0.96);
+    pointer-events: none;
+    transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1), transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.footer-toast.is-visible {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
+}
+.footer-toast-content {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+}
+.footer-toast-icon {
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+.footer-toast-title {
+    display: block;
+    font-size: 13.5px;
+    font-weight: 700;
+    color: #f8fafc;
+    margin-bottom: 2px;
+}
+.footer-toast-text {
+    font-size: 12px;
+    color: #94a3b8;
+    line-height: 1.45;
+    margin: 0;
+}
+</style>
+
+<script>
+function handleFooterNewsletter(event, form) {
+    event.preventDefault();
+    const emailInput = document.getElementById('newsletterEmail');
+    const btn = document.getElementById('newsletterBtn');
+    const btnText = document.getElementById('newsletterBtnText');
+    const toast = document.getElementById('footerNewsletterToast');
+
+    if (!emailInput || !emailInput.value.trim()) return;
+
+    if (btn) btn.disabled = true;
+    if (btnText) btnText.textContent = '...';
+
+    setTimeout(function() {
+        if (btn) btn.disabled = false;
+        if (btnText) btnText.textContent = 'Kirim';
+        emailInput.value = '';
+
+        if (toast) {
+            toast.classList.add('is-visible');
+            setTimeout(function() {
+                toast.classList.remove('is-visible');
+            }, 4500);
+        }
+    }, 450);
+}
+</script>

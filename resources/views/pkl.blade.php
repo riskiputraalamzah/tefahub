@@ -20,13 +20,22 @@
 </head>
 <body>
 
+    {{-- Accessibility: Skip to Main Content --}}
+    <a href="#mainContent" class="skip-to-content">Lewati ke Konten Utama</a>
+
     {{-- Unified Landing Header & Navbar --}}
     <x-landing-header :active="'pkl'" />
+
+    {{-- Accessible Breadcrumb Navigation --}}
+    <x-breadcrumbs :items="[
+        ['label' => 'Layanan', 'url' => url('/#layanan')],
+        ['label' => 'Praktik Kerja Lapangan (PKL)', 'url' => '']
+    ]" />
 
     {{-- ═══════════════════════════════════════════
          PKL HERO SECTION WITH 1216x444 BANNER CARD
          ═══════════════════════════════════════════ --}}
-    <section class="pkl-hero-section">
+    <section class="pkl-hero-section" id="mainContent">
         {{-- Ambient background glows --}}
         <div class="pkl-bg-glow pkl-glow-1" aria-hidden="true"></div>
         <div class="pkl-bg-glow pkl-glow-2" aria-hidden="true"></div>

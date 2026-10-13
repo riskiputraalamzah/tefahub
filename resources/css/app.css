@@ -2,6 +2,27 @@
    TEFA-HUB CINEMATIC SCROLL & LAYER ELEVATION
    ═══════════════════════════════════════════ */
 
+/* ── Accessibility: Skip to Content ─────────────────────────────────── */
+.skip-to-content {
+    position: fixed;
+    top: -100px;
+    left: 20px;
+    background: #004ac6;
+    color: #ffffff;
+    padding: 10px 18px;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 14px;
+    z-index: 1000000;
+    transition: top 0.2s ease;
+    text-decoration: none;
+    box-shadow: 0 4px 15px rgba(0, 74, 198, 0.4);
+}
+.skip-to-content:focus {
+    top: 20px;
+    outline: 3px solid #60a5fa;
+}
+
 /* ── Top Scroll Progress Bar ────────────────────────────────────────── */
 [data-scroll-progress] {
     position: fixed;
@@ -41,14 +62,12 @@ html.lenis, html.lenis body {
 .scroll-layer-section {
     position: relative;
     transform-origin: center top;
-    /* Limit will-change to compositor-only properties for GPU layer promotion */
-    will-change: transform, opacity;
     opacity: 0.08;
     transform: translateY(52px) scale(0.978);
     transition:
-        opacity 1.05s cubic-bezier(0.16, 1, 0.3, 1),
-        transform 1.05s cubic-bezier(0.16, 1, 0.3, 1),
-        box-shadow 1.05s cubic-bezier(0.16, 1, 0.3, 1);
+        opacity 0.95s cubic-bezier(0.16, 1, 0.3, 1),
+        transform 0.95s cubic-bezier(0.16, 1, 0.3, 1),
+        box-shadow 0.95s cubic-bezier(0.16, 1, 0.3, 1);
     box-shadow: 0 -18px 45px -15px rgba(15, 23, 42, 0.05);
 }
 
@@ -63,9 +82,8 @@ html.lenis, html.lenis body {
     opacity: 0;
     transform: translateY(30px);
     transition:
-        opacity 0.92s cubic-bezier(0.16, 1, 0.3, 1),
-        transform 0.92s cubic-bezier(0.16, 1, 0.3, 1);
-    will-change: transform, opacity;
+        opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1),
+        transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 /* When the parent section lifts, give internal reveals an elegant synchronized cadence */
@@ -82,27 +100,24 @@ html.lenis, html.lenis body {
     opacity: 0;
     transform: translateX(-34px) translateY(10px);
     transition:
-        opacity 0.96s cubic-bezier(0.16, 1, 0.3, 1),
-        transform 0.96s cubic-bezier(0.16, 1, 0.3, 1);
-    will-change: transform, opacity;
+        opacity 0.88s cubic-bezier(0.16, 1, 0.3, 1),
+        transform 0.88s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 [data-reveal="right"] {
     opacity: 0;
     transform: translateX(34px) translateY(10px);
     transition:
-        opacity 0.96s cubic-bezier(0.16, 1, 0.3, 1),
-        transform 0.96s cubic-bezier(0.16, 1, 0.3, 1);
-    will-change: transform, opacity;
+        opacity 0.88s cubic-bezier(0.16, 1, 0.3, 1),
+        transform 0.88s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 [data-reveal="scale"] {
     opacity: 0;
     transform: scale(0.94) translateY(22px);
     transition:
-        opacity 0.96s cubic-bezier(0.16, 1, 0.3, 1),
-        transform 0.96s cubic-bezier(0.16, 1, 0.3, 1);
-    will-change: transform, opacity;
+        opacity 0.88s cubic-bezier(0.16, 1, 0.3, 1),
+        transform 0.88s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 [data-reveal="left"].is-revealed,
@@ -121,9 +136,8 @@ html.lenis, html.lenis body {
     opacity: 0;
     transform: translateY(30px);
     transition:
-        opacity 0.92s cubic-bezier(0.16, 1, 0.3, 1),
-        transform 0.92s cubic-bezier(0.16, 1, 0.3, 1);
-    will-change: transform, opacity;
+        opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1),
+        transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .reveal.is-revealed {
     opacity: 1;
@@ -134,9 +148,8 @@ html.lenis, html.lenis body {
     opacity: 0;
     transform: translateX(-34px) translateY(10px);
     transition:
-        opacity 0.96s cubic-bezier(0.16, 1, 0.3, 1),
-        transform 0.96s cubic-bezier(0.16, 1, 0.3, 1);
-    will-change: transform, opacity;
+        opacity 0.88s cubic-bezier(0.16, 1, 0.3, 1),
+        transform 0.88s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .reveal-left.is-revealed {
     opacity: 1;
@@ -147,9 +160,8 @@ html.lenis, html.lenis body {
     opacity: 0;
     transform: translateX(34px) translateY(10px);
     transition:
-        opacity 0.96s cubic-bezier(0.16, 1, 0.3, 1),
-        transform 0.96s cubic-bezier(0.16, 1, 0.3, 1);
-    will-change: transform, opacity;
+        opacity 0.88s cubic-bezier(0.16, 1, 0.3, 1),
+        transform 0.88s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .reveal-right.is-revealed {
     opacity: 1;
@@ -160,9 +172,8 @@ html.lenis, html.lenis body {
     opacity: 0;
     transform: scale(0.94) translateY(22px);
     transition:
-        opacity 0.96s cubic-bezier(0.16, 1, 0.3, 1),
-        transform 0.96s cubic-bezier(0.16, 1, 0.3, 1);
-    will-change: transform, opacity;
+        opacity 0.88s cubic-bezier(0.16, 1, 0.3, 1),
+        transform 0.88s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .reveal-scale.is-revealed {
     opacity: 1;
@@ -174,11 +185,10 @@ html.lenis, html.lenis body {
     opacity: 0;
     transform: translateY(32px) scale(0.965);
     transition:
-        opacity 0.88s cubic-bezier(0.16, 1, 0.3, 1),
-        transform 0.88s cubic-bezier(0.16, 1, 0.3, 1),
+        opacity 0.82s cubic-bezier(0.16, 1, 0.3, 1),
+        transform 0.82s cubic-bezier(0.16, 1, 0.3, 1),
         box-shadow 0.3s ease,
         border-color 0.3s ease;
-    will-change: transform, opacity;
 }
 
 /* Tighter, more natural stagger cadence — fluid cascading ripple */
