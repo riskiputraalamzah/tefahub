@@ -454,10 +454,10 @@
          ECOSYSTEM SUPPORTERS & INITIATIVE PARTNERS
          ═══════════════════════════════════════════ --}}
     <section class="supporters-section" aria-label="Ekosistem Pendukung dan Inisiatif Kolaborasi">
-        <div class="supporters-header">
+        <div class="supporters-header" data-reveal>
             <p class="supporters-label">Inisiatif Kolaboratif &amp; Ekosistem Pendukung</p>
         </div>
-        <div class="supporters-marquee-stage">
+        <div class="supporters-marquee-stage" data-reveal>
             <div class="supporters-track">
                 @for ($set = 0; $set < 4; $set++)
                     <div class="supporters-group" @if($set > 0) aria-hidden="true" @endif>

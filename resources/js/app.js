@@ -70,12 +70,14 @@ function initLayeredScrollEffects(force) {
 
     const sectionSelectors = [
         ".principal-section",
+        ".logo-marquee-section",
         ".about-section",
         ".services-section",
         ".showcase-section",
         ".ai-section",
         ".cta-banner-section",
         ".supporters-section",
+        ".main-footer",
         "[data-scroll-layer]",
     ];
 
@@ -114,15 +116,14 @@ function initLayeredScrollEffects(force) {
                 }
             });
         },
-        // rootMargin pushes the trigger slightly before reaching the viewport
-        // edge so elements begin their animation with a natural lead time.
-        { threshold: 0.06, rootMargin: "0px 0px -40px 0px" }
+        // Refined threshold & margin: launches upward lift with generous lead time
+        { threshold: 0.05, rootMargin: "0px 0px -25px 0px" }
     );
 
     targets.forEach((el) => {
         const rect = el.getBoundingClientRect();
-        if (rect.top < vh * 0.95 && rect.bottom > 0) {
-            // Already in view — reveal immediately, no observer needed.
+        if (rect.top < vh * 0.85 && rect.bottom > 0) {
+            // Already well inside initial viewport — reveal immediately.
             el.classList.add("is-revealed");
         } else if (!el.classList.contains("is-revealed")) {
             _revealObserver.observe(el);

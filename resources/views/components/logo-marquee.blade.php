@@ -50,7 +50,7 @@
 
 <section class="logo-marquee-section" aria-label="Mitra Industri dan Kerjasama Sekolah">
     <div class="logo-marquee-container">
-        <header class="logo-marquee-header">
+        <header class="logo-marquee-header" data-reveal>
             <div class="logo-marquee-pill">
                 <span class="logo-marquee-pill-dot" aria-hidden="true"></span>
                 <span>{{ $badge }}</span>
@@ -59,7 +59,7 @@
             <p class="logo-marquee-subtitle">{{ $subtitle }}</p>
         </header>
 
-        <div class="logo-marquee-stage" id="logoMarqueeStage">
+        <div class="logo-marquee-stage" id="logoMarqueeStage" data-reveal>
             @foreach ($rows as $rowIndex => $rowData)
                 <div class="marquee-row-wrapper" 
                      data-marquee-row="{{ $rowData['id'] }}"
