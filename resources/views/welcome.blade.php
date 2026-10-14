@@ -14,6 +14,19 @@
     <link rel="stylesheet" href="{{ asset('assets/css/sambutan.css') }}?v={{ file_exists(public_path('assets/css/sambutan.css')) ? filemtime(public_path('assets/css/sambutan.css')) : '1.0' }}">
     <link rel="stylesheet" href="{{ asset('assets/css/logo-marquee.css') }}?v={{ file_exists(public_path('assets/css/logo-marquee.css')) ? filemtime(public_path('assets/css/logo-marquee.css')) : '1.0' }}">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <style>
+        /* Failsafe Guaranteed Visibility: All landing page sections always visible under all network/cache states */
+        .hero, .principal-section, .logo-marquee-section, .about-section,
+        .value-prop-section, .services-section, .showcase-section,
+        .facilities-section, .ai-section, .alumni-section, .cta-banner-section,
+        .supporters-section, .main-footer, .scroll-layer-section,
+        [data-reveal], [data-stagger-item], .reveal, .reveal-left, .reveal-right, .reveal-scale,
+        .cards-row, .card, .service-card, .ai-card, .facility-card, .alumni-card {
+            opacity: 1 !important;
+            visibility: visible !important;
+            transform: none !important;
+        }
+    </style>
     <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
 <body>

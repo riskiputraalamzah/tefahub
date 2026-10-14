@@ -1,7 +1,7 @@
 {{-- ═══════════════════════════════════════════
      ALUMNI SUCCESS STORIES & INDUSTRY PARTNERS
      ═══════════════════════════════════════════ --}}
-<section class="alumni-section scroll-layer-section" id="testimoni" aria-label="Testimoni Alumni dan Mitra Industri SMK Antartika 1 Sidoarjo">
+<section class="alumni-section" id="testimoni" aria-label="Testimoni Alumni dan Mitra Industri SMK Antartika 1 Sidoarjo">
     <div class="wrap">
 
         <div class="alumni-header" data-reveal="scale">

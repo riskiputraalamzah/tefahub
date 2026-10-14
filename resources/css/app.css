@@ -157,24 +157,26 @@ html.lenis, html.lenis body {
     will-change: opacity, transform, filter;
 }
 
-/* ── SECTION SCROLL ELEVATION (Muncul Satu per Satu Saat Scroll) ────────── */
-.scroll-layer-section {
-    position: relative;
-    opacity: 0;
-    transform: translate3d(0, 48px, 0) scale(0.982);
-    transition:
-        opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1),
-        transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
-    will-change: opacity, transform;
-}
-
-/* Hero section / Section pertama langsung aktif tanpa nunggu scroll */
+/* ── SECTION SCROLL ELEVATION (100% Terlihat Default & Aman) ────────── */
+.scroll-layer-section,
+.principal-section,
+.logo-marquee-section,
+.about-section,
+.value-prop-section,
+.services-section,
+.showcase-section,
+.facilities-section,
+.ai-section,
+.alumni-section,
+.cta-banner-section,
+.supporters-section,
+.main-footer,
 .hero,
 .hero.scroll-layer-section,
-.hero.scroll-layer-section.is-revealed,
 .scroll-layer-section.is-revealed {
     opacity: 1 !important;
-    transform: translate3d(0, 0, 0) scale(1) !important;
+    transform: none !important;
+    visibility: visible !important;
 }
 
 .hero [data-reveal],
@@ -184,129 +186,34 @@ html.lenis, html.lenis body {
 .hero .card {
     opacity: 1 !important;
     transform: none !important;
+    visibility: visible !important;
 }
 
-/* Child reveal elements — Elemen anak muncul mengalir saat section terangkat */
+/* Child reveal elements — Selalu terlihat penuh */
 [data-reveal],
-.reveal {
-    opacity: 0;
-    transform: translate3d(0, 26px, 0);
-    transition:
-        opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1),
-        transform 0.75s cubic-bezier(0.16, 1, 0.3, 1);
-    will-change: opacity, transform;
-    backface-visibility: hidden;
-    -webkit-backface-visibility: hidden;
-}
-
+[data-reveal="left"],
+[data-reveal="right"],
+[data-reveal="scale"],
+.reveal,
+.reveal-left,
+.reveal-right,
+.reveal-scale,
 .scroll-layer-section.is-revealed [data-reveal],
 .scroll-layer-section.is-revealed .reveal,
 [data-reveal].is-revealed,
 .reveal.is-revealed {
-    opacity: 1;
-    transform: translate3d(0, 0, 0);
+    opacity: 1 !important;
+    transform: none !important;
+    visibility: visible !important;
 }
 
-[data-reveal="left"],
-.reveal-left {
-    opacity: 0;
-    transform: translate3d(-32px, 0, 0);
-    transition:
-        opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
-        transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-    will-change: opacity, transform;
-}
-
-[data-reveal="right"],
-.reveal-right {
-    opacity: 0;
-    transform: translate3d(32px, 0, 0);
-    transition:
-        opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
-        transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-    will-change: opacity, transform;
-}
-
-[data-reveal="scale"],
-.reveal-scale {
-    opacity: 0;
-    transform: scale(0.95) translate3d(0, 16px, 0);
-    transition:
-        opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
-        transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-    will-change: opacity, transform;
-}
-
-.scroll-layer-section.is-revealed [data-reveal="left"],
-.scroll-layer-section.is-revealed [data-reveal="right"],
-.scroll-layer-section.is-revealed .reveal-left,
-.scroll-layer-section.is-revealed .reveal-right,
-[data-reveal="left"].is-revealed,
-[data-reveal="right"].is-revealed,
-.reveal-left.is-revealed,
-.reveal-right.is-revealed {
-    opacity: 1;
-    transform: translate3d(0, 0, 0);
-}
-
-.scroll-layer-section.is-revealed [data-reveal="scale"],
-.scroll-layer-section.is-revealed .reveal-scale,
-[data-reveal="scale"].is-revealed,
-.reveal-scale.is-revealed {
-    opacity: 1;
-    transform: scale(1) translate3d(0, 0, 0);
-}
-
-/* ── Staggered Children (Kartu muncul mengalir satu per satu berurutan) ─── */
-[data-stagger-item] {
-    opacity: 0;
-    transform: translate3d(0, 28px, 0) scale(0.96);
-    transition:
-        opacity 0.72s cubic-bezier(0.16, 1, 0.3, 1),
-        transform 0.72s cubic-bezier(0.16, 1, 0.3, 1);
-    will-change: opacity, transform;
-}
-
-.scroll-layer-section.is-revealed [data-stagger-item]:nth-child(1),
-[data-stagger].is-revealed [data-stagger-item]:nth-child(1) {
-    transition-delay: 0.08s;
-    opacity: 1;
-    transform: translate3d(0, 0, 0) scale(1);
-}
-
-.scroll-layer-section.is-revealed [data-stagger-item]:nth-child(2),
-[data-stagger].is-revealed [data-stagger-item]:nth-child(2) {
-    transition-delay: 0.18s;
-    opacity: 1;
-    transform: translate3d(0, 0, 0) scale(1);
-}
-
-.scroll-layer-section.is-revealed [data-stagger-item]:nth-child(3),
-[data-stagger].is-revealed [data-stagger-item]:nth-child(3) {
-    transition-delay: 0.28s;
-    opacity: 1;
-    transform: translate3d(0, 0, 0) scale(1);
-}
-
-.scroll-layer-section.is-revealed [data-stagger-item]:nth-child(4),
-[data-stagger].is-revealed [data-stagger-item]:nth-child(4) {
-    transition-delay: 0.38s;
-    opacity: 1;
-    transform: translate3d(0, 0, 0) scale(1);
-}
-
-.scroll-layer-section.is-revealed [data-stagger-item]:nth-child(5),
-[data-stagger].is-revealed [data-stagger-item]:nth-child(5) {
-    transition-delay: 0.48s;
-    opacity: 1;
-    transform: translate3d(0, 0, 0) scale(1);
-}
-
-.scroll-layer-section.is-revealed [data-stagger-item]:nth-child(6),
-[data-stagger].is-revealed [data-stagger-item]:nth-child(6) {
-    transition-delay: 0.58s;
-    opacity: 1;
-    transform: translate3d(0, 0, 0) scale(1);
+/* Staggered Children — Selalu terlihat penuh */
+[data-stagger-item],
+[data-stagger].is-revealed [data-stagger-item],
+.scroll-layer-section.is-revealed [data-stagger-item] {
+    opacity: 1 !important;
+    transform: none !important;
+    visibility: visible !important;
 }
 
 /* ── Satisfying Tactile Interactive 3D Card Hover (Perspective Tilt & Glare) ── */

@@ -52,38 +52,14 @@ function initLayeredScrollEffects(force) {
         _revealObserver = null;
     }
 
-    // Attach scroll-layer-section to all primary landing page sections
-    const sectionSelectors = [
-        ".hero",
-        ".principal-section",
-        ".logo-marquee-section",
-        ".about-section",
-        ".value-prop-section",
-        ".services-section",
-        ".showcase-section",
-        ".facilities-section",
-        ".ai-section",
-        ".alumni-section",
-        ".cta-banner-section",
-        ".supporters-section",
-        ".main-footer",
-        "[data-scroll-layer]"
-    ];
-
-    document.querySelectorAll(sectionSelectors.join(", ")).forEach((sec) => {
-        if (!sec.classList.contains("scroll-layer-section")) {
-            sec.classList.add("scroll-layer-section");
-        }
-    });
-
     const targetSelectors = [
-        ".scroll-layer-section",
         "[data-reveal]",
         "[data-stagger]",
         ".reveal",
         ".reveal-left",
         ".reveal-right",
         ".reveal-scale",
+        ".scroll-layer-section",
     ];
 
     const targets = document.querySelectorAll(targetSelectors.join(", "));

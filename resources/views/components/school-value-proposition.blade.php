@@ -1,7 +1,7 @@
 {{-- ═══════════════════════════════════════════
      SCHOOL VALUE PROPOSITION & BRANDING
      ═══════════════════════════════════════════ --}}
-<section class="value-prop-section scroll-layer-section" id="keunggulan" aria-label="Keunggulan SMK Antartika 1 Sidoarjo">
+<section class="value-prop-section" id="keunggulan" aria-label="Keunggulan SMK Antartika 1 Sidoarjo">
     <div class="wrap">
         
         <div class="value-prop-header" data-reveal="scale">

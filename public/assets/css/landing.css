@@ -308,126 +308,64 @@ body.onboarding-active {
    Semua GPU composite-only (opacity + transform): tidak trigger layout/paint.
    ─────────────────────────────────────────────────────────────────────── */
 
-/* ── 1. SECTION-LEVEL FADE (scroll-layer-section ditambah oleh app.js) ── */
-.scroll-layer-section {
-    opacity: 0;
-    transform: translateY(32px);
-    transition: opacity 0.75s cubic-bezier(0.22, 1, 0.36, 1),
-                transform 0.75s cubic-bezier(0.22, 1, 0.36, 1);
-    will-change: opacity, transform;
-    backface-visibility: hidden;
-    -webkit-backface-visibility: hidden;
-}
-
-/* Hero section and all hero elements must NEVER be hidden */
+/* ── 1. ALL CONTENT SECTIONS 100% VISIBLE & ROBUST BY DEFAULT ── */
+.scroll-layer-section,
+.principal-section,
+.logo-marquee-section,
+.about-section,
+.value-prop-section,
+.services-section,
+.showcase-section,
+.facilities-section,
+.ai-section,
+.alumni-section,
+.cta-banner-section,
+.supporters-section,
+.main-footer,
 .hero,
 .hero.scroll-layer-section,
-.hero.scroll-layer-section.is-revealed,
 .scroll-layer-section.is-revealed {
     opacity: 1 !important;
-    transform: translate3d(0, 0, 0) !important;
-}
-
-.hero [data-reveal],
-.hero [data-stagger],
-.hero [data-stagger-item],
-.hero .cards-row,
-.hero .card {
-    opacity: 1 !important;
     transform: none !important;
+    visibility: visible !important;
 }
 
 /* ── 2. ATTRIBUTE-BASED REVEAL [data-reveal] ─────────────────────────── */
-[data-reveal] {
-    opacity: 0;
-    transform: translateY(28px);
-    transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1),
-                transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
-    will-change: opacity, transform;
-    backface-visibility: hidden;
-    -webkit-backface-visibility: hidden;
-}
-[data-reveal="left"]  { transform: translateX(-32px); }
-[data-reveal="right"] { transform: translateX(32px); }
-[data-reveal="scale"] { transform: scale(0.94); }
-[data-reveal="up"]    { transform: translateY(36px); }
-
+[data-reveal],
+[data-reveal="left"],
+[data-reveal="right"],
+[data-reveal="scale"],
+[data-reveal="up"],
 [data-reveal].is-revealed,
 .scroll-layer-section.is-revealed [data-reveal] {
     opacity: 1 !important;
-    transform: translate3d(0, 0, 0) !important;
+    transform: none !important;
+    visibility: visible !important;
 }
 
 /* ── 3. ATTRIBUTE-BASED STAGGER [data-stagger] / [data-stagger-item] ─── */
-[data-stagger-item] {
-    opacity: 0;
-    transform: translateY(22px);
-    transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
-                transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
-    will-change: opacity, transform;
-    backface-visibility: hidden;
-    -webkit-backface-visibility: hidden;
+[data-stagger-item],
+[data-stagger].is-revealed [data-stagger-item] {
+    opacity: 1 !important;
+    transform: none !important;
+    visibility: visible !important;
 }
 
-/* When the parent [data-stagger] gets is-revealed, children animate in cascade */
-[data-stagger].is-revealed [data-stagger-item]:nth-child(1) { opacity: 1; transform: translate3d(0,0,0); transition-delay: 0.04s; }
-[data-stagger].is-revealed [data-stagger-item]:nth-child(2) { opacity: 1; transform: translate3d(0,0,0); transition-delay: 0.12s; }
-[data-stagger].is-revealed [data-stagger-item]:nth-child(3) { opacity: 1; transform: translate3d(0,0,0); transition-delay: 0.20s; }
-[data-stagger].is-revealed [data-stagger-item]:nth-child(4) { opacity: 1; transform: translate3d(0,0,0); transition-delay: 0.28s; }
-[data-stagger].is-revealed [data-stagger-item]:nth-child(5) { opacity: 1; transform: translate3d(0,0,0); transition-delay: 0.36s; }
-[data-stagger].is-revealed [data-stagger-item]:nth-child(6) { opacity: 1; transform: translate3d(0,0,0); transition-delay: 0.44s; }
-[data-stagger].is-revealed [data-stagger-item]:nth-child(7) { opacity: 1; transform: translate3d(0,0,0); transition-delay: 0.52s; }
-[data-stagger].is-revealed [data-stagger-item]:nth-child(8) { opacity: 1; transform: translate3d(0,0,0); transition-delay: 0.60s; }
-
 /* ── 4. CLASS-BASED REVEAL (legacy / fallback) ───────────────────────── */
-/* Base hidden state — elemen fade-in halus saat scroll */
 .reveal,
 .reveal-left,
 .reveal-right,
-.reveal-scale {
-    opacity: 0;
-    transform: translateY(20px);
-    transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1),
-                transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
-    will-change: opacity, transform;
-    backface-visibility: hidden;
-    -webkit-backface-visibility: hidden;
-}
-
-.reveal-left  { transform: translateX(-24px); }
-.reveal-right { transform: translateX(24px); }
-.reveal-scale { transform: scale(0.95); }
-
-/* Revealed state — muncul halus */
+.reveal-scale,
 .reveal.is-revealed,
 .reveal-left.is-revealed,
 .reveal-right.is-revealed,
-.reveal-scale.is-revealed {
-    opacity: 1;
-    transform: translate3d(0, 0, 0);
+.reveal-scale.is-revealed,
+.stagger-group > *,
+.stagger-group.is-revealed > * {
+    opacity: 1 !important;
+    transform: none !important;
+    visibility: visible !important;
 }
-
-/* Delay classes untuk efek cascade yang natural */
-.delay-1 { transition-delay: 0.08s; }
-.delay-2 { transition-delay: 0.16s; }
-.delay-3 { transition-delay: 0.24s; }
-.delay-4 { transition-delay: 0.32s; }
-.delay-5 { transition-delay: 0.40s; }
-.delay-6 { transition-delay: 0.48s; }
-
-/* Stagger group — anak-anak muncul berurutan dengan fade murni */
-.stagger-group > * {
-    opacity: 0;
-    transform: translateY(18px);
-    transition: opacity 0.75s cubic-bezier(0.22, 1, 0.36, 1),
-                transform 0.75s cubic-bezier(0.22, 1, 0.36, 1);
-    will-change: opacity, transform;
-    backface-visibility: hidden;
-    -webkit-backface-visibility: hidden;
-}
-
-.stagger-group.is-revealed > *:nth-child(1) { opacity: 1; transform: translate3d(0, 0, 0); transition-delay: 0.05s; }
-.stagger-group.is-revealed > *:nth-child(2) { opacity: 1; transform: translate3d(0, 0, 0); transition-delay: 0.13s; }
 .stagger-group.is-revealed > *:nth-child(3) { opacity: 1; transform: translate3d(0, 0, 0); transition-delay: 0.21s; }
 .stagger-group.is-revealed > *:nth-child(4) { opacity: 1; transform: translate3d(0, 0, 0); transition-delay: 0.29s; }
 .stagger-group.is-revealed > *:nth-child(5) { opacity: 1; transform: translate3d(0, 0, 0); transition-delay: 0.37s; }

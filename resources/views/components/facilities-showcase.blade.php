@@ -1,7 +1,7 @@
 {{-- ═══════════════════════════════════════════
 FACILITIES & INDUSTRY WORKSHOPS SHOWCASE
 ═══════════════════════════════════════════ --}}
-<section class="facilities-section scroll-layer-section" id="fasilitas"
+<section class="facilities-section" id="fasilitas"
     aria-label="Fasilitas dan Bengkel Industri SMK Antartika 1 Sidoarjo">
     <div class="wrap">
 
