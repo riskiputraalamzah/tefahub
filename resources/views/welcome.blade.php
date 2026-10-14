@@ -34,6 +34,9 @@
          HERO SECTION
          ═══════════════════════════════════════════ --}}
     <main class="hero" id="mainContent">
+        {{-- Interactive Particle Canvas (Item 3) --}}
+        <canvas id="heroParticleCanvas" class="hero-particle-canvas" aria-hidden="true"></canvas>
+
         <div class="wrap">
 
             {{-- Left: copy & search --}}

@@ -435,6 +435,370 @@ function initCounters() {
     counters.forEach((el) => observer.observe(el));
 }
 
+// ── 3D Card Perspective Tilt & Specular Glare (Innovation #2) ─────────────────
+function init3DTilt() {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const isFinePointer = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+    if (!isFinePointer) return;
+
+    const cards = document.querySelectorAll("[data-hover-card], .card, .service-card, .ai-card, .blud-card-frame");
+    cards.forEach((card) => {
+        let frameId = null;
+        let rect = null;
+
+        const onPointerEnter = () => {
+            rect = card.getBoundingClientRect();
+            card.classList.add("is-3d-tilted");
+        };
+
+        const onPointerMove = (e) => {
+            if (!rect) rect = card.getBoundingClientRect();
+            const mouseX = e.clientX - rect.left;
+            const mouseY = e.clientY - rect.top;
+
+            const normX = (mouseX / rect.width) - 0.5;
+            const normY = (mouseY / rect.height) - 0.5;
+
+            if (frameId) cancelAnimationFrame(frameId);
+            frameId = requestAnimationFrame(() => {
+                const tiltX = (-normY * 9).toFixed(2);
+                const tiltY = (normX * 9).toFixed(2);
+
+                card.style.setProperty("--glare-x", `${((normX + 0.5) * 100).toFixed(1)}%`);
+                card.style.setProperty("--glare-y", `${((normY + 0.5) * 100).toFixed(1)}%`);
+                card.style.transform = `perspective(850px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) translateZ(6px) scale3d(1.018, 1.018, 1.018)`;
+            });
+        };
+
+        const onPointerLeave = () => {
+            if (frameId) cancelAnimationFrame(frameId);
+            card.classList.remove("is-3d-tilted");
+            card.style.transform = "";
+            card.style.removeProperty("--glare-x");
+            card.style.removeProperty("--glare-y");
+            rect = null;
+        };
+
+        card.addEventListener("pointerenter", onPointerEnter, { passive: true });
+        card.addEventListener("pointermove", onPointerMove, { passive: true });
+        card.addEventListener("pointerleave", onPointerLeave, { passive: true });
+    });
+}
+
+// ── Hero Subtle Depth Parallax (Innovation #2) ────────────────────────────────
+function initHero3DParallax() {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const isFinePointer = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+    if (!isFinePointer) return;
+
+    const hero = document.querySelector(".hero");
+    if (!hero) return;
+
+    const bubbleArt = hero.querySelector(".hero-bubble-art");
+    const quote = hero.querySelector(".hero-tagline-quote");
+    const badges = hero.querySelector(".hero-badges-wrapper");
+    const students = hero.querySelector(".students-img");
+
+    if (!bubbleArt && !quote && !badges && !students) return;
+
+    let targetX = 0, targetY = 0;
+    let currX = 0, currY = 0;
+    let isTracking = false;
+
+    const onMouseMove = (e) => {
+        const rect = hero.getBoundingClientRect();
+        const normX = ((e.clientX - rect.left) / rect.width) - 0.5;
+        const normY = ((e.clientY - rect.top) / rect.height) - 0.5;
+        targetX = normX * 24;
+        targetY = normY * 24;
+
+        if (!isTracking) {
+            isTracking = true;
+            updateParallax();
+        }
+    };
+
+    const updateParallax = () => {
+        currX += (targetX - currX) * 0.08;
+        currY += (targetY - currY) * 0.08;
+
+        if (bubbleArt) {
+            bubbleArt.style.transform = `translate3d(${(currX * 0.5).toFixed(2)}px, ${(currY * 0.5).toFixed(2)}px, 0)`;
+        }
+        if (quote) {
+            quote.style.transform = `translate3d(${(currX * -0.7).toFixed(2)}px, ${(currY * -0.7).toFixed(2)}px, 0)`;
+        }
+        if (badges) {
+            badges.style.transform = `translate3d(${(currX * 0.9).toFixed(2)}px, ${(currY * 0.9).toFixed(2)}px, 0)`;
+        }
+        if (students) {
+            students.style.transform = `translate3d(${(currX * -0.3).toFixed(2)}px, ${(currY * -0.3).toFixed(2)}px, 0)`;
+        }
+
+        const delta = Math.abs(targetX - currX) + Math.abs(targetY - currY);
+        if (delta > 0.05 || targetX !== 0 || targetY !== 0) {
+            requestAnimationFrame(updateParallax);
+        } else {
+            isTracking = false;
+        }
+    };
+
+    hero.addEventListener("mousemove", onMouseMove, { passive: true });
+    hero.addEventListener("mouseleave", () => {
+        targetX = 0;
+        targetY = 0;
+    }, { passive: true });
+}
+
+// ── Interactive Ambient Constellation Particle Canvas (Innovation #3) ─────────
+function initInteractiveParticles() {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    const canvas = document.getElementById("heroParticleCanvas");
+    const hero = document.querySelector(".hero");
+    if (!canvas || !hero) return;
+
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    let width = 0, height = 0;
+    let dpr = Math.min(window.devicePixelRatio || 1, 2);
+    let animationId = null;
+    let isVisible = true;
+    const mouse = { x: -9999, y: -9999, radius: 130 };
+    const ripples = [];
+
+    // Responsive particle count
+    const count = window.innerWidth > 768 ? 48 : 22;
+    const particles = [];
+
+    const colors = [
+        "rgba(37, 99, 235, ",   // Blue
+        "rgba(56, 189, 248, ",  // Cyan
+        "rgba(99, 102, 241, ",  // Indigo
+        "rgba(139, 92, 246, "   // Violet
+    ];
+
+    function resize() {
+        const rect = hero.getBoundingClientRect();
+        width = rect.width;
+        height = rect.height;
+        dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+        canvas.width = Math.floor(width * dpr);
+        canvas.height = Math.floor(height * dpr);
+        canvas.style.width = `${width}px`;
+        canvas.style.height = `${height}px`;
+        ctx.scale(dpr, dpr);
+    }
+
+    class Particle {
+        constructor() {
+            this.x = Math.random() * width;
+            this.y = Math.random() * height;
+            this.vx = (Math.random() - 0.5) * 0.45;
+            this.vy = (Math.random() - 0.5) * 0.45;
+            this.radius = Math.random() * 1.8 + 1.2;
+            this.baseAlpha = Math.random() * 0.35 + 0.25;
+            this.colorPrefix = colors[Math.floor(Math.random() * colors.length)];
+        }
+
+        update() {
+            this.x += this.vx;
+            this.y += this.vy;
+
+            if (this.x < 0) this.x = width;
+            else if (this.x > width) this.x = 0;
+            if (this.y < 0) this.y = height;
+            else if (this.y > height) this.y = 0;
+
+            // Mouse proximity interaction (soft repulsion)
+            const dx = mouse.x - this.x;
+            const dy = mouse.y - this.y;
+            const dist = Math.hypot(dx, dy);
+
+            if (dist < mouse.radius) {
+                const force = (mouse.radius - dist) / mouse.radius;
+                const angle = Math.atan2(dy, dx);
+                this.x -= Math.cos(angle) * force * 1.8;
+                this.y -= Math.sin(angle) * force * 1.8;
+            }
+
+            // Ripples shockwave
+            for (let r = 0; r < ripples.length; r++) {
+                const rip = ripples[r];
+                const rdx = this.x - rip.x;
+                const rdy = this.y - rip.y;
+                const rdist = Math.hypot(rdx, rdy);
+                if (Math.abs(rdist - rip.currentRadius) < 25) {
+                    const waveForce = (1 - (rip.currentRadius / rip.maxRadius)) * 2;
+                    this.x += (rdx / rdist) * waveForce;
+                    this.y += (rdy / rdist) * waveForce;
+                }
+            }
+        }
+
+        draw() {
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+            ctx.fillStyle = this.colorPrefix + this.baseAlpha + ")";
+            ctx.fill();
+        }
+    }
+
+    function init() {
+        resize();
+        particles.length = 0;
+        for (let i = 0; i < count; i++) {
+            particles.push(new Particle());
+        }
+    }
+
+    function render() {
+        if (!isVisible) return;
+
+        ctx.clearRect(0, 0, width, height);
+
+        const isDark = document.documentElement.getAttribute("data-theme") === "dark";
+        const maxDist = 95;
+
+        // Draw constellation web lines
+        for (let i = 0; i < particles.length; i++) {
+            for (let j = i + 1; j < particles.length; j++) {
+                const dx = particles[i].x - particles[j].x;
+                const dy = particles[i].y - particles[j].y;
+                const dist = Math.hypot(dx, dy);
+
+                if (dist < maxDist) {
+                    const alpha = (1 - dist / maxDist) * (isDark ? 0.35 : 0.22);
+                    ctx.beginPath();
+                    ctx.moveTo(particles[i].x, particles[i].y);
+                    ctx.lineTo(particles[j].x, particles[j].y);
+                    ctx.strokeStyle = isDark
+                        ? `rgba(56, 189, 248, ${alpha})`
+                        : `rgba(37, 99, 235, ${alpha})`;
+                    ctx.lineWidth = 0.85;
+                    ctx.stroke();
+                }
+            }
+        }
+
+        // Draw mouse connecting threads
+        if (mouse.x > 0 && mouse.y > 0) {
+            for (let i = 0; i < particles.length; i++) {
+                const dx = mouse.x - particles[i].x;
+                const dy = mouse.y - particles[i].y;
+                const dist = Math.hypot(dx, dy);
+
+                if (dist < mouse.radius) {
+                    const alpha = (1 - dist / mouse.radius) * (isDark ? 0.45 : 0.32);
+                    ctx.beginPath();
+                    ctx.moveTo(particles[i].x, particles[i].y);
+                    ctx.lineTo(mouse.x, mouse.y);
+                    ctx.strokeStyle = `rgba(56, 189, 248, ${alpha})`;
+                    ctx.lineWidth = 1.1;
+                    ctx.stroke();
+                }
+            }
+        }
+
+        // Update and draw ripple pulses
+        for (let r = ripples.length - 1; r >= 0; r--) {
+            const rip = ripples[r];
+            rip.currentRadius += 3.5;
+            const ripAlpha = (1 - rip.currentRadius / rip.maxRadius) * 0.3;
+
+            ctx.beginPath();
+            ctx.arc(rip.x, rip.y, rip.currentRadius, 0, Math.PI * 2);
+            ctx.strokeStyle = `rgba(56, 189, 248, ${Math.max(0, ripAlpha)})`;
+            ctx.lineWidth = 1.5;
+            ctx.stroke();
+
+            if (rip.currentRadius >= rip.maxRadius) {
+                ripples.splice(r, 1);
+            }
+        }
+
+        // Update and draw particles
+        for (let i = 0; i < particles.length; i++) {
+            particles[i].update();
+            particles[i].draw();
+        }
+
+        animationId = requestAnimationFrame(render);
+    }
+
+    init();
+    animationId = requestAnimationFrame(render);
+
+    // Event listeners
+    let resizeTimer = null;
+    window.addEventListener("resize", () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(() => {
+            resize();
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].x = Math.min(particles[i].x, width);
+                particles[i].y = Math.min(particles[i].y, height);
+            }
+        }, 120);
+    }, { passive: true });
+
+    hero.addEventListener("mousemove", (e) => {
+        const rect = hero.getBoundingClientRect();
+        mouse.x = e.clientX - rect.left;
+        mouse.y = e.clientY - rect.top;
+    }, { passive: true });
+
+    hero.addEventListener("mouseleave", () => {
+        mouse.x = -9999;
+        mouse.y = -9999;
+    }, { passive: true });
+
+    hero.addEventListener("pointerdown", (e) => {
+        const rect = hero.getBoundingClientRect();
+        ripples.push({
+            x: e.clientX - rect.left,
+            y: e.clientY - rect.top,
+            currentRadius: 5,
+            maxRadius: 110
+        });
+        if (ripples.length > 3) ripples.shift();
+    }, { passive: true });
+
+    // IntersectionObserver safeguard: pause when hero is off-screen
+    if ("IntersectionObserver" in window) {
+        const obs = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                isVisible = entry.isIntersecting;
+                if (isVisible && !animationId) {
+                    animationId = requestAnimationFrame(render);
+                } else if (!isVisible && animationId) {
+                    cancelAnimationFrame(animationId);
+                    animationId = null;
+                }
+            });
+        }, { threshold: 0.05 });
+        obs.observe(hero);
+    }
+
+    // Tab visibility change safeguard
+    document.addEventListener("visibilitychange", () => {
+        if (document.hidden) {
+            isVisible = false;
+            if (animationId) {
+                cancelAnimationFrame(animationId);
+                animationId = null;
+            }
+        } else {
+            isVisible = true;
+            if (!animationId) {
+                animationId = requestAnimationFrame(render);
+            }
+        }
+    });
+}
+
 // ── Bootstrapping ────────────────────────────────────────────────────────────
 function boot() {
     const lenis = initSmoothScroll();
@@ -446,6 +810,9 @@ function boot() {
     initThemeToggle();
     initLazyImages();
     initCounters();
+    init3DTilt();
+    initHero3DParallax();
+    initInteractiveParticles();
 
     // After onboarding splash exits, trigger a single scan for viewport elements
     window.addEventListener(

@@ -40,10 +40,23 @@
             </div>
             <div class="ai-header-info">
                 <h3 class="ai-header-title">Tanya Tefa AI</h3>
-                <span class="ai-header-sub">Asisten Digital Vokasi • Online</span>
+                <span class="ai-header-sub"><span class="ai-live-dot" aria-hidden="true"></span> Asisten Digital Vokasi • Real-Time</span>
             </div>
         </div>
         <div class="ai-header-actions">
+            <button class="ai-icon-btn" id="ai-sound-btn" type="button" aria-label="Pengaturan Suara" title="Aktifkan / Matikan Suara Notifikasi">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+                    <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+                    <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
+                </svg>
+            </button>
+            <button class="ai-icon-btn" id="ai-reset-btn" type="button" aria-label="Percakapan Baru" title="Mulai Percakapan Baru">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+                    <path d="M3 3v5h5"/>
+                </svg>
+            </button>
             <button class="ai-close-btn" id="ai-close-btn" type="button" aria-label="Tutup Tanya Tefa">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
                     <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
@@ -106,6 +119,14 @@
                 maxlength="500"
                 aria-label="Pertanyaan untuk tim Tefa-Hub"
             >
+            <button type="button" class="ai-mic-btn" id="ai-mic-btn" aria-label="Input Suara (Bicara)" title="Bicara untuk mendikte pertanyaan otomatis">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+                    <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+                    <line x1="12" y1="19" x2="12" y2="23"/>
+                    <line x1="8" y1="23" x2="16" y2="23"/>
+                </svg>
+            </button>
             <button type="submit" class="ai-submit" id="ai-send-btn" aria-label="Kirim pertanyaan">
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                     <line x1="22" y1="2" x2="11" y2="13"/>
@@ -113,11 +134,11 @@
                 </svg>
             </button>
         </form>
-        <p class="ai-powered">Didukung teknologi AI · Tefa-Hub</p>
+        <p class="ai-powered">Didukung teknologi AI · Vokasi Tefa-Hub Real-Time</p>
     </div>
 </div>
 
-{{-- Unified High-Performance Chat Logic --}}
+{{-- Unified High-Performance Real-Time Chat Logic --}}
 <script>
 (function () {
     'use strict';
@@ -128,11 +149,64 @@
     const CHAT_URL   = '{{ route("ai.chat") }}';
     const CSRF_TOKEN = document.querySelector('meta[name="csrf-token"]')?.content || '';
     const AI_GREETING_KEY = 'tefa-hub-ai-greeting-played-v2';
+    const AI_SOUND_KEY = 'tefa-hub-ai-sound-enabled';
 
-    let panel, backdrop, toggleBtn, closeBtn, conversation, form, field, submitBtn, quickActions, badge, greetCard, initLoading;
+    let panel, backdrop, toggleBtn, closeBtn, resetBtn, soundBtn, micBtn;
+    let conversation, form, field, submitBtn, quickActions, badge, greetCard, initLoading;
     let isOpen = false, isBusy = false, greeted = false;
     let chatHistory = [];
     let hasPlayedAiGreeting = sessionStorage.getItem(AI_GREETING_KEY) === 'played';
+    let isSoundEnabled = localStorage.getItem(AI_SOUND_KEY) !== 'false';
+    let currentSpeakingUtterance = null;
+    let speechRecognition = null;
+    let isListening = false;
+
+    // ── Synthetic Web Audio Chimes (0kb external asset) ──
+    let audioCtx = null;
+    function getAudioContext() {
+        if (!audioCtx && (window.AudioContext || window.webkitAudioContext)) {
+            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        if (audioCtx && audioCtx.state === 'suspended') {
+            audioCtx.resume();
+        }
+        return audioCtx;
+    }
+
+    function playTone(freq, type, duration, delay = 0, gainVal = 0.08) {
+        if (!isSoundEnabled) return;
+        try {
+            const ctx = getAudioContext();
+            if (!ctx) return;
+            const now = ctx.currentTime + delay;
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+
+            osc.type = type;
+            osc.frequency.setValueAtTime(freq, now);
+
+            gain.gain.setValueAtTime(0.001, now);
+            gain.gain.exponentialRampToValueAtTime(gainVal, now + 0.02);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
+
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+
+            osc.start(now);
+            osc.stop(now + duration + 0.05);
+        } catch (_) {}
+    }
+
+    function playSentChime() {
+        playTone(520, 'sine', 0.09, 0, 0.07);
+        playTone(680, 'sine', 0.12, 0.07, 0.06);
+    }
+
+    function playReplyChime() {
+        playTone(440, 'triangle', 0.1, 0, 0.06);
+        playTone(587.33, 'triangle', 0.1, 0.08, 0.06);
+        playTone(880, 'sine', 0.18, 0.16, 0.05);
+    }
 
     function speakAiGreeting() {
         if (hasPlayedAiGreeting || !('speechSynthesis' in window)) {
@@ -151,7 +225,7 @@
         const utterance = new SpeechSynthesisUtterance('Selamat datang di TefaHub. Saya Asisten TefaHub. Silakan sampaikan kebutuhan Anda. Dengan senang hati, saya siap membantu.');
 
         utterance.lang = 'id-ID';
-        utterance.rate = 0.82;
+        utterance.rate = 0.85;
         utterance.pitch = 0.98;
         utterance.volume = 0.9;
 
@@ -163,11 +237,129 @@
         window.speechSynthesis.speak(utterance);
     }
 
+    function speakText(text, btnEl) {
+        if (!('speechSynthesis' in window)) return;
+
+        if (window.speechSynthesis.speaking) {
+            window.speechSynthesis.cancel();
+            document.querySelectorAll('.ai-tts-btn').forEach(b => {
+                b.classList.remove('is-playing');
+                b.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg> Dengarkan`;
+            });
+            if (currentSpeakingUtterance && currentSpeakingUtterance._btn === btnEl) {
+                currentSpeakingUtterance = null;
+                return;
+            }
+        }
+
+        // Strip HTML & markdown symbols for smooth natural reading
+        const plain = text.replace(/<[^>]*>/g, '').replace(/[*_#`[\]()]/g, ' ').replace(/\s+/g, ' ').trim();
+        if (!plain) return;
+
+        const utterance = new SpeechSynthesisUtterance(plain);
+        utterance.lang = 'id-ID';
+        utterance.rate = 0.92;
+        utterance.pitch = 1.0;
+        utterance._btn = btnEl;
+
+        const voices = window.speechSynthesis.getVoices();
+        const indonesianVoices = voices.filter(v => v.lang.toLowerCase().startsWith('id'));
+        const voice = indonesianVoices.find(v => /female|perempuan|google|microsoft/i.test(v.name)) || indonesianVoices[0];
+        if (voice) utterance.voice = voice;
+
+        utterance.onstart = () => {
+            if (btnEl) {
+                btnEl.classList.add('is-playing');
+                btnEl.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg> Berhenti`;
+            }
+        };
+
+        utterance.onend = utterance.onerror = () => {
+            if (btnEl) {
+                btnEl.classList.remove('is-playing');
+                btnEl.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg> Dengarkan`;
+            }
+            currentSpeakingUtterance = null;
+        };
+
+        currentSpeakingUtterance = utterance;
+        window.speechSynthesis.speak(utterance);
+    }
+
+    function initSpeechRecognition() {
+        const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if (!SpeechRec || !micBtn) return;
+
+        try {
+            speechRecognition = new SpeechRec();
+            speechRecognition.continuous = false;
+            speechRecognition.interimResults = true;
+            speechRecognition.lang = 'id-ID';
+
+            speechRecognition.onstart = () => {
+                isListening = true;
+                micBtn.classList.add('is-listening');
+                micBtn.title = 'Mendengarkan suara Anda... Klik lagi untuk berhenti.';
+                if (field) field.placeholder = 'Mendengarkan... Silakan berbicara.';
+                playTone(600, 'sine', 0.1, 0, 0.05);
+            };
+
+            speechRecognition.onresult = (event) => {
+                let interim = '';
+                let final = '';
+                for (let i = event.resultIndex; i < event.results.length; ++i) {
+                    if (event.results[i].isFinal) {
+                        final += event.results[i][0].transcript;
+                    } else {
+                        interim += event.results[i][0].transcript;
+                    }
+                }
+                if (field) {
+                    field.value = final || interim;
+                }
+            };
+
+            speechRecognition.onerror = (e) => {
+                isListening = false;
+                micBtn.classList.remove('is-listening');
+                if (field) field.placeholder = 'Tulis pertanyaan Anda...';
+            };
+
+            speechRecognition.onend = () => {
+                isListening = false;
+                micBtn.classList.remove('is-listening');
+                micBtn.title = 'Bicara untuk mendikte pertanyaan otomatis';
+                if (field) {
+                    field.placeholder = 'Tulis pertanyaan Anda...';
+                    if (field.value.trim()) {
+                        field.focus();
+                    }
+                }
+            };
+
+            micBtn.addEventListener('click', () => {
+                if (!speechRecognition) return;
+                if (isListening) {
+                    speechRecognition.stop();
+                } else {
+                    try {
+                        speechRecognition.start();
+                    } catch (_) {}
+                }
+            });
+        } catch (_) {
+            if (micBtn) micBtn.style.display = 'none';
+        }
+    }
+
     function initAiWidget() {
         panel        = document.getElementById('ai-navigator-panel');
         backdrop     = document.getElementById('ai-navigator-backdrop');
         toggleBtn    = document.getElementById('ai-toggle-btn');
         closeBtn     = document.getElementById('ai-close-btn');
+        resetBtn     = document.getElementById('ai-reset-btn');
+        soundBtn     = document.getElementById('ai-sound-btn');
+        micBtn       = document.getElementById('ai-mic-btn');
         conversation = document.getElementById('ai-messages');
         form         = document.getElementById('ai-chat-form');
         field        = document.getElementById('ai-message-input');
@@ -178,6 +370,46 @@
         initLoading  = document.getElementById('ai-initial-typing');
 
         if (!panel || !toggleBtn) return;
+
+        // Initialize sound toggle state
+        function updateSoundButton() {
+            if (!soundBtn) return;
+            soundBtn.title = isSoundEnabled ? 'Bunyi Aktif (Klik untuk Mematikan)' : 'Bunyi Senyap (Klik untuk Mengaktifkan)';
+            soundBtn.style.color = isSoundEnabled ? '#2563eb' : '#94a3b8';
+        }
+        updateSoundButton();
+
+        if (soundBtn) {
+            soundBtn.addEventListener('click', () => {
+                isSoundEnabled = !isSoundEnabled;
+                localStorage.setItem(AI_SOUND_KEY, isSoundEnabled ? 'true' : 'false');
+                updateSoundButton();
+                if (isSoundEnabled) {
+                    playTone(660, 'sine', 0.12, 0, 0.08);
+                }
+            });
+        }
+
+        // Initialize reset conversation button
+        if (resetBtn) {
+            resetBtn.addEventListener('click', () => {
+                if (window.speechSynthesis) window.speechSynthesis.cancel();
+                if (conversation) {
+                    conversation.innerHTML = '';
+                }
+                if (greetCard) greetCard.style.display = '';
+                chatHistory = [];
+                greeted = false;
+                loadGreeting();
+                if (field) {
+                    field.value = '';
+                    field.focus();
+                }
+                playTone(400, 'sine', 0.1, 0, 0.05);
+            });
+        }
+
+        initSpeechRecognition();
 
         function openPanel() {
             isOpen = true;
@@ -202,6 +434,8 @@
             toggleBtn.setAttribute('aria-expanded', 'false');
             toggleBtn.classList.remove('is-hidden');
             document.body.classList.remove('ai-panel-open');
+            if (window.speechSynthesis) window.speechSynthesis.cancel();
+            if (isListening && speechRecognition) speechRecognition.stop();
         }
 
         toggleBtn.addEventListener('click', () => isOpen ? closePanel() : openPanel());
@@ -231,6 +465,7 @@
                 if (quickActions) quickActions.innerHTML = '';
 
                 appendQuestion(text);
+                playSentChime();
                 chatHistory.push({ role: 'user', text: text });
                 if (chatHistory.length > 8) chatHistory = chatHistory.slice(-8);
 
@@ -254,6 +489,7 @@
                     setBusy(false);
                     const replyText = data.answer || data.reply || 'Jawaban Anda telah diterima.';
                     chatHistory.push({ role: 'model', text: replyText });
+                    playReplyChime();
                     appendReply(data);
                 } catch {
                     setBusy(false);
@@ -301,6 +537,7 @@
         scrollEnd();
     }
 
+    // ── Live Streaming Simulation Typewriter for Replies ──
     function appendReply(data) {
         if (!conversation) return;
         const text  = (typeof data === 'string') ? data : (data.answer || data.reply || 'Pertanyaan Anda sudah diterima.');
@@ -325,16 +562,61 @@
 
         const row = document.createElement('div');
         row.className = 'ai-row ai-row--reply';
+
+        // Target body container
+        const fullHtml = mdFull(text);
+        const replyId = 'reply-' + Date.now();
+
         row.innerHTML = `
             <div class="ai-msg ai-msg--reply">
                 <span class="ai-cat-badge ${badgeCls}">${badgeTxt}</span>
-                <div class="ai-reply-body">${mdFull(text)}</div>
-                ${ctaHtml}
+                <div class="ai-reply-body" id="${replyId}"></div>
+                <div class="ai-reply-footer" style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:6px;">
+                    ${ctaHtml}
+                    <button type="button" class="ai-tts-btn" data-tts-target="${replyId}" title="Dengarkan jawaban ini">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg> Dengarkan
+                    </button>
+                </div>
             </div>`;
         conversation.appendChild(row);
-        scrollEnd();
 
-        if (sugg.length) buildQuickActions(sugg);
+        const bodyEl = row.querySelector('.ai-reply-body');
+        const ttsBtn = row.querySelector('.ai-tts-btn');
+
+        if (ttsBtn) {
+            ttsBtn.addEventListener('click', () => speakText(text, ttsBtn));
+        }
+
+        // Live stream typing simulation
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            bodyEl.innerHTML = fullHtml;
+            scrollEnd();
+            if (sugg.length) buildQuickActions(sugg);
+            return;
+        }
+
+        // Chunk words for smooth live stream feel
+        const words = fullHtml.split(/(\s+|<[^>]+>)/g).filter(Boolean);
+        let currentIndex = 0;
+        let buffer = '';
+
+        function streamStep() {
+            const batchSize = Math.min(3, words.length - currentIndex);
+            for (let b = 0; b < batchSize; b++) {
+                buffer += words[currentIndex++];
+            }
+            bodyEl.innerHTML = buffer + '<span class="ai-streaming-cursor" aria-hidden="true"></span>';
+            scrollEnd();
+
+            if (currentIndex < words.length) {
+                setTimeout(streamStep, 16);
+            } else {
+                bodyEl.innerHTML = fullHtml;
+                scrollEnd();
+                if (sugg.length) buildQuickActions(sugg);
+            }
+        }
+        streamStep();
     }
 
     function setBusy(state) {
