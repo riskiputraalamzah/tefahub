@@ -493,10 +493,9 @@ function initHero3DParallax() {
 
     const bubbleArt = hero.querySelector(".hero-bubble-art");
     const quote = hero.querySelector(".hero-tagline-quote");
-    const badges = hero.querySelector(".hero-badges-wrapper");
     const students = hero.querySelector(".students-img");
 
-    if (!bubbleArt && !quote && !badges && !students) return;
+    if (!bubbleArt && !quote && !students) return;
 
     let targetX = 0, targetY = 0;
     let currX = 0, currY = 0;
@@ -506,8 +505,8 @@ function initHero3DParallax() {
         const rect = hero.getBoundingClientRect();
         const normX = ((e.clientX - rect.left) / rect.width) - 0.5;
         const normY = ((e.clientY - rect.top) / rect.height) - 0.5;
-        targetX = normX * 24;
-        targetY = normY * 24;
+        targetX = normX * 16;
+        targetY = normY * 16;
 
         if (!isTracking) {
             isTracking = true;
@@ -520,16 +519,13 @@ function initHero3DParallax() {
         currY += (targetY - currY) * 0.08;
 
         if (bubbleArt) {
-            bubbleArt.style.transform = `translate3d(${(currX * 0.5).toFixed(2)}px, ${(currY * 0.5).toFixed(2)}px, 0)`;
+            bubbleArt.style.transform = `translate3d(${(currX * 0.4).toFixed(2)}px, ${(currY * 0.4).toFixed(2)}px, 0)`;
         }
         if (quote) {
-            quote.style.transform = `translate3d(${(currX * -0.7).toFixed(2)}px, ${(currY * -0.7).toFixed(2)}px, 0)`;
-        }
-        if (badges) {
-            badges.style.transform = `translate3d(${(currX * 0.9).toFixed(2)}px, ${(currY * 0.9).toFixed(2)}px, 0)`;
+            quote.style.transform = `translate3d(${(currX * -0.4).toFixed(2)}px, ${(currY * -0.4).toFixed(2)}px, 0)`;
         }
         if (students) {
-            students.style.transform = `translate3d(${(currX * -0.3).toFixed(2)}px, ${(currY * -0.3).toFixed(2)}px, 0)`;
+            students.style.transform = `translate3d(${(currX * -0.2).toFixed(2)}px, ${(currY * -0.2).toFixed(2)}px, 0)`;
         }
 
         const delta = Math.abs(targetX - currX) + Math.abs(targetY - currY);

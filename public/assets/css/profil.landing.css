@@ -324,13 +324,17 @@ body > * {
 }
 
 /* ── Program Keahlian Card (Bottom Left) ── */
+/* ── Program Keahlian Card (Bottom Left) ── */
 .profil-keahlian-card {
     background: #ffffff;
     border: 1px solid #e2e8f0;
     border-radius: 20px;
-    padding: 22px 28px;
-    box-shadow: 0 2px 14px rgba(15, 23, 42, 0.03);
+    padding: 24px 26px;
+    box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04);
     margin-top: 20px;
+    width: 100%;
+    box-sizing: border-box;
+    overflow: hidden;
 }
 
 .profil-keahlian-head {
@@ -341,34 +345,39 @@ body > * {
 }
 
 .profil-keahlian-sub {
-    font-size: 0.82rem;
+    font-size: 0.85rem;
     color: #64748b;
-    margin: 0 0 16px 0;
-    line-height: 1.45;
+    margin: 0 0 18px 0;
+    line-height: 1.5;
 }
 
 .profil-jurusan-row-grid {
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 10px;
+    grid-template-columns: repeat(auto-fit, minmax(175px, 1fr));
+    gap: 12px;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .profil-jurusan-mini-card {
-    background: #ffffff;
+    background: #f8fafc;
     border: 1px solid #e2e8f0;
-    border-radius: 12px;
-    padding: 10px 10px;
+    border-radius: 14px;
+    padding: 12px 14px;
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
     text-decoration: none;
     transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+    min-width: 0;
+    box-sizing: border-box;
 }
 
 .profil-jurusan-mini-card:hover {
-    border-color: #bfdbfe;
+    border-color: #93c5fd;
+    background: #ffffff;
     transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(15, 23, 42, 0.06);
+    box-shadow: 0 8px 20px rgba(37, 99, 235, 0.08);
 }
 
 .profil-jurusan-mini-badge {
