@@ -66,10 +66,10 @@ function initLayeredScrollEffects(force) {
 
     const vh = window.innerHeight || document.documentElement.clientHeight;
 
-    // Immediate check: Reveal all elements already in or near the fold on load
+    // Reveal elements immediately only if they are in the initial above-the-fold screen
     targets.forEach((el) => {
         const rect = el.getBoundingClientRect();
-        if (rect.top < vh + 80) {
+        if (rect.top < vh * 0.7) {
             el.classList.add("is-revealed");
         }
     });
@@ -79,19 +79,17 @@ function initLayeredScrollEffects(force) {
         return;
     }
 
-    // High performance observer: Unobserve upon entrance (run once)
-    // Eliminates scroll re-calculation lag, keeps frame rates pegged at 60/120fps!
+    // High performance observer: Triggers satisfying cascading entrances as user scrolls
     _revealObserver = new IntersectionObserver(
         (entries, observer) => {
             entries.forEach((entry) => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add("is-revealed");
-                    // Unobserve to free up GPU and CPU cycles permanently for this element
                     observer.unobserve(entry.target);
                 }
             });
         },
-        { threshold: 0.05, rootMargin: "80px 0px 40px 0px" }
+        { threshold: 0.08, rootMargin: "0px 0px -30px 0px" }
     );
 
     targets.forEach((el) => {

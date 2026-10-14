@@ -168,28 +168,30 @@
 
                 {{-- Students 3D character photo --}}
                 <div class="students-wrap">
-                    {{-- Floating Official Verification Badges --}}
-                    <div class="hero-verified-badge hero-badge-akreditasi" data-hover-card>
-                        <div class="verified-icon-circle">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
-                            </svg>
+                    {{-- Floating Official Verification Badges (Desktop floating, Mobile clean above photo) --}}
+                    <div class="hero-badges-wrapper">
+                        <div class="hero-verified-badge hero-badge-akreditasi" data-hover-card>
+                            <div class="verified-icon-circle">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                                </svg>
+                            </div>
+                            <div class="verified-badge-text">
+                                <span class="verified-title">TERAKREDITASI "A"</span>
+                                <span class="verified-sub">BAN-S/M Kemendikbudristek</span>
+                            </div>
                         </div>
-                        <div class="verified-badge-text">
-                            <span class="verified-title">TERAKREDITASI "A"</span>
-                            <span class="verified-sub">BAN-S/M Kemendikbudristek</span>
-                        </div>
-                    </div>
 
-                    <div class="hero-verified-badge hero-badge-smkpk" data-hover-card>
-                        <div class="verified-icon-circle icon-pk">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                                <polyline points="20 6 9 17 4 12"></polyline>
-                            </svg>
-                        </div>
-                        <div class="verified-badge-text">
-                            <span class="verified-title">SMK PUSAT KEUNGGULAN</span>
-                            <span class="verified-sub">Kurikulum Selaras Industri</span>
+                        <div class="hero-verified-badge hero-badge-smkpk" data-hover-card>
+                            <div class="verified-icon-circle icon-pk">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="20 6 9 17 4 12"></polyline>
+                                </svg>
+                            </div>
+                            <div class="verified-badge-text">
+                                <span class="verified-title">SMK PUSAT KEUNGGULAN</span>
+                                <span class="verified-sub">Kurikulum Selaras Industri</span>
+                            </div>
                         </div>
                     </div>
 

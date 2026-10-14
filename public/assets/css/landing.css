@@ -997,6 +997,16 @@ body.onboarding-active {
 }
 
 /* Tilted accent pills */
+@keyframes pillFloat1 {
+    0%, 100% { transform: rotate(35deg) translate3d(0, 0, 0); }
+    50% { transform: rotate(38deg) translate3d(3px, -8px, 0); }
+}
+
+@keyframes pillFloat2 {
+    0%, 100% { transform: rotate(35deg) translate3d(0, 0, 0); }
+    50% { transform: rotate(32deg) translate3d(-3px, 6px, 0); }
+}
+
 .bubble-pill-1 {
     position: absolute;
     top: 5%;
@@ -1007,6 +1017,7 @@ body.onboarding-active {
     border-radius: 9999px;
     transform: rotate(35deg);
     box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
+    animation: pillFloat1 6s ease-in-out infinite;
 }
 
 .bubble-pill-2 {
@@ -1019,6 +1030,7 @@ body.onboarding-active {
     border-radius: 9999px;
     transform: rotate(35deg);
     box-shadow: 0 4px 14px rgba(37, 99, 235, 0.25);
+    animation: pillFloat2 7s ease-in-out 0.5s infinite;
 }
 
 /* Dot matrices */
@@ -1058,6 +1070,11 @@ body.onboarding-active {
 }
 
 /* Tagline Quote (Siap Berkarya untuk Negeri) */
+@keyframes quoteSway {
+    0%, 100% { transform: rotate(5deg) translate3d(0, 0, 0); }
+    50% { transform: rotate(3.5deg) translate3d(0, -6px, 0); }
+}
+
 .hero-tagline-quote {
     position: absolute;
     top: 28px;
@@ -1073,6 +1090,7 @@ body.onboarding-active {
     pointer-events: none;
     user-select: none;
     letter-spacing: 0.02em;
+    animation: quoteSway 5s ease-in-out infinite;
 }
 
 /* ── Floating Official Verification Badges ─────────────────────────── */
@@ -1089,6 +1107,10 @@ body.onboarding-active {
     transform: translateY(-10px);
 }
 
+.hero-badges-wrapper {
+    display: contents;
+}
+
 .hero-verified-badge {
     position: absolute;
     display: flex;
@@ -1097,30 +1119,52 @@ body.onboarding-active {
     background: #ffffff;
     border-radius: 14px;
     padding: 10px 14px;
-    box-shadow: 0 8px 28px -6px rgba(15, 23, 42, 0.14), 0 2px 8px rgba(0, 0, 0, 0.06);
-    border: 1px solid rgba(226, 232, 240, 0.9);
+    box-shadow: 0 10px 30px -6px rgba(15, 23, 42, 0.12), 0 2px 8px rgba(0, 0, 0, 0.04);
+    border: 1px solid rgba(226, 232, 240, 0.95);
     z-index: 20;
     min-width: 190px;
     max-width: 230px;
     cursor: default;
-    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease;
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
 }
 
-.hero-verified-badge:hover {
-    transform: translateY(-3px) scale(1.02);
-    box-shadow: 0 14px 36px -8px rgba(37, 99, 235, 0.18), 0 4px 12px rgba(0, 0, 0, 0.07);
+/* Zero-gravity gentle floating physics */
+@keyframes heroBadgeFloat1 {
+    0%, 100% {
+        transform: translate3d(0, 0, 0);
+    }
+    50% {
+        transform: translate3d(0, -9px, 0);
+    }
 }
 
-/* Akreditasi badge — top-left of the students wrap */
+@keyframes heroBadgeFloat2 {
+    0%, 100% {
+        transform: translate3d(0, 0, 0);
+    }
+    50% {
+        transform: translate3d(0, 9px, 0);
+    }
+}
+
+/* Akreditasi badge — top-left with gentle float */
 .hero-badge-akreditasi {
     top: 28px;
     left: -20px;
+    animation: heroBadgeFloat1 5.5s ease-in-out infinite;
 }
 
-/* SMK-PK badge — lower-right, above the cards row */
+/* SMK-PK badge — lower-right with complementary offset float */
 .hero-badge-smkpk {
     bottom: 110px;
     right: -20px;
+    animation: heroBadgeFloat2 6.2s ease-in-out 0.8s infinite;
+}
+
+.hero-verified-badge:hover {
+    animation-play-state: paused;
+    transform: translateY(-4px) scale(1.03);
+    box-shadow: 0 16px 36px -8px rgba(37, 99, 235, 0.22), 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
 .verified-icon-circle {
@@ -2676,10 +2720,45 @@ body.ai-panel-open .ai-trigger {
     .hero-visual { min-height: auto; width: 100%; max-width: 460px; margin: 0 auto; position: relative; padding-bottom: 0; overflow: visible; }
     .hero-bubble-art { width: 100%; max-width: 420px; height: 85%; }
     .hero-tagline-quote { font-size: 19px; top: 18px; right: 10px; }
-    .students-wrap { max-width: 400px; padding-bottom: 0; transform: none; }
+    .students-wrap { 
+        max-width: 400px; 
+        padding-bottom: 0; 
+        transform: none; 
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        position: relative;
+    }
     .students-img { max-height: 360px; }
-    .hero-badge-akreditasi { top: 16px; left: -10px; min-width: 170px; max-width: 210px; }
-    .hero-badge-smkpk { bottom: 100px; right: -10px; min-width: 170px; max-width: 210px; }
+    .hero-badges-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        width: 100%;
+        margin-bottom: 14px;
+        z-index: 20;
+        order: -1;
+    }
+    .hero-verified-badge {
+        position: static !important;
+        transform: none !important;
+        min-width: unset !important;
+        max-width: unset !important;
+        flex: 1 1 auto;
+        padding: 8px 14px;
+        border-radius: 9999px;
+        gap: 8px;
+        box-shadow: 0 4px 16px rgba(15, 23, 42, 0.08);
+        border: 1px solid rgba(226, 232, 240, 0.95);
+    }
+    .hero-badge-akreditasi,
+    .hero-badge-smkpk {
+        top: auto !important;
+        left: auto !important;
+        right: auto !important;
+        bottom: auto !important;
+    }
     .cards-row {
         position: relative;
         bottom: auto;
@@ -2992,11 +3071,32 @@ body.ai-panel-open .ai-trigger {
     .service-card { padding: 18px 16px 16px; }
     .hero-visual { min-height: auto; max-width: 360px; }
     .students-img { max-height: 300px; }
-    .hero-badge-akreditasi { top: 10px; left: 0; font-size: 10px; padding: 7px 10px; min-width: 150px; max-width: 185px; }
-    .hero-badge-smkpk { bottom: 90px; right: 0; font-size: 10px; padding: 7px 10px; min-width: 150px; max-width: 185px; }
-    .verified-title { font-size: 10.5px; }
-    .verified-sub { font-size: 9.5px; }
-    .verified-icon-circle { width: 30px; height: 30px; }
+    .hero-badges-wrapper {
+        gap: 8px;
+        margin-bottom: 12px;
+        padding: 0 4px;
+    }
+    .hero-verified-badge {
+        padding: 7px 12px !important;
+        border-radius: 9999px !important;
+        gap: 7px !important;
+    }
+    .verified-icon-circle {
+        width: 26px !important;
+        height: 26px !important;
+    }
+    .verified-icon-circle svg {
+        width: 13px !important;
+        height: 13px !important;
+    }
+    .verified-title {
+        font-size: 10.5px !important;
+        white-space: nowrap;
+    }
+    .verified-sub {
+        font-size: 9px !important;
+        white-space: nowrap;
+    }
     .cards-row {
         max-width: 380px;
         width: 100%;
@@ -3028,6 +3128,28 @@ body.ai-panel-open .ai-trigger {
     .hero-tagline-quote { font-size: 15px; top: 12px; right: 6px; }
     .hero-visual { max-width: 310px; }
     .students-img { max-height: 260px; }
+    .hero-badges-wrapper {
+        gap: 6px;
+        margin-bottom: 8px;
+    }
+    .hero-verified-badge {
+        padding: 5px 9px !important;
+        gap: 5px !important;
+    }
+    .verified-icon-circle {
+        width: 22px !important;
+        height: 22px !important;
+    }
+    .verified-icon-circle svg {
+        width: 11px !important;
+        height: 11px !important;
+    }
+    .verified-title {
+        font-size: 9.5px !important;
+    }
+    .verified-sub {
+        display: none !important;
+    }
     .cards-row { max-width: 100%; width: 100%; margin: -26px auto 0; gap: 8px; }
     .card { padding: 10px 12px; border-radius: 12px; gap: 10px; }
     .card-icon { width: 36px; height: 36px; border-radius: 9px; }
