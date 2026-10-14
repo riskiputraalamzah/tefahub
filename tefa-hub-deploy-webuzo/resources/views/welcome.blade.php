@@ -10,11 +10,29 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ asset('assets/css/landing.css') }}?v={{ filemtime(public_path('assets/css/landing.css')) }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/landing.css') }}?v={{ file_exists(public_path('assets/css/landing.css')) ? filemtime(public_path('assets/css/landing.css')) : '1.0' }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/sambutan.css') }}?v={{ file_exists(public_path('assets/css/sambutan.css')) ? filemtime(public_path('assets/css/sambutan.css')) : '1.0' }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/logo-marquee.css') }}?v={{ file_exists(public_path('assets/css/logo-marquee.css')) ? filemtime(public_path('assets/css/logo-marquee.css')) : '1.0' }}">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <style>
+        /* Failsafe Guaranteed Visibility: All landing page sections always visible under all network/cache states */
+        .hero, .principal-section, .logo-marquee-section, .about-section,
+        .value-prop-section, .services-section, .showcase-section,
+        .facilities-section, .ai-section, .alumni-section, .cta-banner-section,
+        .supporters-section, .main-footer, .scroll-layer-section,
+        [data-reveal], [data-stagger-item], .reveal, .reveal-left, .reveal-right, .reveal-scale,
+        .cards-row, .card, .service-card, .ai-card, .facility-card, .alumni-card {
+            opacity: 1 !important;
+            visibility: visible !important;
+            transform: none !important;
+        }
+    </style>
     <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
 <body>
+
+    {{-- Accessibility: Skip to Main Content --}}
+    <a href="#mainContent" class="skip-to-content">Lewati ke Konten Utama</a>
 
     {{-- Cinematic GSAP Scroll Progress Indicator --}}
     <div data-scroll-progress aria-hidden="true"></div>
@@ -28,14 +46,17 @@
     {{-- ═══════════════════════════════════════════
          HERO SECTION
          ═══════════════════════════════════════════ --}}
-    <main class="hero">
+    <main class="hero" id="mainContent">
+        {{-- Interactive Particle Canvas (Item 3) --}}
+        <canvas id="heroParticleCanvas" class="hero-particle-canvas" aria-hidden="true"></canvas>
+
         <div class="wrap">
 
             {{-- Left: copy & search --}}
             <section class="hero-content">
-                <div class="pill-badge" data-anim="eyebrow">
+                <div class="pill-badge" data-anim="eyebrow" id="heroPillBadge" style="cursor: pointer;" title="Klik untuk tips & info berikutnya">
                     <span class="pill-dot" aria-hidden="true"></span>
-                    <span class="pill-text">Platform Resmi SMK Pusat Keunggulan &amp; BLUD</span>
+                    <span class="pill-text pill-text-rotating" id="heroPillText">Platform Resmi SMK Pusat Keunggulan &amp; BLUD</span>
                 </div>
 
                 <h1 class="hero-title" data-anim="hero-title">
@@ -60,8 +81,8 @@
                         <input
                             type="text" name="q" id="heroSearchInput"
                             class="s-input"
-                            placeholder="Cari info jurusan, PKL, BKK, atau BLUD..."
-                            aria-label="Cari informasi"
+                            placeholder="Cari info jurusan, PKL, fasilitas, atau beasiswa..."
+                            aria-label="Cari informasi sekolah"
                             autocomplete="off"
                         >
                         <button type="submit" class="s-btn" id="heroSearchBtn" aria-label="Cari">
@@ -71,6 +92,9 @@
                             </svg>
                         </button>
                     </form>
+
+                    {{-- Autocomplete Quick Suggestions Dropdown --}}
+                    <div class="search-suggestions-dropdown" id="searchSuggestionsDropdown" role="listbox" aria-label="Saran Pencarian Cepat" aria-hidden="true"></div>
                 </div>
 
                 <a href="{{ route('ppdb.kuis') }}" class="hero-ai-discovery-link" data-anim="hero-actions">
@@ -163,11 +187,37 @@
 
                 {{-- Students 3D character photo --}}
                 <div class="students-wrap">
+                    {{-- Floating Official Verification Badges (Desktop floating, Mobile clean above photo) --}}
+                    <div class="hero-badges-wrapper">
+                        <div class="hero-verified-badge hero-badge-akreditasi" data-hover-card>
+                            <div class="verified-icon-circle">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                                </svg>
+                            </div>
+                            <div class="verified-badge-text">
+                                <span class="verified-title">TERAKREDITASI "A"</span>
+                                <span class="verified-sub">BAN-S/M Kemendikbudristek</span>
+                            </div>
+                        </div>
+
+                        <div class="hero-verified-badge hero-badge-smkpk" data-hover-card>
+                            <div class="verified-icon-circle icon-pk">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="20 6 9 17 4 12"></polyline>
+                                </svg>
+                            </div>
+                            <div class="verified-badge-text">
+                                <span class="verified-title">SMK PUSAT KEUNGGULAN</span>
+                                <span class="verified-sub">Kurikulum Selaras Industri</span>
+                            </div>
+                        </div>
+                    </div>
+
                     <img
                         src="{{ asset('assets/image.webp') }}"
                         alt="Siswa dan Siswi SMK Tefa-Hub"
                         class="students-img"
-                        data-parallax
                     >
                 </div>
 
@@ -207,87 +257,14 @@
     </main>
 
     {{-- ═══════════════════════════════════════════
-         PARTNER / MITRA LOGOS MARQUEE
+         SAMBUTAN KEPALA SEKOLAH
          ═══════════════════════════════════════════ --}}
-    <section class="partners-section" data-reveal aria-label="Mitra dan Partner Tefa-Hub">
-        <p class="partners-label">Didukung &amp; Terintegrasi Bersama Mitra Industri Nasional</p>
-        <div class="partners-track-wrapper" id="partnersWrapper">
-            <div class="partners-track" id="partnersTrack">
-                {{-- Group 1 --}}
-                <div class="partners-track-group">
-                    <div class="partner-logo-item">
-                        <img src="{{ asset('assets/L1.webp') }}" alt="Jagoan Hosting Innovation Competition">
-                    </div>
-                    <div class="partner-logo-item">
-                        <img src="{{ asset('assets/L2.webp') }}" alt="Jagoan Hosting">
-                    </div>
-                    <div class="partner-logo-item">
-                        <img src="{{ asset('assets/L3.webp') }}" alt="Komdigi">
-                    </div>
-                    <div class="partner-logo-item">
-                        <img src="{{ asset('assets/L4.webp') }}" alt="Garuda Spark Innovation Hub">
-                    </div>
-                    <div class="partner-logo-item">
-                        <img src="{{ asset('assets/L5.webp') }}" alt="Ngalup.co">
-                    </div>
-                </div>
-                {{-- Group 2 --}}
-                <div class="partners-track-group" aria-hidden="true">
-                    <div class="partner-logo-item">
-                        <img src="{{ asset('assets/L1.webp') }}" alt="">
-                    </div>
-                    <div class="partner-logo-item">
-                        <img src="{{ asset('assets/L2.webp') }}" alt="">
-                    </div>
-                    <div class="partner-logo-item">
-                        <img src="{{ asset('assets/L3.webp') }}" alt="">
-                    </div>
-                    <div class="partner-logo-item">
-                        <img src="{{ asset('assets/L4.webp') }}" alt="">
-                    </div>
-                    <div class="partner-logo-item">
-                        <img src="{{ asset('assets/L5.webp') }}" alt="">
-                    </div>
-                </div>
-                {{-- Group 3 --}}
-                <div class="partners-track-group" aria-hidden="true">
-                    <div class="partner-logo-item">
-                        <img src="{{ asset('assets/L1.webp') }}" alt="">
-                    </div>
-                    <div class="partner-logo-item">
-                        <img src="{{ asset('assets/L2.webp') }}" alt="">
-                    </div>
-                    <div class="partner-logo-item">
-                        <img src="{{ asset('assets/L3.webp') }}" alt="">
-                    </div>
-                    <div class="partner-logo-item">
-                        <img src="{{ asset('assets/L4.webp') }}" alt="">
-                    </div>
-                    <div class="partner-logo-item">
-                        <img src="{{ asset('assets/L5.webp') }}" alt="">
-                    </div>
-                </div>
-                {{-- Group 4 --}}
-                <div class="partners-track-group" aria-hidden="true">
-                    <div class="partner-logo-item">
-                        <img src="{{ asset('assets/L1.webp') }}" alt="">
-                    </div>
-                    <div class="partner-logo-item">
-                        <img src="{{ asset('assets/L2.webp') }}" alt="">
-                    </div>
-                    <div class="partner-logo-item">
-                        <img src="{{ asset('assets/L3.webp') }}" alt="">
-                    </div>
-                    <div class="partner-logo-item">
-                        <img src="{{ asset('assets/L4.webp') }}" alt="">
-                    </div>
-                    <div class="partner-logo-item">
-                        <img src="{{ asset('assets/L5.webp') }}" alt="">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+    <x-sambutan-kepsek />
+
+    {{-- ═══════════════════════════════════════════
+         INFINITE LOGO MARQUEE WITH SEQUENTIAL AUTO SPOTLIGHT
+         ═══════════════════════════════════════════ --}}
+    <x-logo-marquee />
 
     {{-- ═══════════════════════════════════════════
          ABOUT SECTION
@@ -296,12 +273,12 @@
         <div class="wrap">
 
             {{-- Left: Logo Image --}}
-            <div class="about-visual" data-reveal>
-                <img src="{{ asset('assets/logo2.webp') }}" alt="Logo Tefa-Hub" class="about-logo-img" data-parallax>
+            <div class="about-visual" data-reveal="left">
+                <img src="{{ asset('assets/logo2.webp') }}" alt="Logo Tefa-Hub" class="about-logo-img">
             </div>
 
             {{-- Right: Content --}}
-            <div class="about-content" data-reveal>
+            <div class="about-content" data-reveal="right">
                 <span class="about-category">TENTANG KAMI</span>
 
                 <h2 class="about-title">
@@ -317,12 +294,17 @@
     </section>
 
     {{-- ═══════════════════════════════════════════
+         SCHOOL VALUE PROPOSITION (KENAPA PILIH KAMI)
+         ═══════════════════════════════════════════ --}}
+    <x-school-value-proposition />
+
+    {{-- ═══════════════════════════════════════════
          SERVICES / 4 CARDS SECTION
          ═══════════════════════════════════════════ --}}
     <section class="services-section" id="layanan">
         <div class="wrap">
 
-            <div class="services-header" data-reveal>
+            <div class="services-header" data-reveal="scale">
                 <h2 class="services-title">Layanan Unggulan Sekolah</h2>
                 <p class="services-desc">
                     Semua informasi dan kebutuhan sekolah dapat diakses dengan mudah dan praktis di satu tempat.
@@ -345,14 +327,14 @@
                     ],
                     [
                         'icon' => '3.webp',
-                        'title' => 'Produk & Jasa Karya Siswa',
-                        'desc' => 'Layanan servis kendaraan dan hasil karya siswa yang siap melayani masyarakat umum.',
-                        'link' => '#blud',
+                        'title' => 'Praktik Kerja Lapangan (PKL)',
+                        'desc' => 'Program magang industri terstruktur bersama 50+ mitra industri resmi bersertifikasi kompetensi.',
+                        'link' => route('pkl'),
                     ],
                     [
                         'icon' => '4.webp',
-                        'title' => 'Penyaluran Kerja & Magang',
-                        'desc' => 'Informasi lowongan kerja, tempat magang resmi (PKL), dan pengiriman lamaran langsung.',
+                        'title' => 'Penyaluran Kerja & Karir (BKK)',
+                        'desc' => 'Informasi lowongan kerja resmi, rekrutmen kampus, dan penyaluran lulusan ke dunia kerja.',
                         'link' => route('bkk'),
                     ],
                 ];
@@ -379,60 +361,60 @@
     </section>
 
     {{-- ═══════════════════════════════════════════
-         SHOWCASE / TEFA TO PUBLIC SECTION
+         SHOWCASE / PKL & MITRA INDUSTRI SECTION
          ═══════════════════════════════════════════ --}}
-    <section class="showcase-section" id="blud">
+    <section class="showcase-section" id="pkl">
         <div class="wrap">
 
             {{-- Left: Text & CTA --}}
-            <div class="showcase-content" data-reveal>
-                <span class="showcase-category">KARYA &amp; LAYANAN SISWA</span>
+            <div class="showcase-content" data-reveal="left">
+                <span class="showcase-category">PROGRAM MAGANG &amp; KEMITRAAN DUDI</span>
 
-                <h2 class="showcase-title">Dari Praktik Menjadi Karya Nyata</h2>
+                <h2 class="showcase-title">Praktik Kerja Lapangan &amp; Pengalaman Industri Nyata</h2>
 
                 <p class="showcase-desc">
-                    Siswa kami dilatih melalui praktik kerja langsung. Dari perawatan kendaraan hingga pembuatan produk, semua dikerjakan dengan rapi, teliti, dan terjangkau untuk masyarakat umum.
+                    Siswa SMK Antartika 1 Sidoarjo diterjunkan langsung ke dunia usaha dan dunia industri (DUDI). Dibekali keahlian teknis terkini, standar K3, etos kerja profesional, dan sertifikasi BNSP berstandar nasional.
                 </p>
 
-                <a href="{{ route('bkk') }}" class="showcase-btn">
-                    Lihat Selengkapnya
+                <a href="{{ route('pkl') }}" class="showcase-btn">
+                    Eksplorasi Program PKL
                 </a>
             </div>
 
-            {{-- Right: Visual Mockup matching BKK page cards --}}
-            <div class="showcase-visual" data-reveal>
+            {{-- Right: Visual Mockup matching Vocational PKL Cards --}}
+            <div class="showcase-visual" data-reveal="right">
                 <div class="showcase-cards">
                     <div class="blud-card-frame showcase-card-layer showcase-card-1" data-hover-card>
                         <div class="blud-card-image-wrap">
-                            <img src="{{ asset('assets/image copy 3.webp') }}" alt="Servis Berkala & Ganti Oli Mesin" class="blud-bg-img" data-parallax loading="lazy" decoding="async">
+                            <img src="{{ asset('assets/image copy 3.webp') }}" alt="Praktik Industri Otomotif & Manufaktur" class="blud-bg-img" loading="lazy" decoding="async">
                             <span class="blud-rating-badge">
                                 <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
                                 4.9
                             </span>
-                            <span class="blud-price-badge">Mulai 50rb</span>
+                            <span class="blud-price-badge">Bengkel APM</span>
                             <div class="blud-inner-card">
                                 <div class="blud-inner-content">
-                                    <span class="blud-tag">JASA LAYANAN</span>
-                                    <h3 class="blud-title">Servis Berkala &amp; Ganti Oli Mesin</h3>
+                                    <span class="blud-tag">TEKNIK OTOMOTIF &amp; MESIN</span>
+                                    <h3 class="blud-title">Praktik Industri &amp; Servis Presisi</h3>
                                 </div>
-                                <a href="{{ route('bkk') }}" class="blud-btn">Lihat Selengkapnya</a>
+                                <a href="{{ route('pkl') }}" class="blud-btn">Lihat Panduan PKL</a>
                             </div>
                         </div>
                     </div>
                     <div class="blud-card-frame showcase-card-layer showcase-card-2" data-hover-card>
                         <div class="blud-card-image-wrap">
-                            <img src="{{ asset('assets/image copy 3.webp') }}" alt="Tune-Up Injeksi & Servis Motor" class="blud-bg-img" data-parallax loading="lazy" decoding="async">
+                            <img src="{{ asset('assets/image copy 3.webp') }}" alt="Magang Industri Software & Jaringan" class="blud-bg-img" loading="lazy" decoding="async">
                             <span class="blud-rating-badge">
                                 <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
                                 5.0
                             </span>
-                            <span class="blud-price-badge">Mulai 65rb</span>
+                            <span class="blud-price-badge">Tech Partner</span>
                             <div class="blud-inner-card">
                                 <div class="blud-inner-content">
-                                    <span class="blud-tag">TEACHING FACTORY</span>
-                                    <h3 class="blud-title">Tune-Up Injeksi &amp; Servis Motor</h3>
+                                    <span class="blud-tag">RPL &amp; TEKNIK JARINGAN</span>
+                                    <h3 class="blud-title">Magang Software &amp; Cloud Infra</h3>
                                 </div>
-                                <a href="{{ route('bkk') }}" class="blud-btn">Lihat Selengkapnya</a>
+                                <a href="{{ route('pkl') }}" class="blud-btn">Lihat Panduan PKL</a>
                             </div>
                         </div>
                     </div>
@@ -443,18 +425,23 @@
     </section>
 
     {{-- ═══════════════════════════════════════════
+         FACILITIES & WORKSHOPS SHOWCASE
+         ═══════════════════════════════════════════ --}}
+    <x-facilities-showcase />
+
+    {{-- ═══════════════════════════════════════════
          AI HELPER / TANYA TEFA SECTION
          ═══════════════════════════════════════════ --}}
     <section class="ai-section" id="tanya-tefa">
         <div class="wrap">
 
             {{-- Left: ai.webp Image --}}
-            <div class="ai-visual" data-reveal>
-                <img src="{{ asset('assets/ai.webp') }}" alt="Tefa AI Assistant" class="ai-img" data-parallax>
+            <div class="ai-visual" data-reveal="left">
+                <img src="{{ asset('assets/ai.webp') }}" alt="Tefa AI Assistant" class="ai-img">
             </div>
 
             {{-- Right: Content & 3 Cards --}}
-            <div class="ai-content" data-reveal>
+            <div class="ai-content" data-reveal="right">
                 <span class="ai-category">BANTUAN CEPAT</span>
 
                 <h2 class="ai-title">Pusat Informasi &amp; Bantuan 24 Jam</h2>
@@ -500,11 +487,16 @@
     </section>
 
     {{-- ═══════════════════════════════════════════
+         ALUMNI TESTIMONIALS & INDUSTRY TRUST
+         ═══════════════════════════════════════════ --}}
+    <x-alumni-testimonials />
+
+    {{-- ═══════════════════════════════════════════
          CTA BANNER SECTION
          ═══════════════════════════════════════════ --}}
     <section class="cta-banner-section">
         <div class="wrap">
-            <div class="cta-banner-card" data-reveal>
+            <div class="cta-banner-card" data-reveal="scale">
                 <h2 class="cta-banner-title">
                     Siapkan Masa Depanmu<br>
                     Bersama Tefa–Hub
@@ -521,8 +513,47 @@
         </div>
     </section>
 
+    {{-- ═══════════════════════════════════════════
+         ECOSYSTEM SUPPORTERS & INITIATIVE PARTNERS
+         ═══════════════════════════════════════════ --}}
+    <section class="supporters-section" aria-label="Ekosistem Pendukung dan Inisiatif Kolaborasi">
+        <div class="supporters-header" data-reveal>
+            <p class="supporters-label">Inisiatif Kolaboratif &amp; Ekosistem Pendukung</p>
+        </div>
+        <div class="supporters-marquee-stage" data-reveal>
+            <div class="supporters-track">
+                @for ($set = 0; $set < 4; $set++)
+                    <div class="supporters-group" @if($set > 0) aria-hidden="true" @endif>
+                        <div class="supporter-logo-item" title="Jagoan Hosting Innovation Competition">
+                            <img src="{{ asset('assets/L1.webp') }}" alt="Jagoan Hosting Innovation Competition" loading="lazy">
+                        </div>
+                        <div class="supporter-logo-item" title="Jagoan Hosting">
+                            <img src="{{ asset('assets/L2.webp') }}" alt="Jagoan Hosting" loading="lazy">
+                        </div>
+                        <div class="supporter-logo-item" title="Kementerian Komunikasi dan Digital">
+                            <img src="{{ asset('assets/L3.webp') }}" alt="Kementerian Komunikasi dan Digital" loading="lazy">
+                        </div>
+                        <div class="supporter-logo-item" title="Garuda Spark Innovation Hub">
+                            <img src="{{ asset('assets/L4.webp') }}" alt="Garuda Spark Innovation Hub" loading="lazy">
+                        </div>
+                        <div class="supporter-logo-item" title="Ngalup.co">
+                            <img src="{{ asset('assets/L5.webp') }}" alt="Ngalup.co" loading="lazy">
+                        </div>
+                    </div>
+                @endfor
+            </div>
+        </div>
+    </section>
+
     {{-- Unified Reusable Landing Footer --}}
     <x-landing-footer />
+
+    {{-- Floating Back-to-Top Navigation Button --}}
+    <button type="button" class="back-to-top-btn" id="backToTopBtn" aria-label="Kembali ke atas" title="Kembali ke atas">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="18 15 12 9 6 15"></polyline>
+        </svg>
+    </button>
 
     {{-- Unified Reusable Tanya Tefa AI Widget --}}
     <x-ai-widget subtitle="Pusat Bantuan 24/7" />
@@ -548,16 +579,20 @@
                     const qLower = query.toLowerCase();
                     let targetId = null;
                     
-                    if (qLower.includes('karir') || qLower.includes('bkk') || qLower.includes('kerja') || qLower.includes('loker') || qLower.includes('lowongan')) {
-                        targetId = 'career-center';
-                    } else if (qLower.includes('blud') || qLower.includes('produk') || qLower.includes('tefa') || qLower.includes('katalog') || qLower.includes('toko') || qLower.includes('jual')) {
-                        targetId = 'blud';
+                    if (qLower.includes('fasilitas') || qLower.includes('bengkel') || qLower.includes('lab') || qLower.includes('laboratorium') || qLower.includes('workshop')) {
+                        targetId = 'fasilitas';
+                    } else if (qLower.includes('keunggulan') || qLower.includes('alasan') || qLower.includes('kenapa') || qLower.includes('akreditasi') || qLower.includes('bnsp')) {
+                        targetId = 'keunggulan';
+                    } else if (qLower.includes('karir') || qLower.includes('bkk') || qLower.includes('kerja') || qLower.includes('loker') || qLower.includes('lowongan')) {
+                        targetId = 'layanan';
+                    } else if (qLower.includes('pkl') || qLower.includes('magang') || qLower.includes('industri') || qLower.includes('prakerin') || qLower.includes('praktik')) {
+                        targetId = 'pkl';
                     } else if (qLower.includes('akademik') || qLower.includes('nilai') || qLower.includes('jadwal') || qLower.includes('guru') || qLower.includes('siswa') || qLower.includes('kurikulum') || qLower.includes('pelajaran')) {
-                        targetId = 'akademik';
+                        targetId = 'layanan';
                     } else if (qLower.includes('layanan') || qLower.includes('fitur') || qLower.includes('ppdb') || qLower.includes('daftar')) {
                         targetId = 'layanan';
-                    } else if (qLower.includes('tentang') || qLower.includes('profil') || qLower.includes('sekolah') || qLower.includes('smk') || qLower.includes('apa itu')) {
-                        targetId = 'tentang';
+                    } else if (qLower.includes('tentang') || qLower.includes('profil') || qLower.includes('sekolah') || qLower.includes('smk') || qLower.includes('apa itu') || qLower.includes('sambutan')) {
+                        targetId = 'sambutan';
                     }
                     
                     if (targetId) {
