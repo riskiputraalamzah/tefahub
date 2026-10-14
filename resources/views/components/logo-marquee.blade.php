@@ -95,60 +95,88 @@
 <script>
 (function() {
     /**
-     * Sequential Auto Spotlight Controller
-     * Cycles through each logo index sequentially in each marquee row.
-     * Staggered intervals and initial delays keep the 3 rows dynamically independent.
+     * Sequential Auto Spotlight Controller (Viewport-Aware & Highly Optimized)
+     * Automatically pauses timers when off-screen to preserve 100% CPU/GPU for scrolling.
      */
     function initLogoMarqueeSpotlight() {
+        const stage = document.getElementById('logoMarqueeStage');
         const rows = document.querySelectorAll('[data-marquee-row]');
-        if (!rows.length) return;
+        if (!rows.length || !stage) return;
 
-        const activeTimers = [];
+        let activeTimers = [];
+        let isRunning = false;
 
-        rows.forEach(function(row) {
-            const total = parseInt(row.getAttribute('data-marquee-total'), 10) || 5;
-            const intervalTime = parseInt(row.getAttribute('data-marquee-interval'), 10) || 2800;
-            const delayTime = parseInt(row.getAttribute('data-marquee-delay'), 10) || 0;
+        function startSpotlights() {
+            if (isRunning) return;
+            isRunning = true;
 
-            let currentIndex = 0;
+            rows.forEach(function(row) {
+                const total = parseInt(row.getAttribute('data-marquee-total'), 10) || 5;
+                const intervalTime = parseInt(row.getAttribute('data-marquee-interval'), 10) || 2800;
+                const delayTime = parseInt(row.getAttribute('data-marquee-delay'), 10) || 0;
 
-            function highlightIndex(index) {
-                // Clear previous spotlights in this row
-                const currentActive = row.querySelectorAll('.marquee-logo-card.is-spotlight');
-                currentActive.forEach(function(card) {
-                    card.classList.remove('is-spotlight');
-                });
+                let currentIndex = 0;
 
-                // Highlight all duplicate instances of target logo index in this row
-                const targetCards = row.querySelectorAll('.marquee-logo-card[data-logo-index="' + index + '"]');
-                targetCards.forEach(function(card) {
-                    card.classList.add('is-spotlight');
-                });
-            }
+                function highlightIndex(index) {
+                    const currentActive = row.querySelectorAll('.marquee-logo-card.is-spotlight');
+                    currentActive.forEach(function(card) {
+                        card.classList.remove('is-spotlight');
+                    });
 
-            // Initial highlight after staggered delay
-            const initialTimer = setTimeout(function() {
-                highlightIndex(currentIndex);
+                    const targetCards = row.querySelectorAll('.marquee-logo-card[data-logo-index="' + index + '"]');
+                    targetCards.forEach(function(card) {
+                        card.classList.add('is-spotlight');
+                    });
+                }
 
-                // Start recurring sequential rotation
-                const cycleInterval = setInterval(function() {
-                    currentIndex = (currentIndex + 1) % total;
+                const initialTimer = setTimeout(function() {
                     highlightIndex(currentIndex);
-                }, intervalTime);
+                    const cycleInterval = setInterval(function() {
+                        currentIndex = (currentIndex + 1) % total;
+                        highlightIndex(currentIndex);
+                    }, intervalTime);
 
-                activeTimers.push(cycleInterval);
-            }, delayTime);
+                    activeTimers.push(cycleInterval);
+                }, delayTime);
 
-            activeTimers.push(initialTimer);
-        });
+                activeTimers.push(initialTimer);
+            });
+        }
 
-        // Cleanup on page visibility change or teardown to prevent memory leaks
+        function stopSpotlights() {
+            isRunning = false;
+            activeTimers.forEach(function(t) {
+                clearTimeout(t);
+                clearInterval(t);
+            });
+            activeTimers = [];
+
+            document.querySelectorAll('.marquee-logo-card.is-spotlight').forEach(function(card) {
+                card.classList.remove('is-spotlight');
+            });
+        }
+
+        // Viewport Observer: ONLY tick when visible
+        if ('IntersectionObserver' in window) {
+            const observer = new IntersectionObserver(function(entries) {
+                entries.forEach(function(entry) {
+                    if (entry.isIntersecting) {
+                        startSpotlights();
+                    } else {
+                        stopSpotlights();
+                    }
+                });
+            }, { threshold: 0.1 });
+            observer.observe(stage);
+        } else {
+            startSpotlights();
+        }
+
         document.addEventListener('visibilitychange', function() {
             if (document.hidden) {
-                // Dim down spotlights while inactive tab
-                document.querySelectorAll('.marquee-logo-card.is-spotlight').forEach(function(card) {
-                    card.classList.remove('is-spotlight');
-                });
+                stopSpotlights();
+            } else if (!document.hidden && stage.getBoundingClientRect().top < window.innerHeight && stage.getBoundingClientRect().bottom > 0) {
+                startSpotlights();
             }
         });
     }

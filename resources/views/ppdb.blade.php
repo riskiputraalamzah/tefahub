@@ -26,8 +26,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     <!-- CSS Assets -->
-    <link rel="stylesheet" href="{{ asset('assets/css/landing.css') }}?v={{ config('app.asset_version', '1.0') }}">
-    <link rel="stylesheet" href="{{ asset('assets/css/ppdb.landing.css') }}?v={{ config('app.asset_version', '1.0') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/landing.css') }}?v={{ file_exists(public_path('assets/css/landing.css')) ? filemtime(public_path('assets/css/landing.css')) : '1.0' }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/ppdb.landing.css') }}?v={{ file_exists(public_path('assets/css/ppdb.landing.css')) ? filemtime(public_path('assets/css/ppdb.landing.css')) : '1.0' }}">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
 <body class="ppdb-body">
@@ -517,7 +517,7 @@
 
                 <div class="quiz-banner-visual">
                     <img 
-                        src="{{ asset('assets/image copy 2.webp') }}" 
+                        src="{{ asset('assets/image copy 2.png') }}" 
                         alt="Temukan Program Keahlian 5 Jurusan Unggulan SMK Antartika 1 Sidoarjo" 
                         class="quiz-banner-right-img"
                         loading="eager"

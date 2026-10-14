@@ -149,15 +149,15 @@
     box-sizing: border-box;
     cursor: default;
     user-select: none;
-    /* Default: Grayscale with balanced opacity */
-    filter: grayscale(100%) opacity(0.52);
-    transform: scale(1);
+    opacity: 0.55;
+    filter: grayscale(100%);
+    transform: translate3d(0, 0, 0);
     transition:
-        filter 0.55s cubic-bezier(0.16, 1, 0.3, 1),
-        transform 0.55s cubic-bezier(0.16, 1, 0.3, 1),
-        box-shadow 0.55s cubic-bezier(0.16, 1, 0.3, 1),
-        border-color 0.55s cubic-bezier(0.16, 1, 0.3, 1),
-        background-color 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+        opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+        transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+        border-color 0.35s ease,
+        box-shadow 0.35s ease;
+    will-change: transform, opacity;
 }
 
 .marquee-logo-card img {
@@ -168,30 +168,26 @@
     object-fit: contain;
     display: block;
     pointer-events: none;
-    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 /* ── Active Sequential Spotlight State ────────────────────────────── */
 .marquee-logo-card.is-spotlight {
-    filter: grayscale(0%) opacity(1) brightness(1.05) saturate(1.15);
-    transform: scale(1.07);
+    opacity: 1;
+    filter: grayscale(0%);
+    transform: translate3d(0, -4px, 0) scale(1.04);
     background: #ffffff;
     border-color: rgba(37, 99, 235, 0.5);
-    box-shadow:
-        0 0 28px -4px rgba(37, 99, 235, 0.35),
-        0 10px 22px -6px rgba(15, 23, 42, 0.12);
+    box-shadow: 0 10px 22px -6px rgba(37, 99, 235, 0.25);
     z-index: 5;
-}
-
-.marquee-logo-card.is-spotlight img {
-    transform: scale(1.03);
 }
 
 /* Hover fallback when user interacts */
 .marquee-logo-card:hover {
-    filter: grayscale(0%) opacity(1) brightness(1.04);
+    opacity: 1;
+    filter: grayscale(0%);
     border-color: rgba(37, 99, 235, 0.4);
-    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.2);
+    transform: translate3d(0, -3px, 0);
+    box-shadow: 0 8px 18px -4px rgba(37, 99, 235, 0.2);
 }
 
 /* ── Responsive Adaptations ────────────────────────────────────────── */

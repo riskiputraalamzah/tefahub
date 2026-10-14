@@ -10,9 +10,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ asset('assets/css/landing.css') }}?v={{ config('app.asset_version', '1.0') }}">
-    <link rel="stylesheet" href="{{ asset('assets/css/sambutan.css') }}?v={{ config('app.asset_version', '1.0') }}">
-    <link rel="stylesheet" href="{{ asset('assets/css/logo-marquee.css') }}?v={{ config('app.asset_version', '1.0') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/landing.css') }}?v={{ file_exists(public_path('assets/css/landing.css')) ? filemtime(public_path('assets/css/landing.css')) : '1.0' }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/sambutan.css') }}?v={{ file_exists(public_path('assets/css/sambutan.css')) ? filemtime(public_path('assets/css/sambutan.css')) : '1.0' }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/logo-marquee.css') }}?v={{ file_exists(public_path('assets/css/logo-marquee.css')) ? filemtime(public_path('assets/css/logo-marquee.css')) : '1.0' }}">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
@@ -194,10 +194,9 @@
                     </div>
 
                     <img
-                        src="{{ asset('assets/image.webp') }}"
+                        src="{{ asset('assets/image.png') }}"
                         alt="Siswa dan Siswi SMK Tefa-Hub"
                         class="students-img"
-                        data-parallax
                     >
                 </div>
 
@@ -254,7 +253,7 @@
 
             {{-- Left: Logo Image --}}
             <div class="about-visual" data-reveal="left">
-                <img src="{{ asset('assets/logo2.webp') }}" alt="Logo Tefa-Hub" class="about-logo-img" data-parallax>
+                <img src="{{ asset('assets/logo2.webp') }}" alt="Logo Tefa-Hub" class="about-logo-img">
             </div>
 
             {{-- Right: Content --}}
@@ -366,7 +365,7 @@
                 <div class="showcase-cards">
                     <div class="blud-card-frame showcase-card-layer showcase-card-1" data-hover-card>
                         <div class="blud-card-image-wrap">
-                            <img src="{{ asset('assets/image copy 3.webp') }}" alt="Praktik Industri Otomotif & Manufaktur" class="blud-bg-img" data-parallax loading="lazy" decoding="async">
+                            <img src="{{ asset('assets/image copy 3.webp') }}" alt="Praktik Industri Otomotif & Manufaktur" class="blud-bg-img" loading="lazy" decoding="async">
                             <span class="blud-rating-badge">
                                 <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
                                 4.9
@@ -383,7 +382,7 @@
                     </div>
                     <div class="blud-card-frame showcase-card-layer showcase-card-2" data-hover-card>
                         <div class="blud-card-image-wrap">
-                            <img src="{{ asset('assets/image copy 8.webp') }}" alt="Magang Industri Software & Jaringan" class="blud-bg-img" data-parallax loading="lazy" decoding="async">
+                            <img src="{{ asset('assets/image copy 3.webp') }}" alt="Magang Industri Software & Jaringan" class="blud-bg-img" loading="lazy" decoding="async">
                             <span class="blud-rating-badge">
                                 <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
                                 5.0
@@ -417,7 +416,7 @@
 
             {{-- Left: ai.webp Image --}}
             <div class="ai-visual" data-reveal="left">
-                <img src="{{ asset('assets/ai.webp') }}" alt="Tefa AI Assistant" class="ai-img" data-parallax>
+                <img src="{{ asset('assets/ai.webp') }}" alt="Tefa AI Assistant" class="ai-img">
             </div>
 
             {{-- Right: Content & 3 Cards --}}

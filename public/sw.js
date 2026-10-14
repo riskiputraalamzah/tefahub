@@ -1,5 +1,5 @@
-const STATIC_CACHE = 'tefa-hub-static-v6';
-const PAGE_CACHE = 'tefa-hub-pages-v6';
+const STATIC_CACHE = 'tefa-hub-static-v7';
+const PAGE_CACHE = 'tefa-hub-pages-v7';
 const OFFLINE_URL = '/offline.html';
 
 const precachedUrls = [

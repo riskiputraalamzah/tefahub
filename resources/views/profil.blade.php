@@ -14,8 +14,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     <!-- CSS Assets -->
-    <link rel="stylesheet" href="{{ asset('assets/css/landing.css') }}?v={{ config('app.asset_version', '1.0') }}">
-    <link rel="stylesheet" href="{{ asset('assets/css/profil.landing.css') }}?v={{ config('app.asset_version', '1.0') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/landing.css') }}?v={{ file_exists(public_path('assets/css/landing.css')) ? filemtime(public_path('assets/css/landing.css')) : '1.0' }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/profil.landing.css') }}?v={{ file_exists(public_path('assets/css/profil.landing.css')) ? filemtime(public_path('assets/css/profil.landing.css')) : '1.0' }}">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
 <body>
@@ -174,7 +174,7 @@
 
                         {{-- School Gate Photo Card (Thick White Frame & Elevation) --}}
                         <div class="profil-hero-img-card">
-                            <img src="{{ asset('assets/image copy 3.webp') }}" srcset="{{ asset('assets/image copy 3.webp') }} 1x, {{ asset('assets/image copy 3.webp') }} 2x" alt="Gerbang dan Gedung SMK Antartika 1 Sidoarjo" class="profil-hero-img" width="620" height="390" onerror="this.onerror=null; this.src='{{ asset('assets/image copy 3.webp') }}';" loading="eager" fetchpriority="high">
+                            <img src="{{ asset('assets/image copy 3.png') }}" srcset="{{ asset('assets/image copy 3.png') }} 1x, {{ asset('assets/image copy 3.png') }} 2x" alt="Gerbang dan Gedung SMK Antartika 1 Sidoarjo" class="profil-hero-img" width="620" height="390" onerror="this.onerror=null; this.src='{{ asset('assets/image copy 3.png') }}';" loading="eager" fetchpriority="high">
                         </div>
 
                         {{-- Floating Location Card at Bottom-Right --}}
@@ -935,7 +935,7 @@
                 <div class="profil-galeri-grid">
                     
                     <div class="profil-galeri-card">
-                        <img src="{{ asset('assets/image copy 3.webp') }}" alt="Gedung SMK Antartika 1 Sidoarjo" class="profil-galeri-img">
+                        <img src="{{ asset('assets/image copy 3.png') }}" alt="Gedung SMK Antartika 1 Sidoarjo" class="profil-galeri-img">
                         <div class="profil-galeri-info">
                             <strong class="profil-galeri-title">Gerbang Utama &amp; Gedung Pembelajaran</strong>
                             <span class="profil-galeri-sub">Kampus SMK Antartika 1 Sidoarjo</span>
@@ -943,7 +943,7 @@
                     </div>
 
                     <div class="profil-galeri-card">
-                        <img src="{{ asset('assets/image copy.webp') }}" alt="Kepala Sekolah &amp; Manajemen" class="profil-galeri-img">
+                        <img src="{{ asset('assets/image copy.png') }}" alt="Kepala Sekolah &amp; Manajemen" class="profil-galeri-img">
                         <div class="profil-galeri-info">
                             <strong class="profil-galeri-title">Kepemimpinan &amp; Manajemen Vokasi</strong>
                             <span class="profil-galeri-sub">Pimpinan dan Tenaga Pendidik Profesional</span>
@@ -951,7 +951,7 @@
                     </div>
 
                     <div class="profil-galeri-card">
-                        <img src="{{ asset('assets/logo.webp') }}" alt="Teaching Factory TefaHub" class="profil-galeri-img" style="object-fit: contain; padding: 24px; background: #f8fafc;">
+                        <img src="{{ asset('assets/logo.png') }}" alt="Teaching Factory TefaHub" class="profil-galeri-img" style="object-fit: contain; padding: 24px; background: #f8fafc;">
                         <div class="profil-galeri-info">
                             <strong class="profil-galeri-title">Ekosistem Teaching Factory</strong>
                             <span class="profil-galeri-sub">Kemitraan Industri &amp; Unit Produksi Nyata</span>
@@ -1461,7 +1461,7 @@
                 {{-- Principal Showcase Card --}}
                 <div class="profil-principal-card">
                     <div class="profil-principal-avatar">
-                        <img src="{{ asset('assets/image copy.webp') }}" alt="Akhmad Nasirudin, S.T. - Kepala SMK Antartika 1 Sidoarjo" class="profil-principal-img" onerror="this.onerror=null; this.src='{{ asset('assets/image copy.webp') }}';">
+                        <img src="{{ asset('assets/image copy.png') }}" alt="Akhmad Nasirudin, S.T. - Kepala SMK Antartika 1 Sidoarjo" class="profil-principal-img" onerror="this.onerror=null; this.src='{{ asset('assets/image copy.png') }}';">
                     </div>
                     <h3 class="profil-principal-name">Akhmad Nasirudin, S.T.</h3>
                     <div class="profil-principal-role">Kepala SMK Antartika 1 Sidoarjo</div>

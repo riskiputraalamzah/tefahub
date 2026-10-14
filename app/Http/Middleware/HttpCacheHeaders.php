@@ -28,17 +28,13 @@ class HttpCacheHeaders
             return $response;
         }
 
-        // Public landing pages — can be cached by browser & CDN
+        // Public landing pages — always revalidate HTML so CSS/JS updates apply immediately without requiring manual refresh
         $staticRoutes = ['home', 'bkk', 'profil', 'pkl', 'ppdb', 'ppdb.kuis', 'kuis-jurusan'];
         $isStaticLanding = in_array($request->route()?->getName(), $staticRoutes, true)
             || $request->is(['/', 'bkk', 'profil', 'pkl', 'ppdb', 'ppdb/kuis', 'kuis-jurusan']);
 
         if ($isStaticLanding) {
-            $response->headers->set('Cache-Control', 'public, max-age=3600, s-maxage=86400, stale-while-revalidate=600');
-            // Remove cookies for unauthenticated visitors so CDNs (Cloudflare) and proxies can edge-cache
-            if ($request->user() === null) {
-                $response->headers->remove('Set-Cookie');
-            }
+            $response->headers->set('Cache-Control', 'no-cache, must-revalidate');
 
             return $response;
         }

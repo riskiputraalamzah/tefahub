@@ -7,6 +7,48 @@
     padding: 0;
 }
 
+/* ── Accessibility: Skip to Content (Completely hidden unless focused via keyboard Tab) ── */
+.skip-to-content {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+    top: 0 !important;
+    left: 0 !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+    z-index: 9999999 !important;
+}
+
+.skip-to-content:focus {
+    position: fixed !important;
+    top: 16px !important;
+    left: 16px !important;
+    width: auto !important;
+    height: auto !important;
+    padding: 10px 20px !important;
+    margin: 0 !important;
+    overflow: visible !important;
+    clip: auto !important;
+    white-space: normal !important;
+    background: #004ac6 !important;
+    color: #ffffff !important;
+    border-radius: 10px !important;
+    font-weight: 700 !important;
+    font-size: 14px !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    outline: 3px solid #60a5fa !important;
+    box-shadow: 0 10px 25px -4px rgba(0, 74, 198, 0.45) !important;
+    text-decoration: none !important;
+    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
 :root {
     --blue:        #2563eb;
     --blue-dark:   #1d4ed8;
@@ -1033,7 +1075,7 @@ body.onboarding-active {
     letter-spacing: 0.02em;
 }
 
-/* Students 3D Illustration (image.webp - Shifted up for balance) */
+/* ── Floating Official Verification Badges ─────────────────────────── */
 .students-wrap {
     position: relative;
     z-index: 5;
@@ -1046,6 +1088,77 @@ body.onboarding-active {
     margin-bottom: 0;
     transform: translateY(-10px);
 }
+
+.hero-verified-badge {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 10px 14px;
+    box-shadow: 0 8px 28px -6px rgba(15, 23, 42, 0.14), 0 2px 8px rgba(0, 0, 0, 0.06);
+    border: 1px solid rgba(226, 232, 240, 0.9);
+    z-index: 20;
+    min-width: 190px;
+    max-width: 230px;
+    cursor: default;
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease;
+}
+
+.hero-verified-badge:hover {
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 14px 36px -8px rgba(37, 99, 235, 0.18), 0 4px 12px rgba(0, 0, 0, 0.07);
+}
+
+/* Akreditasi badge — top-left of the students wrap */
+.hero-badge-akreditasi {
+    top: 28px;
+    left: -20px;
+}
+
+/* SMK-PK badge — lower-right, above the cards row */
+.hero-badge-smkpk {
+    bottom: 110px;
+    right: -20px;
+}
+
+.verified-icon-circle {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #eff6ff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.verified-icon-circle.icon-pk {
+    background: #ecfdf5;
+}
+
+.verified-badge-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.verified-title {
+    font-size: 12px;
+    font-weight: 800;
+    color: #0f172a;
+    letter-spacing: 0.04em;
+    line-height: 1.2;
+}
+
+.verified-sub {
+    font-size: 10.5px;
+    color: #64748b;
+    font-weight: 500;
+    line-height: 1.3;
+}
+
 .students-img {
     width: 100%;
     height: auto;
@@ -1054,81 +1167,6 @@ body.onboarding-active {
     display: block;
     user-select: none;
     filter: drop-shadow(0 14px 28px rgba(15, 23, 42, 0.12));
-}
-
-/* Floating Official Accreditation Badges */
-.hero-verified-badge {
-    position: absolute;
-    z-index: 7;
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(8px);
-    border: 1px solid rgba(226, 232, 240, 0.9);
-    border-radius: 14px;
-    padding: 8px 14px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    box-shadow: 0 10px 24px -6px rgba(15, 23, 42, 0.12);
-    user-select: none;
-    pointer-events: auto;
-    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease;
-}
-.hero-verified-badge:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 14px 30px -6px rgba(37, 99, 235, 0.2);
-}
-.hero-badge-akreditasi {
-    top: 36px;
-    left: -12px;
-}
-.hero-badge-smkpk {
-    bottom: 120px;
-    right: -8px;
-}
-.verified-icon-circle {
-    width: 32px;
-    height: 32px;
-    background: #eff6ff;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-}
-.verified-icon-circle.icon-pk {
-    background: #ecfdf5;
-}
-.verified-badge-text {
-    display: flex;
-    flex-direction: column;
-}
-.verified-title {
-    font-size: 11.5px;
-    font-weight: 800;
-    color: #0f172a;
-    line-height: 1.2;
-    letter-spacing: 0.02em;
-}
-.verified-sub {
-    font-size: 10px;
-    color: #64748b;
-    font-weight: 500;
-    line-height: 1.2;
-}
-
-@media (max-width: 640px) {
-    .hero-badge-akreditasi {
-        top: 10px;
-        left: 8px;
-        padding: 6px 10px;
-    }
-    .hero-badge-smkpk {
-        bottom: 85px;
-        right: 8px;
-        padding: 6px 10px;
-    }
-    .verified-title { font-size: 10px; }
-    .verified-sub { font-size: 9px; }
 }
 
 /* Cards Row — 2 columns side by side, centered below character illustration */
@@ -2640,6 +2678,8 @@ body.ai-panel-open .ai-trigger {
     .hero-tagline-quote { font-size: 19px; top: 18px; right: 10px; }
     .students-wrap { max-width: 400px; padding-bottom: 0; transform: none; }
     .students-img { max-height: 360px; }
+    .hero-badge-akreditasi { top: 16px; left: -10px; min-width: 170px; max-width: 210px; }
+    .hero-badge-smkpk { bottom: 100px; right: -10px; min-width: 170px; max-width: 210px; }
     .cards-row {
         position: relative;
         bottom: auto;
@@ -2952,6 +2992,11 @@ body.ai-panel-open .ai-trigger {
     .service-card { padding: 18px 16px 16px; }
     .hero-visual { min-height: auto; max-width: 360px; }
     .students-img { max-height: 300px; }
+    .hero-badge-akreditasi { top: 10px; left: 0; font-size: 10px; padding: 7px 10px; min-width: 150px; max-width: 185px; }
+    .hero-badge-smkpk { bottom: 90px; right: 0; font-size: 10px; padding: 7px 10px; min-width: 150px; max-width: 185px; }
+    .verified-title { font-size: 10.5px; }
+    .verified-sub { font-size: 9.5px; }
+    .verified-icon-circle { width: 30px; height: 30px; }
     .cards-row {
         max-width: 380px;
         width: 100%;
@@ -3052,6 +3097,7 @@ body.ai-panel-open .ai-trigger {
    PERFORMANCE ACCELERATION: 60/120FPS SILKY SMOOTH SCROLLING
    ============================================================ */
 html {
+    scroll-behavior: smooth;
     -webkit-overflow-scrolling: touch;
 }
 
@@ -3064,5 +3110,17 @@ html {
 .footer {
     content-visibility: auto;
     contain-intrinsic-size: 600px;
+}
+
+/* Hardware accelerated layer promotion for cards */
+.site-header {
+    transform: translate3d(0, 0, 0);
+    will-change: transform;
+}
+
+.card,
+.service-card,
+.cta-banner-card {
+    transform: translateZ(0);
 }
 
