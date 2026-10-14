@@ -169,10 +169,21 @@ html.lenis, html.lenis body {
 }
 
 /* Hero section / Section pertama langsung aktif tanpa nunggu scroll */
+.hero,
 .hero.scroll-layer-section,
+.hero.scroll-layer-section.is-revealed,
 .scroll-layer-section.is-revealed {
     opacity: 1 !important;
     transform: translate3d(0, 0, 0) scale(1) !important;
+}
+
+.hero [data-reveal],
+.hero [data-stagger],
+.hero [data-stagger-item],
+.hero .cards-row,
+.hero .card {
+    opacity: 1 !important;
+    transform: none !important;
 }
 
 /* Child reveal elements — Elemen anak muncul mengalir saat section terangkat */

@@ -50,6 +50,9 @@
             onboardingEl.style.display = 'none';
             onboardingEl.setAttribute('aria-hidden', 'true');
             document.body.classList.remove('onboarding-active');
+            if (window.dispatchEvent) {
+                window.dispatchEvent(new CustomEvent('tefa-onboarding-done'));
+            }
             return;
         }
     } catch (e) {
@@ -64,14 +67,27 @@
     // Lock body scroll during onboarding sequence
     document.body.classList.add('onboarding-active');
 
+    // Hard fail-safe: Ensure overlay NEVER gets stuck covering the page under any circumstance
+    setTimeout(function() {
+        if (onboardingEl && !onboardingEl.classList.contains('is-done')) {
+            onboardingEl.classList.add('is-done');
+            onboardingEl.style.display = 'none';
+            onboardingEl.setAttribute('aria-hidden', 'true');
+            document.body.classList.remove('onboarding-active');
+            if (window.dispatchEvent) {
+                window.dispatchEvent(new CustomEvent('tefa-onboarding-done'));
+            }
+        }
+    }, 1600);
+
     function runOnboardingSequence() {
         // Step 1: Gentle fade-in emergence of Logo and Brand
         setTimeout(function() {
             if (logoCircle) logoCircle.classList.add('is-popped', 'is-settled');
             if (brandReveal) brandReveal.classList.add('is-revealed');
-        }, 120);
+        }, 80);
 
-        // Step 2: Luxurious hold, then elegant fade-out transition to page
+        // Step 2: Smooth fade-out transition to page
         setTimeout(function() {
             onboardingEl.classList.add('is-exiting');
             document.body.classList.remove('onboarding-active');
@@ -85,8 +101,8 @@
                 onboardingEl.classList.add('is-done');
                 onboardingEl.style.display = 'none';
                 onboardingEl.setAttribute('aria-hidden', 'true');
-            }, 650);
-        }, 1350);
+            }, 450);
+        }, 900);
     }
 
     if (document.readyState === 'loading') {

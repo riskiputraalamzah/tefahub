@@ -318,9 +318,23 @@ body.onboarding-active {
     backface-visibility: hidden;
     -webkit-backface-visibility: hidden;
 }
+
+/* Hero section and all hero elements must NEVER be hidden */
+.hero,
+.hero.scroll-layer-section,
+.hero.scroll-layer-section.is-revealed,
 .scroll-layer-section.is-revealed {
-    opacity: 1;
-    transform: translate3d(0, 0, 0);
+    opacity: 1 !important;
+    transform: translate3d(0, 0, 0) !important;
+}
+
+.hero [data-reveal],
+.hero [data-stagger],
+.hero [data-stagger-item],
+.hero .cards-row,
+.hero .card {
+    opacity: 1 !important;
+    transform: none !important;
 }
 
 /* ── 2. ATTRIBUTE-BASED REVEAL [data-reveal] ─────────────────────────── */
@@ -338,9 +352,10 @@ body.onboarding-active {
 [data-reveal="scale"] { transform: scale(0.94); }
 [data-reveal="up"]    { transform: translateY(36px); }
 
-[data-reveal].is-revealed {
-    opacity: 1;
-    transform: translate3d(0, 0, 0);
+[data-reveal].is-revealed,
+.scroll-layer-section.is-revealed [data-reveal] {
+    opacity: 1 !important;
+    transform: translate3d(0, 0, 0) !important;
 }
 
 /* ── 3. ATTRIBUTE-BASED STAGGER [data-stagger] / [data-stagger-item] ─── */

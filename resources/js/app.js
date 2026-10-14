@@ -91,15 +91,23 @@ function initLayeredScrollEffects(force) {
 
     const vh = window.innerHeight || document.documentElement.clientHeight;
 
-    // The hero / topmost section is revealed immediately without waiting for scroll
+    // The hero / topmost section and all its contents are revealed immediately
     const hero = document.querySelector(".hero");
-    if (hero) hero.classList.add("is-revealed");
+    if (hero) {
+        hero.classList.add("is-revealed");
+        hero.querySelectorAll("[data-reveal], [data-stagger], [data-stagger-item], .reveal, .cards-row, .card").forEach((c) => {
+            c.classList.add("is-revealed");
+        });
+    }
 
-    // Reveal elements currently visible on the initial screen
+    // Immediately reveal all elements currently on or near the initial screen
     targets.forEach((el) => {
         const rect = el.getBoundingClientRect();
-        if (rect.top < vh * 0.65) {
+        if (rect.top < vh * 1.15) {
             el.classList.add("is-revealed");
+            el.querySelectorAll && el.querySelectorAll("[data-stagger-item]").forEach((item) => {
+                item.classList.add("is-revealed");
+            });
         }
     });
 
@@ -108,17 +116,20 @@ function initLayeredScrollEffects(force) {
         return;
     }
 
-    // High performance observer: Triggers each section to rise one-by-one as user scrolls
+    // High performance observer with generous anticipation margin
     _revealObserver = new IntersectionObserver(
         (entries, observer) => {
             entries.forEach((entry) => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add("is-revealed");
+                    entry.target.querySelectorAll && entry.target.querySelectorAll("[data-stagger-item]").forEach((item) => {
+                        item.classList.add("is-revealed");
+                    });
                     observer.unobserve(entry.target);
                 }
             });
         },
-        { threshold: 0.1, rootMargin: "0px 0px -40px 0px" }
+        { threshold: 0.05, rootMargin: "0px 0px 100px 0px" }
     );
 
     targets.forEach((el) => {
@@ -126,6 +137,16 @@ function initLayeredScrollEffects(force) {
             _revealObserver.observe(el);
         }
     });
+
+    // Failsafe: Guarantee all sections and items are visible after 1.2s
+    setTimeout(() => {
+        targets.forEach((el) => {
+            el.classList.add("is-revealed");
+            el.querySelectorAll && el.querySelectorAll("[data-stagger-item]").forEach((item) => {
+                item.classList.add("is-revealed");
+            });
+        });
+    }, 1200);
 }
 
 // ── Dynamic Multi-Color Scroll Progress Bar with Hue Shift ───────────────────
@@ -801,24 +822,25 @@ function initInteractiveParticles() {
 
 // ── Bootstrapping ────────────────────────────────────────────────────────────
 function boot() {
-    const lenis = initSmoothScroll();
-    initLayeredScrollEffects(false);
-    initScrollProgress();
-    initBackToTop(lenis);
-    initSearchAutocomplete(lenis);
-    initRotatingTips();
-    initThemeToggle();
-    initLazyImages();
-    initCounters();
-    init3DTilt();
-    initHero3DParallax();
-    initInteractiveParticles();
+    let lenis = null;
+    try { lenis = initSmoothScroll(); } catch (e) { console.warn("SmoothScroll error:", e); }
+    try { initLayeredScrollEffects(false); } catch (e) { console.warn("ScrollEffects error:", e); }
+    try { initScrollProgress(); } catch (e) { console.warn("ScrollProgress error:", e); }
+    try { initBackToTop(lenis); } catch (e) { console.warn("BackToTop error:", e); }
+    try { initSearchAutocomplete(lenis); } catch (e) { console.warn("SearchAutocomplete error:", e); }
+    try { initRotatingTips(); } catch (e) { console.warn("RotatingTips error:", e); }
+    try { initThemeToggle(); } catch (e) { console.warn("ThemeToggle error:", e); }
+    try { initLazyImages(); } catch (e) { console.warn("LazyImages error:", e); }
+    try { initCounters(); } catch (e) { console.warn("Counters error:", e); }
+    try { init3DTilt(); } catch (e) { console.warn("3DTilt error:", e); }
+    try { initHero3DParallax(); } catch (e) { console.warn("Hero3DParallax error:", e); }
+    try { initInteractiveParticles(); } catch (e) { console.warn("Particles error:", e); }
 
     // After onboarding splash exits, trigger a single scan for viewport elements
     window.addEventListener(
         "tefa-onboarding-done",
         () => {
-            initLayeredScrollEffects(true);
+            try { initLayeredScrollEffects(true); } catch (_) {}
         },
         { once: true }
     );
