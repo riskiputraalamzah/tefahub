@@ -194,7 +194,7 @@
                     </div>
 
                     <img
-                        src="{{ asset('assets/image.webp"
+                        src="{{ asset('assets/image.webp') }}"
                         alt="Siswa dan Siswi SMK Tefa-Hub"
                         class="students-img"
                     >
