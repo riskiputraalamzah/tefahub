@@ -52,7 +52,32 @@ function initLayeredScrollEffects(force) {
         _revealObserver = null;
     }
 
+    // Attach scroll-layer-section to all primary landing page sections
+    const sectionSelectors = [
+        ".hero",
+        ".principal-section",
+        ".logo-marquee-section",
+        ".about-section",
+        ".value-prop-section",
+        ".services-section",
+        ".showcase-section",
+        ".facilities-section",
+        ".ai-section",
+        ".alumni-section",
+        ".cta-banner-section",
+        ".supporters-section",
+        ".main-footer",
+        "[data-scroll-layer]"
+    ];
+
+    document.querySelectorAll(sectionSelectors.join(", ")).forEach((sec) => {
+        if (!sec.classList.contains("scroll-layer-section")) {
+            sec.classList.add("scroll-layer-section");
+        }
+    });
+
     const targetSelectors = [
+        ".scroll-layer-section",
         "[data-reveal]",
         "[data-stagger]",
         ".reveal",
@@ -66,10 +91,14 @@ function initLayeredScrollEffects(force) {
 
     const vh = window.innerHeight || document.documentElement.clientHeight;
 
-    // Reveal elements immediately only if they are in the initial above-the-fold screen
+    // The hero / topmost section is revealed immediately without waiting for scroll
+    const hero = document.querySelector(".hero");
+    if (hero) hero.classList.add("is-revealed");
+
+    // Reveal elements currently visible on the initial screen
     targets.forEach((el) => {
         const rect = el.getBoundingClientRect();
-        if (rect.top < vh * 0.7) {
+        if (rect.top < vh * 0.65) {
             el.classList.add("is-revealed");
         }
     });
@@ -79,7 +108,7 @@ function initLayeredScrollEffects(force) {
         return;
     }
 
-    // High performance observer: Triggers satisfying cascading entrances as user scrolls
+    // High performance observer: Triggers each section to rise one-by-one as user scrolls
     _revealObserver = new IntersectionObserver(
         (entries, observer) => {
             entries.forEach((entry) => {
@@ -89,7 +118,7 @@ function initLayeredScrollEffects(force) {
                 }
             });
         },
-        { threshold: 0.08, rootMargin: "0px 0px -30px 0px" }
+        { threshold: 0.1, rootMargin: "0px 0px -40px 0px" }
     );
 
     targets.forEach((el) => {
