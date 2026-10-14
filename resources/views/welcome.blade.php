@@ -38,9 +38,9 @@
 
             {{-- Left: copy & search --}}
             <section class="hero-content">
-                <div class="pill-badge" data-anim="eyebrow">
+                <div class="pill-badge" data-anim="eyebrow" id="heroPillBadge" style="cursor: pointer;" title="Klik untuk tips & info berikutnya">
                     <span class="pill-dot" aria-hidden="true"></span>
-                    <span class="pill-text">Platform Resmi SMK Pusat Keunggulan &amp; BLUD</span>
+                    <span class="pill-text pill-text-rotating" id="heroPillText">Platform Resmi SMK Pusat Keunggulan &amp; BLUD</span>
                 </div>
 
                 <h1 class="hero-title" data-anim="hero-title">
@@ -76,6 +76,9 @@
                             </svg>
                         </button>
                     </form>
+
+                    {{-- Autocomplete Quick Suggestions Dropdown --}}
+                    <div class="search-suggestions-dropdown" id="searchSuggestionsDropdown" role="listbox" aria-label="Saran Pencarian Cepat" aria-hidden="true"></div>
                 </div>
 
                 <a href="{{ route('ppdb.kuis') }}" class="hero-ai-discovery-link" data-anim="hero-actions">
@@ -528,6 +531,13 @@
 
     {{-- Unified Reusable Landing Footer --}}
     <x-landing-footer />
+
+    {{-- Floating Back-to-Top Navigation Button --}}
+    <button type="button" class="back-to-top-btn" id="backToTopBtn" aria-label="Kembali ke atas" title="Kembali ke atas">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="18 15 12 9 6 15"></polyline>
+        </svg>
+    </button>
 
     {{-- Unified Reusable Tanya Tefa AI Widget --}}
     <x-ai-widget subtitle="Pusat Bantuan 24/7" />

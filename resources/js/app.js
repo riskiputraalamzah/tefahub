@@ -128,7 +128,7 @@ function initLayeredScrollEffects(force) {
     });
 }
 
-// ── Lightweight GPU Scroll Progress Bar ─────────────────────────────────────
+// ── Dynamic Multi-Color Scroll Progress Bar with Hue Shift ───────────────────
 function initScrollProgress() {
     const progress = document.querySelector("[data-scroll-progress]");
     if (!progress) return;
@@ -139,6 +139,7 @@ function initScrollProgress() {
         const ratio = total > 0 ? window.pageYOffset / total : 0;
         const clamped = Math.min(1, Math.max(0, ratio));
         progress.style.transform = `scaleX(${clamped})`;
+        progress.style.backgroundPosition = `${clamped * 100}% 0`;
         ticking = false;
     };
 
@@ -152,6 +153,238 @@ function initScrollProgress() {
         },
         { passive: true }
     );
+}
+
+// ── Floating Back-to-Top Navigation Button ──────────────────────────────────
+function initBackToTop(lenis) {
+    const btn = document.getElementById("backToTopBtn");
+    if (!btn) return;
+
+    let ticking = false;
+    const checkScroll = () => {
+        const scrolled = window.pageYOffset || document.documentElement.scrollTop;
+        if (scrolled > 360) {
+            btn.classList.add("is-visible");
+        } else {
+            btn.classList.remove("is-visible");
+        }
+        ticking = false;
+    };
+
+    window.addEventListener(
+        "scroll",
+        () => {
+            if (!ticking) {
+                window.requestAnimationFrame(checkScroll);
+                ticking = true;
+            }
+        },
+        { passive: true }
+    );
+
+    btn.addEventListener("click", () => {
+        if (lenis) {
+            lenis.scrollTo(0, { duration: 0.7 });
+        } else {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        }
+    });
+}
+
+// ── Fast Autocomplete & Quick Destination Suggestions ────────────────────────
+function initSearchAutocomplete(lenis) {
+    const input = document.getElementById("heroSearchInput");
+    const dropdown = document.getElementById("searchSuggestionsDropdown");
+    if (!input || !dropdown) return;
+
+    const quickLinks = [
+        { title: "PPDB & Pendaftaran Online", cat: "Pendaftaran", icon: "📝", target: "/ppdb", isRoute: true },
+        { title: "Kuis Minat Jurusan AI", cat: "Eksplorasi", icon: "⚡", target: "/kuis-jurusan", isRoute: true },
+        { title: "BKK Lowongan Kerja Mitra", cat: "Karier", icon: "💼", target: "/bkk", isRoute: true },
+        { title: "PKL & Magang Industri", cat: "Praktik", icon: "🏭", target: "/pkl", isRoute: true },
+        { title: "Fasilitas Lab & Bengkel Standar Industri", cat: "Sarana", icon: "🔬", target: "#fasilitas", isRoute: false },
+        { title: "Teaching Factory & Unit Produksi BLUD", cat: "Produk", icon: "🛍️", target: "#produk", isRoute: false },
+        { title: "Keunggulan SMK Akreditasi A & Fasilitas", cat: "Mutu", icon: "⭐", target: "#keunggulan", isRoute: false },
+        { title: "Sambutan & Profil Kepala Sekolah", cat: "Profil", icon: "🎓", target: "#sambutan", isRoute: false }
+    ];
+
+    function renderSuggestions(query = "") {
+        const q = query.trim().toLowerCase();
+        const matches = quickLinks.filter((item) => {
+            if (!q) return true;
+            return item.title.toLowerCase().includes(q) || item.cat.toLowerCase().includes(q);
+        });
+
+        if (!matches.length) {
+            dropdown.innerHTML = `<div style="padding: 12px; font-size: 13px; color: #64748b; text-align: center;">Tidak ada hasil langsung. Tekan enter untuk mencari dengan Tanya Tefa AI.</div>`;
+            dropdown.classList.add("is-open");
+            dropdown.setAttribute("aria-hidden", "false");
+            return;
+        }
+
+        let html = `<div class="suggestion-header">Navigasi Cepat &amp; Layanan</div>`;
+        matches.slice(0, 5).forEach((item) => {
+            html += `
+                <div class="suggestion-item" data-target="${item.target}" data-is-route="${item.isRoute}">
+                    <span class="suggestion-item-icon">${item.icon}</span>
+                    <span class="suggestion-item-text">${item.title}</span>
+                    <span class="suggestion-item-badge">${item.cat}</span>
+                </div>
+            `;
+        });
+
+        dropdown.innerHTML = html;
+        dropdown.classList.add("is-open");
+        dropdown.setAttribute("aria-hidden", "false");
+
+        dropdown.querySelectorAll(".suggestion-item").forEach((el) => {
+            el.addEventListener("mousedown", (e) => {
+                e.preventDefault();
+                const target = el.getAttribute("data-target");
+                const isRoute = el.getAttribute("data-is-route") === "true";
+                dropdown.classList.remove("is-open");
+                dropdown.setAttribute("aria-hidden", "true");
+
+                if (isRoute) {
+                    window.location.href = target;
+                } else {
+                    const elTarget = document.querySelector(target);
+                    if (elTarget) {
+                        if (lenis) {
+                            lenis.scrollTo(elTarget, { offset: -68, duration: 0.6 });
+                        } else {
+                            elTarget.scrollIntoView({ behavior: "smooth" });
+                        }
+                    }
+                }
+            });
+        });
+    }
+
+    input.addEventListener("focus", () => {
+        renderSuggestions(input.value);
+    });
+
+    input.addEventListener("input", () => {
+        renderSuggestions(input.value);
+    });
+
+    document.addEventListener("click", (e) => {
+        if (!e.target.closest(".search-wrap")) {
+            dropdown.classList.remove("is-open");
+            dropdown.setAttribute("aria-hidden", "true");
+        }
+    });
+
+    // Keyboard shortcut: Pressing '/' or 'Ctrl+K' focuses the search input
+    document.addEventListener("keydown", (e) => {
+        if ((e.key === "/" || (e.ctrlKey && e.key.toLowerCase() === "k")) && document.activeElement !== input) {
+            if (!["INPUT", "TEXTAREA"].includes(document.activeElement.tagName)) {
+                e.preventDefault();
+                input.focus();
+                input.select();
+            }
+        } else if (e.key === "Escape" && dropdown.classList.contains("is-open")) {
+            dropdown.classList.remove("is-open");
+            dropdown.setAttribute("aria-hidden", "true");
+        }
+    });
+}
+
+// ── Rotating Inspiring Tips & Insights in Hero Badge ────────────────────────
+function initRotatingTips() {
+    const badge = document.getElementById("heroPillBadge");
+    const textEl = document.getElementById("heroPillText");
+    if (!badge || !textEl) return;
+
+    const tips = [
+        "Platform Resmi SMK Pusat Keunggulan & BLUD",
+        "💡 98% Lulusan Terserap di Industri Mitra & BKK",
+        "🚀 Unit Teaching Factory Bersertifikasi Standar Industri",
+        "✨ Coba Kuis Minat Jurusan AI untuk Rekomendasi Instan",
+        "🏆 Akreditasi A & Sertifikasi LSP-P1 Nasional"
+    ];
+
+    let currentIndex = 0;
+
+    function nextTip() {
+        textEl.classList.add("fade-out");
+        setTimeout(() => {
+            currentIndex = (currentIndex + 1) % tips.length;
+            textEl.textContent = tips[currentIndex];
+            textEl.classList.remove("fade-out");
+            textEl.classList.add("fade-in");
+            setTimeout(() => {
+                textEl.classList.remove("fade-in");
+            }, 350);
+        }, 300);
+    }
+
+    let interval = setInterval(nextTip, 6500);
+
+    badge.addEventListener("click", () => {
+        clearInterval(interval);
+        nextTip();
+        interval = setInterval(nextTip, 6500);
+    });
+}
+
+// ── Dark/Light Mode Theme Toggle ────────────────────────────────────────────
+function initThemeToggle() {
+    const desktopBtn = document.getElementById("themeToggleBtn");
+    const mobileBtn = document.getElementById("mobileThemeToggleBtn");
+
+    const getPreferredTheme = () => {
+        const stored = localStorage.getItem("tefa_theme");
+        if (stored) return stored;
+        return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    };
+
+    const setTheme = (theme) => {
+        if (theme === "dark") {
+            document.documentElement.setAttribute("data-theme", "dark");
+        } else {
+            document.documentElement.removeAttribute("data-theme");
+        }
+        localStorage.setItem("tefa_theme", theme);
+        updateButtons(theme);
+    };
+
+    const updateButtons = (theme) => {
+        const iconSvg = theme === "dark"
+            ? `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>`
+            : `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>`;
+
+        [desktopBtn, mobileBtn].forEach((btn) => {
+            if (btn) {
+                btn.innerHTML = iconSvg;
+                btn.title = theme === "dark" ? "Beralih ke Mode Terang" : "Beralih ke Mode Gelap";
+            }
+        });
+    };
+
+    const initialTheme = getPreferredTheme();
+    setTheme(initialTheme);
+
+    const toggle = () => {
+        const current = document.documentElement.getAttribute("data-theme") === "dark" ? "dark" : "light";
+        setTheme(current === "dark" ? "light" : "dark");
+    };
+
+    if (desktopBtn) desktopBtn.addEventListener("click", toggle);
+    if (mobileBtn) mobileBtn.addEventListener("click", toggle);
+}
+
+// ── Image Lazy Loading & Async Decoding Acceleration ─────────────────────────
+function initLazyImages() {
+    const images = document.querySelectorAll("img:not([loading])");
+    images.forEach((img) => {
+        // Do not lazy load the main hero student image for optimal LCP score
+        if (!img.classList.contains("students-img") && !img.closest(".hero-content")) {
+            img.setAttribute("loading", "lazy");
+            img.setAttribute("decoding", "async");
+        }
+    });
 }
 
 // ── Statistic Counters Animation (Single-pass RAF) ──────────────────────────
@@ -204,9 +437,14 @@ function initCounters() {
 
 // ── Bootstrapping ────────────────────────────────────────────────────────────
 function boot() {
-    initSmoothScroll();
+    const lenis = initSmoothScroll();
     initLayeredScrollEffects(false);
     initScrollProgress();
+    initBackToTop(lenis);
+    initSearchAutocomplete(lenis);
+    initRotatingTips();
+    initThemeToggle();
+    initLazyImages();
     initCounters();
 
     // After onboarding splash exits, trigger a single scan for viewport elements
@@ -235,3 +473,4 @@ if (document.readyState === "loading") {
 } else {
     boot();
 }
+
