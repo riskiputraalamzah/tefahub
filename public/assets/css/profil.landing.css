@@ -353,8 +353,8 @@ body > * {
 
 .profil-jurusan-row-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(175px, 1fr));
-    gap: 12px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
     width: 100%;
     box-sizing: border-box;
 }
@@ -362,11 +362,11 @@ body > * {
 .profil-jurusan-mini-card {
     background: #f8fafc;
     border: 1px solid #e2e8f0;
-    border-radius: 14px;
-    padding: 12px 14px;
+    border-radius: 12px;
+    padding: 11px 12px;
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
     text-decoration: none;
     transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
     min-width: 0;
@@ -418,20 +418,23 @@ body > * {
 }
 
 .profil-jurusan-mini-code {
-    font-size: 0.88rem;
+    font-size: 0.82rem;
     font-weight: 800;
     color: #0f172a;
     line-height: 1.2;
 }
 
 .profil-jurusan-mini-name {
-    font-size: 0.68rem;
+    font-size: 0.64rem;
     color: #64748b;
     line-height: 1.25;
     margin-top: 1px;
-    white-space: nowrap;
+    white-space: normal;
     overflow: hidden;
     text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
 }
 
 /* ── Sidebar Right: Informasi Singkat Card ── */
@@ -676,7 +679,7 @@ body > * {
         grid-template-columns: 1fr;
     }
     .profil-jurusan-row-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(2, 1fr);
     }
     .profil-dash-card,
     .profil-keahlian-card,
@@ -1936,10 +1939,11 @@ body > * {
         max-width: 100% !important;
     }
 
-    /* Hero Stats in modern cards on mobile */
+    /* Hero Stats in compact grid on mobile */
     .profil-stats-row {
-        flex-direction: column;
+        flex-direction: row;
         align-items: stretch;
+        flex-wrap: wrap;
         gap: 10px;
         width: 100% !important;
         box-sizing: border-box !important;
@@ -1947,15 +1951,16 @@ body > * {
     }
 
     .profil-stat-box {
-        width: 100%;
+        flex: 1 1 calc(50% - 5px);
+        min-width: 130px;
         box-sizing: border-box;
         background: #ffffff;
         border: 1px solid #e2e8f0;
         border-radius: 12px;
-        padding: 12px 14px;
+        padding: 10px 12px;
         display: flex;
         align-items: center;
-        gap: 12px;
+        gap: 10px;
         box-shadow: 0 2px 6px rgba(15, 23, 42, 0.03);
     }
 
@@ -2098,7 +2103,7 @@ body > * {
     }
 
     .profil-jurusan-row-grid {
-        grid-template-columns: 1fr !important;
+        grid-template-columns: repeat(2, 1fr) !important;
         gap: 8px !important;
     }
 
