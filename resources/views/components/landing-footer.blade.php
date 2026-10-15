@@ -120,7 +120,7 @@
 </footer>
 
 {{-- Floating Back-to-Top Navigation Button (Consistent Bottom-Left Pill with Pulse Indicator) --}}
-<button type="button" style="padding: 0;width:42px;" class="back-to-top-btn" id="backToTopBtn" aria-label="Kembali ke atas" title="Kembali ke atas">
+<button type="button" class="back-to-top-btn" id="backToTopBtn" aria-label="Kembali ke atas" title="Kembali ke atas">
     <span class="back-to-top-pulse-ring" aria-hidden="true"></span>
     <span class="back-to-top-icon-wrap" aria-hidden="true">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
