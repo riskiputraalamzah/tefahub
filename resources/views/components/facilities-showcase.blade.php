@@ -413,4 +413,59 @@ FACILITIES & INDUSTRY WORKSHOPS SHOWCASE
             padding: 64px 0;
         }
     }
+
+    /* ── Dark Mode Adaptation ── */
+    [data-theme="dark"] .facilities-section {
+        background: #0e1424 !important;
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    [data-theme="dark"] .facilities-eyebrow {
+        background: rgba(37, 99, 235, 0.18) !important;
+        border-color: rgba(59, 130, 246, 0.3) !important;
+        color: #93c5fd !important;
+    }
+    [data-theme="dark"] .facilities-title {
+        color: #ffffff !important;
+    }
+    [data-theme="dark"] .facilities-desc {
+        color: #94a3b8 !important;
+    }
+    [data-theme="dark"] .facility-card {
+        background: #131b2e !important;
+        border-color: rgba(255, 255, 255, 0.08) !important;
+        box-shadow: 0 10px 30px -8px rgba(0, 0, 0, 0.4) !important;
+    }
+    [data-theme="dark"] .facility-card:hover {
+        background: #172138 !important;
+        border-color: rgba(59, 130, 246, 0.4) !important;
+        box-shadow: 0 22px 46px -12px rgba(37, 99, 235, 0.25) !important;
+    }
+    [data-theme="dark"] .facility-badge {
+        background: rgba(37, 99, 235, 0.18) !important;
+        border-color: rgba(59, 130, 246, 0.3) !important;
+        color: #93c5fd !important;
+    }
+    [data-theme="dark"] .facility-name {
+        color: #ffffff !important;
+    }
+    [data-theme="dark"] .facility-detail {
+        color: #94a3b8 !important;
+    }
+    [data-theme="dark"] .facility-features {
+        border-top-color: rgba(255, 255, 255, 0.08) !important;
+    }
+    [data-theme="dark"] .facility-pill {
+        background: rgba(255, 255, 255, 0.06) !important;
+        border-color: rgba(255, 255, 255, 0.1) !important;
+        color: #cbd5e1 !important;
+    }
+    [data-theme="dark"] .icon-red,
+    [data-theme="dark"] .icon-blue,
+    [data-theme="dark"] .icon-purple,
+    [data-theme="dark"] .icon-cyan,
+    [data-theme="dark"] .icon-emerald {
+        background: rgba(255, 255, 255, 0.06) !important;
+        border-color: rgba(255, 255, 255, 0.1) !important;
+    }
 </style>

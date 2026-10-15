@@ -1027,3 +1027,171 @@
         max-height: 195px;
     }
 }
+
+/* ── Dark Mode Adaptation ────────────────────────────────────────── */
+[data-theme="dark"] .pkl-hero-section {
+    background: #0b0f19 !important;
+}
+
+[data-theme="dark"] .pkl-banner-card {
+    background: #131b2e !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
+    box-shadow: 0 16px 36px -10px rgba(0, 0, 0, 0.5) !important;
+}
+
+[data-theme="dark"] .pkl-card-title {
+    color: #ffffff !important;
+}
+
+[data-theme="dark"] .pkl-card-desc {
+    color: #94a3b8 !important;
+}
+
+[data-theme="dark"] .pkl-search-section {
+    background: #0b0f19 !important;
+}
+
+[data-theme="dark"] .pkl-search-bar {
+    background: #131b2e !important;
+    border-color: rgba(255, 255, 255, 0.12) !important;
+}
+
+[data-theme="dark"] .pkl-search-input,
+[data-theme="dark"] .pkl-select-input {
+    color: #ffffff !important;
+}
+
+[data-theme="dark"] .pkl-select-input option {
+    background: #131b2e !important;
+    color: #ffffff !important;
+}
+
+[data-theme="dark"] .pkl-input-group {
+    border-right-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+[data-theme="dark"] .pkl-listings-section {
+    background: #0e1424 !important;
+}
+
+[data-theme="dark"] .pkl-section-title {
+    color: #ffffff !important;
+}
+
+[data-theme="dark"] .pkl-section-sub {
+    color: #94a3b8 !important;
+}
+
+[data-theme="dark"] .pkl-item-card {
+    background: #131b2e !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+    box-shadow: 0 10px 30px -8px rgba(0, 0, 0, 0.4) !important;
+}
+
+[data-theme="dark"] .pkl-item-card:hover {
+    background: #172138 !important;
+    border-color: rgba(59, 130, 246, 0.4) !important;
+}
+
+[data-theme="dark"] .pkl-item-title {
+    color: #ffffff !important;
+}
+
+[data-theme="dark"] .pkl-company-logo {
+    background: #0e1424 !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+[data-theme="dark"] .pkl-company-name {
+    color: #cbd5e1 !important;
+}
+
+[data-theme="dark"] .pkl-meta-tag {
+    background: rgba(255, 255, 255, 0.06) !important;
+    color: #cbd5e1 !important;
+}
+
+[data-theme="dark"] .pkl-item-footer {
+    border-top-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+[data-theme="dark"] .pkl-item-quota {
+    color: #94a3b8 !important;
+}
+
+/* Modal Detail PKL */
+[data-theme="dark"] .pkl-modal-card {
+    background: #131b2e !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6) !important;
+}
+
+[data-theme="dark"] .pkl-modal-header {
+    border-bottom-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+[data-theme="dark"] .pkl-modal-company-logo {
+    background: #0e1424 !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+[data-theme="dark"] .pkl-modal-title {
+    color: #ffffff !important;
+}
+
+[data-theme="dark"] .pkl-modal-company-name {
+    color: #cbd5e1 !important;
+}
+
+[data-theme="dark"] .pkl-modal-close-btn {
+    background: rgba(255, 255, 255, 0.08) !important;
+    color: #cbd5e1 !important;
+}
+
+[data-theme="dark"] .pkl-modal-close-btn:hover {
+    background: rgba(255, 255, 255, 0.15) !important;
+    color: #ffffff !important;
+}
+
+[data-theme="dark"] .pkl-modal-badge-item {
+    background: #0e1424 !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+[data-theme="dark"] .pkl-modal-badge-label {
+    color: #94a3b8 !important;
+}
+
+[data-theme="dark"] .pkl-modal-badge-value {
+    color: #ffffff !important;
+}
+
+[data-theme="dark"] .pkl-modal-section-title {
+    color: #ffffff !important;
+}
+
+[data-theme="dark"] .pkl-modal-desc {
+    color: #cbd5e1 !important;
+}
+
+[data-theme="dark"] .pkl-modal-list-item {
+    color: #cbd5e1 !important;
+}
+
+[data-theme="dark"] .pkl-modal-footer {
+    background: #0e1424 !important;
+    border-top-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+[data-theme="dark"] .pkl-modal-btn-close {
+    background: #131b2e !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
+    color: #cbd5e1 !important;
+}
+
+[data-theme="dark"] .pkl-modal-btn-close:hover {
+    background: #172138 !important;
+    color: #ffffff !important;
+}
+
+

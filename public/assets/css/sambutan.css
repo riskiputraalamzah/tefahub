@@ -267,3 +267,75 @@
         padding: 12px 16px;
     }
 }
+
+/* ── Dark Mode Adaptation ────────────────────────────────────────── */
+[data-theme="dark"] .principal-section {
+    background: #0e1424 !important;
+    border-bottom-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+[data-theme="dark"] .principal-photo-frame {
+    background: #131b2e !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
+    box-shadow: 0 20px 45px -12px rgba(0, 0, 0, 0.5) !important;
+}
+
+[data-theme="dark"] .principal-badge-card {
+    background: rgba(19, 27, 46, 0.94) !important;
+    border-color: rgba(255, 255, 255, 0.12) !important;
+    box-shadow: 0 12px 28px -6px rgba(0, 0, 0, 0.45) !important;
+}
+
+[data-theme="dark"] .principal-badge-name {
+    color: #ffffff !important;
+}
+
+[data-theme="dark"] .principal-badge-role {
+    color: #94a3b8 !important;
+}
+
+[data-theme="dark"] .principal-eyebrow {
+    background: rgba(37, 99, 235, 0.18) !important;
+    border-color: rgba(59, 130, 246, 0.3) !important;
+    color: #93c5fd !important;
+}
+
+[data-theme="dark"] .principal-heading {
+    color: #ffffff !important;
+}
+
+[data-theme="dark"] .principal-body-text {
+    color: #cbd5e1 !important;
+}
+
+[data-theme="dark"] .principal-body-text.greeting-text,
+[data-theme="dark"] .principal-body-text.salam-text {
+    color: #f1f5f9 !important;
+}
+
+[data-theme="dark"] .principal-stat-card {
+    background: #131b2e !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+    box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.4) !important;
+}
+
+[data-theme="dark"] .principal-stat-card:hover {
+    background: #172138 !important;
+    border-color: rgba(59, 130, 246, 0.4) !important;
+    box-shadow: 0 16px 36px -8px rgba(37, 99, 235, 0.25) !important;
+}
+
+[data-theme="dark"] .principal-stat-num {
+    color: #ffffff !important;
+}
+
+[data-theme="dark"] .principal-stat-lbl {
+    color: #94a3b8 !important;
+}
+
+[data-theme="dark"] .icon-emerald,
+[data-theme="dark"] .icon-blue,
+[data-theme="dark"] .icon-cyan {
+    background: rgba(255, 255, 255, 0.06) !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
+}

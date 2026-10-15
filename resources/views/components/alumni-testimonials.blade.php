@@ -300,4 +300,62 @@
         padding: 64px 0;
     }
 }
+
+/* ── Dark Mode Adaptation ── */
+[data-theme="dark"] .alumni-section {
+    background: #0e1424 !important;
+    border-top-color: rgba(255, 255, 255, 0.08) !important;
+}
+[data-theme="dark"] .alumni-eyebrow {
+    background: rgba(16, 185, 129, 0.15) !important;
+    border-color: rgba(16, 185, 129, 0.3) !important;
+    color: #6ee7b7 !important;
+}
+[data-theme="dark"] .alumni-title {
+    color: #ffffff !important;
+}
+[data-theme="dark"] .alumni-desc {
+    color: #94a3b8 !important;
+}
+[data-theme="dark"] .alumni-card {
+    background: #131b2e !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+    box-shadow: 0 10px 28px -10px rgba(0, 0, 0, 0.4) !important;
+}
+[data-theme="dark"] .alumni-card:hover {
+    background: #172138 !important;
+    border-color: rgba(16, 185, 129, 0.4) !important;
+    box-shadow: 0 20px 40px -12px rgba(16, 185, 129, 0.2) !important;
+}
+[data-theme="dark"] .alumni-name {
+    color: #ffffff !important;
+}
+[data-theme="dark"] .alumni-role {
+    color: #94a3b8 !important;
+}
+[data-theme="dark"] .alumni-quote {
+    color: #cbd5e1 !important;
+}
+[data-theme="dark"] .alumni-meta {
+    border-top-color: rgba(255, 255, 255, 0.08) !important;
+}
+[data-theme="dark"] .alumni-badge {
+    background: rgba(16, 185, 129, 0.15) !important;
+    border-color: rgba(16, 185, 129, 0.3) !important;
+    color: #6ee7b7 !important;
+}
+[data-theme="dark"] .partner-statement-card {
+    background: #131b2e !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+    box-shadow: 0 10px 28px -10px rgba(0, 0, 0, 0.4) !important;
+}
+[data-theme="dark"] .partner-quote-body {
+    color: #cbd5e1 !important;
+}
+[data-theme="dark"] .partner-author strong {
+    color: #ffffff !important;
+}
+[data-theme="dark"] .partner-author span {
+    color: #60a5fa !important;
+}
 </style>

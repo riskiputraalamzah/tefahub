@@ -860,3 +860,95 @@
         transform: none !important;
     }
 }
+
+/* ── Dark Mode Adaptation ────────────────────────────────────────── */
+[data-theme="dark"] .bkk-hero-section {
+    background: linear-gradient(180deg, #0b0f19 0%, #0e1424 50%, #0b0f19 100%) !important;
+}
+
+[data-theme="dark"] .bkk-hero-title {
+    color: #ffffff !important;
+}
+
+[data-theme="dark"] .bkk-hero-desc {
+    color: #94a3b8 !important;
+}
+
+[data-theme="dark"] .bkk-catalog-section {
+    background: #0b0f19 !important;
+}
+
+[data-theme="dark"] .bkk-section-title {
+    color: #ffffff !important;
+}
+
+[data-theme="dark"] .bkk-section-desc {
+    color: #94a3b8 !important;
+}
+
+[data-theme="dark"] .bkk-benefits-strip {
+    background: #131b2e !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+[data-theme="dark"] .bkk-benefit-item:not(:last-child) {
+    border-right-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+[data-theme="dark"] .bkk-benefit-title {
+    color: #ffffff !important;
+}
+
+[data-theme="dark"] .bkk-benefit-sub {
+    color: #94a3b8 !important;
+}
+
+[data-theme="dark"] .bkk-benefit-icon,
+[data-theme="dark"] .bkk-header-icon-box {
+    background: rgba(37, 99, 235, 0.2) !important;
+    color: #60a5fa !important;
+}
+
+[data-theme="dark"] .bkk-showcase-card {
+    background: #131b2e !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
+    box-shadow: 0 16px 40px -8px rgba(0, 0, 0, 0.5) !important;
+}
+
+[data-theme="dark"] .bkk-showcase-float-card {
+    background: rgba(19, 27, 46, 0.95) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+[data-theme="dark"] .bkk-showcase-float-title {
+    color: #ffffff !important;
+}
+
+[data-theme="dark"] .bkk-service-card {
+    background: #131b2e !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4) !important;
+}
+
+[data-theme="dark"] .bkk-service-card:hover {
+    background: #172138 !important;
+    border-color: rgba(59, 130, 246, 0.4) !important;
+}
+
+[data-theme="dark"] .bkk-card-title {
+    color: #ffffff !important;
+}
+
+[data-theme="dark"] .bkk-card-desc {
+    color: #94a3b8 !important;
+}
+
+[data-theme="dark"] .bkk-card-icon-badge {
+    background: #131b2e !important;
+    border-color: #131b2e !important;
+}
+
+[data-theme="dark"] .bkk-card-icon-inner {
+    background: rgba(37, 99, 235, 0.2) !important;
+    color: #60a5fa !important;
+}

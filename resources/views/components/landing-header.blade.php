@@ -3,6 +3,20 @@
 {{-- ═══════════════════════════════════════════
      UNIFIED LANDING / PUBLIC HEADER & NAVBAR
      ═══════════════════════════════════════════ --}}
+{{-- Immediate Theme Script: Prevent FOUC across all pages --}}
+<script>
+(function() {
+    try {
+        var savedTheme = localStorage.getItem('tefa_theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        if (savedTheme === 'dark') {
+            document.documentElement.setAttribute('data-theme', 'dark');
+        } else {
+            document.documentElement.removeAttribute('data-theme');
+        }
+    } catch (e) {}
+})();
+</script>
+
 <header class="site-header" id="siteHeader">
     <div class="wrap">
         <a href="{{ url('/') }}" class="brand" aria-label="Tefa-Hub Beranda">
@@ -256,10 +270,79 @@
         }
     }
 
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initHeader);
-    } else {
+    function initThemeToggle() {
+        const desktopBtn = document.getElementById('themeToggleBtn');
+        const mobileBtn  = document.getElementById('mobileThemeToggleBtn');
+
+        function getStoredTheme() {
+            try {
+                return localStorage.getItem('tefa_theme') ||
+                       (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            } catch (e) {
+                return 'light';
+            }
+        }
+
+        function applyTheme(theme) {
+            if (theme === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            } else {
+                document.documentElement.removeAttribute('data-theme');
+            }
+            try {
+                localStorage.setItem('tefa_theme', theme);
+            } catch (e) {}
+            updateButtons(theme);
+            window.dispatchEvent(new CustomEvent('tefa-theme-change', { detail: { theme: theme } }));
+        }
+
+        function updateButtons(theme) {
+            const isDark = theme === 'dark';
+            const iconSvg = isDark
+                ? '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>'
+                : '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>';
+
+            [desktopBtn, mobileBtn].forEach(btn => {
+                if (btn) {
+                    btn.innerHTML = iconSvg;
+                    btn.setAttribute('title', isDark ? 'Beralih ke Mode Terang' : 'Beralih ke Mode Gelap');
+                    btn.setAttribute('aria-label', isDark ? 'Beralih ke Mode Terang' : 'Beralih ke Mode Gelap');
+                }
+            });
+        }
+
+        // Apply initially
+        const currentTheme = getStoredTheme();
+        applyTheme(currentTheme);
+
+        function toggle() {
+            const current = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+            const next = current === 'dark' ? 'light' : 'dark';
+            applyTheme(next);
+        }
+
+        if (desktopBtn && !desktopBtn._tefaThemeBound) {
+            desktopBtn.addEventListener('click', toggle);
+            desktopBtn._tefaThemeBound = true;
+        }
+        if (mobileBtn && !mobileBtn._tefaThemeBound) {
+            mobileBtn.addEventListener('click', toggle);
+            mobileBtn._tefaThemeBound = true;
+        }
+
+        window.tefaToggleTheme = toggle;
+        window.tefaApplyTheme = applyTheme;
+    }
+
+    function initAll() {
         initHeader();
+        initThemeToggle();
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initAll);
+    } else {
+        initAll();
     }
 })();
 </script>

@@ -2608,3 +2608,305 @@ html {
     transform: translateZ(0);
 }
 
+/* ── Dark Mode Adaptation ────────────────────────────────────────── */
+[data-theme="dark"] {
+    --profil-dark: #f8fafc;
+    --profil-slate: #f1f5f9;
+    --profil-muted: #94a3b8;
+    --profil-card-bg: #131b2e;
+    --profil-border: rgba(255, 255, 255, 0.08);
+}
+
+[data-theme="dark"] body {
+    background: #0b0f19 !important;
+    color: #f8fafc !important;
+}
+
+/* 1. Hero Section */
+[data-theme="dark"] .profil-hero-section {
+    background: #0b0f19 !important;
+}
+
+[data-theme="dark"] .profil-title-dark {
+    color: #ffffff !important;
+}
+
+[data-theme="dark"] .profil-title-blue {
+    color: #60a5fa !important;
+}
+
+[data-theme="dark"] .profil-hero-lead {
+    color: #cbd5e1 !important;
+}
+
+[data-theme="dark"] .profil-hero-lead strong {
+    color: #ffffff !important;
+}
+
+[data-theme="dark"] .profil-stat-box {
+    background: #131b2e !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35) !important;
+}
+
+[data-theme="dark"] .profil-stat-icon {
+    background: rgba(37, 99, 235, 0.2) !important;
+    border-color: rgba(59, 130, 246, 0.3) !important;
+    color: #60a5fa !important;
+}
+
+[data-theme="dark"] .profil-stat-label {
+    color: #94a3b8 !important;
+}
+
+[data-theme="dark"] .profil-stat-value {
+    color: #ffffff !important;
+}
+
+/* 2. Navigation Tabs */
+[data-theme="dark"] .profil-nav-tabs-section {
+    background: #0e1424 !important;
+    border-bottom-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+[data-theme="dark"] .profil-nav-tab-btn {
+    background: rgba(255, 255, 255, 0.05) !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+    color: #cbd5e1 !important;
+}
+
+[data-theme="dark"] .profil-nav-tab-btn:hover {
+    background: rgba(255, 255, 255, 0.1) !important;
+    color: #ffffff !important;
+}
+
+[data-theme="dark"] .profil-nav-tab-btn svg {
+    color: #94a3b8 !important;
+}
+
+[data-theme="dark"] .profil-nav-tab-btn:hover svg {
+    color: #ffffff !important;
+}
+
+[data-theme="dark"] .profil-nav-tab-btn.is-active {
+    background: linear-gradient(135deg, #0284c7 0%, #2563eb 100%) !important;
+    color: #ffffff !important;
+}
+
+/* 3. Main Dashboard & Cards */
+[data-theme="dark"] .profil-main-dashboard-section {
+    background: #0b0f19 !important;
+}
+
+[data-theme="dark"] .profil-dash-card,
+[data-theme="dark"] .profil-keahlian-card,
+[data-theme="dark"] .profil-side-card,
+[data-theme="dark"] .profil-jurusan-card,
+[data-theme="dark"] .profil-fasilitas-card,
+[data-theme="dark"] .profil-info-card,
+[data-theme="dark"] .profil-galeri-card,
+[data-theme="dark"] .profil-card {
+    background: #131b2e !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4) !important;
+}
+
+[data-theme="dark"] .profil-dash-title,
+[data-theme="dark"] .profil-section-title,
+[data-theme="dark"] .profil-feature-heading,
+[data-theme="dark"] .profil-heading,
+[data-theme="dark"] .profil-title,
+[data-theme="dark"] .profil-card-title,
+[data-theme="dark"] .profil-info-val,
+[data-theme="dark"] .profil-galeri-title {
+    color: #ffffff !important;
+}
+
+[data-theme="dark"] .profil-dash-desc,
+[data-theme="dark"] .profil-section-desc,
+[data-theme="dark"] .profil-feature-sub,
+[data-theme="dark"] .profil-meta-label,
+[data-theme="dark"] .profil-sub,
+[data-theme="dark"] .profil-desc,
+[data-theme="dark"] .profil-card-desc,
+[data-theme="dark"] .profil-info-label,
+[data-theme="dark"] .profil-galeri-sub {
+    color: #94a3b8 !important;
+}
+
+[data-theme="dark"] .profil-section-desc strong,
+[data-theme="dark"] .profil-dash-desc strong {
+    color: #f1f5f9 !important;
+}
+
+[data-theme="dark"] .profil-body-text {
+    color: #cbd5e1 !important;
+}
+
+[data-theme="dark"] .profil-feature-card {
+    background: #0e1424 !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+[data-theme="dark"] .profil-feature-card:hover {
+    background: #172138 !important;
+    border-color: rgba(59, 130, 246, 0.4) !important;
+}
+
+[data-theme="dark"] .profil-jurusan-mini-card {
+    background: #0e1424 !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+[data-theme="dark"] .profil-jurusan-mini-code {
+    color: #ffffff !important;
+}
+
+[data-theme="dark"] .profil-jurusan-mini-name {
+    color: #94a3b8 !important;
+}
+
+[data-theme="dark"] .profil-stat-item {
+    background: #0e1424 !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+/* 4. Mitra Industri & BKK Section */
+[data-theme="dark"] .profil-mitra-section {
+    background: #0e1424 !important;
+}
+
+[data-theme="dark"] .profil-mitra-tab-btn {
+    background: #131b2e !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
+    color: #cbd5e1 !important;
+}
+
+[data-theme="dark"] .profil-mitra-tab-btn:hover {
+    background: #172138 !important;
+    color: #ffffff !important;
+}
+
+[data-theme="dark"] .profil-mitra-tab-btn.is-active {
+    background: #2563eb !important;
+    border-color: #2563eb !important;
+    color: #ffffff !important;
+}
+
+[data-theme="dark"] .profil-mitra-card {
+    background: #131b2e !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+[data-theme="dark"] .profil-mitra-card:hover {
+    background: #172138 !important;
+    border-color: rgba(59, 130, 246, 0.4) !important;
+}
+
+[data-theme="dark"] .profil-mitra-name {
+    color: #ffffff !important;
+}
+
+[data-theme="dark"] .profil-mitra-sector {
+    color: #94a3b8 !important;
+}
+
+[data-theme="dark"] .profil-mitra-icon-circle {
+    background: rgba(37, 99, 235, 0.18) !important;
+    color: #60a5fa !important;
+}
+
+[data-theme="dark"] .profil-mitra-cta-box {
+    background: #131b2e !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+[data-theme="dark"] .profil-mitra-cta-text {
+    color: #f1f5f9 !important;
+}
+
+/* 5. Fasilitas Section */
+[data-theme="dark"] .profil-fasilitas-section {
+    background: #0b0f19 !important;
+}
+
+[data-theme="dark"] .profil-fasilitas-col {
+    background: #131b2e !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+[data-theme="dark"] .profil-fasilitas-col-title {
+    color: #ffffff !important;
+}
+
+[data-theme="dark"] .profil-fasilitas-col-desc {
+    color: #94a3b8 !important;
+}
+
+[data-theme="dark"] .profil-fasilitas-item {
+    background: #0e1424 !important;
+    border-color: rgba(255, 255, 255, 0.06) !important;
+}
+
+[data-theme="dark"] .profil-fasilitas-item:hover {
+    background: #172138 !important;
+    border-color: rgba(59, 130, 246, 0.3) !important;
+}
+
+[data-theme="dark"] .profil-fasilitas-item-text strong {
+    color: #ffffff !important;
+}
+
+[data-theme="dark"] .profil-fasilitas-item-text span {
+    color: #94a3b8 !important;
+}
+
+/* 6. Ekskul & Karakter Section */
+[data-theme="dark"] .profil-ekskul-section {
+    background: #0e1424 !important;
+}
+
+/* 7. Kepemimpinan Sekolah Section */
+[data-theme="dark"] .profil-lead-section {
+    background: #0b0f19 !important;
+}
+
+[data-theme="dark"] .profil-principal-card {
+    background: #131b2e !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+[data-theme="dark"] .profil-principal-name {
+    color: #ffffff !important;
+}
+
+[data-theme="dark"] .profil-principal-tenure {
+    background: #0e1424 !important;
+    color: #94a3b8 !important;
+}
+
+[data-theme="dark"] .profil-principal-quote {
+    color: #cbd5e1 !important;
+    border-top-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+[data-theme="dark"] .profil-mgmt-box {
+    background: #131b2e !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+[data-theme="dark"] .profil-mgmt-title {
+    color: #ffffff !important;
+}
+
+[data-theme="dark"] .profil-mgmt-desc {
+    color: #94a3b8 !important;
+}
+
+/* 8. Alamat & Kontak Resmi Section */
+[data-theme="dark"] .profil-contact-section {
+    background: #0e1424 !important;
+}
+
+
+

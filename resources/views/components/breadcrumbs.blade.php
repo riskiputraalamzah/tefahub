@@ -82,5 +82,22 @@
     color: #0f172a;
     font-weight: 600;
 }
+
+[data-theme="dark"] .breadcrumb-container {
+    background: #0e1424 !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+[data-theme="dark"] .breadcrumb-link {
+    color: #94a3b8 !important;
+}
+[data-theme="dark"] .breadcrumb-link:hover {
+    color: #60a5fa !important;
+}
+[data-theme="dark"] .breadcrumb-separator {
+    color: #64748b !important;
+}
+[data-theme="dark"] .breadcrumb-current {
+    color: #f8fafc !important;
+}
 </style>
 @endif

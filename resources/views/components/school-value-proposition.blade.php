@@ -216,4 +216,50 @@
         padding: 64px 0;
     }
 }
+
+/* ── Dark Mode Adaptation ── */
+[data-theme="dark"] .value-prop-section {
+    background: #0b0f19 !important;
+    border-top-color: rgba(255, 255, 255, 0.08) !important;
+    border-bottom-color: rgba(255, 255, 255, 0.08) !important;
+}
+[data-theme="dark"] .value-prop-eyebrow {
+    background: rgba(37, 99, 235, 0.18) !important;
+    border-color: rgba(59, 130, 246, 0.3) !important;
+    color: #93c5fd !important;
+}
+[data-theme="dark"] .value-prop-title {
+    color: #ffffff !important;
+}
+[data-theme="dark"] .value-prop-desc {
+    color: #94a3b8 !important;
+}
+[data-theme="dark"] .value-prop-card {
+    background: #131b2e !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.4) !important;
+}
+[data-theme="dark"] .value-prop-card:hover {
+    background: #172138 !important;
+    border-color: rgba(59, 130, 246, 0.4) !important;
+    box-shadow: 0 20px 40px -12px rgba(37, 99, 235, 0.25) !important;
+}
+[data-theme="dark"] .stat-number {
+    color: #ffffff !important;
+}
+[data-theme="dark"] .stat-label {
+    color: #94a3b8 !important;
+}
+[data-theme="dark"] .value-prop-heading {
+    color: #f8fafc !important;
+}
+[data-theme="dark"] .value-prop-text {
+    color: #94a3b8 !important;
+}
+[data-theme="dark"] .icon-blue,
+[data-theme="dark"] .icon-emerald,
+[data-theme="dark"] .icon-purple,
+[data-theme="dark"] .icon-amber {
+    background: rgba(255, 255, 255, 0.06) !important;
+}
 </style>

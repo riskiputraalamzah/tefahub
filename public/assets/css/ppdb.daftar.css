@@ -2252,3 +2252,247 @@ textarea.form-control {
         box-shadow: none !important;
     }
 }
+
+/* ── Dark Mode Adaptation ────────────────────────────────────────── */
+[data-theme="dark"] body.ppdb-daftar-body {
+    background-color: #0b0f19 !important;
+    color: #f8fafc !important;
+}
+
+/* ── Dark Mode Adaptation ────────────────────────────────────────── */
+[data-theme="dark"] {
+    --reg-dark: #f8fafc;
+    --reg-text-main: #f1f5f9;
+    --reg-muted: #94a3b8;
+    --reg-light-bg: #0b0f19;
+    --reg-card-bg: #131b2e;
+    --reg-border: rgba(255, 255, 255, 0.08);
+}
+
+[data-theme="dark"] body.ppdb-daftar-body {
+    background-color: #0b0f19 !important;
+    background: #0b0f19 !important;
+    color: #f8fafc !important;
+}
+
+[data-theme="dark"] .reg-main-card,
+[data-theme="dark"] .reg-stepper-card,
+[data-theme="dark"] .reg-hero-banner,
+[data-theme="dark"] .reg-summary-card,
+[data-theme="dark"] .receipt-card {
+    background: #131b2e !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+    box-shadow: 0 10px 30px -8px rgba(0, 0, 0, 0.4) !important;
+}
+
+/* Stepper Progress Bar */
+[data-theme="dark"] .reg-step-label {
+    color: #94a3b8 !important;
+}
+
+[data-theme="dark"] .reg-step-item.active .reg-step-label {
+    color: #60a5fa !important;
+    font-weight: 700 !important;
+}
+
+[data-theme="dark"] .reg-step-item.completed .reg-step-label {
+    color: #f8fafc !important;
+}
+
+[data-theme="dark"] .reg-step-divider {
+    background: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Titles and Headers */
+[data-theme="dark"] .reg-hero-title,
+[data-theme="dark"] .reg-section-title,
+[data-theme="dark"] .reg-card-title,
+[data-theme="dark"] .reg-step-title,
+[data-theme="dark"] .step-pane-title-modern {
+    color: #ffffff !important;
+}
+
+[data-theme="dark"] .reg-hero-desc,
+[data-theme="dark"] .reg-section-desc,
+[data-theme="dark"] .reg-step-desc,
+[data-theme="dark"] .reg-muted-text,
+[data-theme="dark"] .step-pane-desc-modern {
+    color: #94a3b8 !important;
+}
+
+/* Info Box / Banner */
+[data-theme="dark"] .step-info-card {
+    background: #0e1424 !important;
+    border: 1px solid rgba(59, 130, 246, 0.25) !important;
+}
+
+[data-theme="dark"] .step-info-title {
+    color: #93c5fd !important;
+}
+
+[data-theme="dark"] .step-info-desc {
+    color: #cbd5e1 !important;
+}
+
+/* Form Labels & Badges */
+[data-theme="dark"] .reg-label,
+[data-theme="dark"] .form-label,
+[data-theme="dark"] .form-label-modern {
+    color: #e2e8f0 !important;
+}
+
+[data-theme="dark"] .form-label-modern span {
+    color: #e2e8f0 !important;
+}
+
+[data-theme="dark"] .label-icon-badge {
+    background: rgba(37, 99, 235, 0.2) !important;
+    color: #60a5fa !important;
+}
+
+/* Form Inputs & Wrappers */
+[data-theme="dark"] .input-with-icon-wrap {
+    background: #0e1424 !important;
+    border-color: rgba(255, 255, 255, 0.12) !important;
+}
+
+[data-theme="dark"] .input-with-icon-wrap:focus-within {
+    border-color: #60a5fa !important;
+    background: #172138 !important;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.25) !important;
+}
+
+[data-theme="dark"] .form-control-modern,
+[data-theme="dark"] input.form-control-modern,
+[data-theme="dark"] select.form-control-modern,
+[data-theme="dark"] textarea.form-control-modern,
+[data-theme="dark"] .reg-input,
+[data-theme="dark"] .reg-select,
+[data-theme="dark"] .reg-textarea,
+[data-theme="dark"] .form-control {
+    background: #0e1424 !important;
+    border-color: rgba(255, 255, 255, 0.15) !important;
+    color: #ffffff !important;
+}
+
+[data-theme="dark"] .form-control-modern::placeholder,
+[data-theme="dark"] .reg-input::placeholder {
+    color: #64748b !important;
+}
+
+[data-theme="dark"] .input-icon-left {
+    color: #64748b !important;
+}
+
+[data-theme="dark"] .input-with-icon-wrap:focus-within .input-icon-left {
+    color: #60a5fa !important;
+}
+
+[data-theme="dark"] .country-code-pill {
+    background: rgba(255, 255, 255, 0.06) !important;
+    color: #cbd5e1 !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+[data-theme="dark"] .form-help-modern {
+    color: #94a3b8 !important;
+}
+
+[data-theme="dark"] .form-help-modern.is-invalid {
+    color: #f87171 !important;
+}
+
+/* Jurusan Choice Cards */
+[data-theme="dark"] .jurusan-choice-card {
+    background: #0e1424 !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+[data-theme="dark"] .jurusan-choice-card:hover {
+    background: #172138 !important;
+    border-color: rgba(59, 130, 246, 0.4) !important;
+}
+
+[data-theme="dark"] .jurusan-choice-card.selected {
+    background: #172138 !important;
+    border-color: #2563eb !important;
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.3) !important;
+}
+
+[data-theme="dark"] .jurusan-code-badge {
+    background: rgba(37, 99, 235, 0.2) !important;
+    color: #93c5fd !important;
+}
+
+[data-theme="dark"] .jurusan-name-desc {
+    color: #cbd5e1 !important;
+}
+
+[data-theme="dark"] .jurusan-choice-card.selected .jurusan-name-desc {
+    color: #ffffff !important;
+}
+
+/* Upload & Review */
+[data-theme="dark"] .upload-dropzone {
+    background: #0e1424 !important;
+    border-color: rgba(255, 255, 255, 0.12) !important;
+}
+
+[data-theme="dark"] .upload-dropzone:hover {
+    background: #172138 !important;
+    border-color: #60a5fa !important;
+}
+
+[data-theme="dark"] .upload-title {
+    color: #ffffff !important;
+}
+
+[data-theme="dark"] .upload-subtitle {
+    color: #94a3b8 !important;
+}
+
+[data-theme="dark"] .review-box {
+    background: #0e1424 !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+[data-theme="dark"] .review-table td {
+    border-color: rgba(255, 255, 255, 0.08) !important;
+    color: #cbd5e1 !important;
+}
+
+[data-theme="dark"] .review-table th {
+    background: #131b2e !important;
+    color: #ffffff !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+[data-theme="dark"] .agreement-box {
+    background: #0e1424 !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+[data-theme="dark"] .agreement-text {
+    color: #cbd5e1 !important;
+}
+
+/* Buttons and Links */
+[data-theme="dark"] .reg-back-link {
+    background: #131b2e !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
+    color: #cbd5e1 !important;
+}
+
+[data-theme="dark"] .step-pill {
+    background: #0e1424 !important;
+    color: #94a3b8 !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+[data-theme="dark"] .step-pill.is-active {
+    background: rgba(37, 99, 235, 0.2) !important;
+    color: #60a5fa !important;
+    border-color: rgba(59, 130, 246, 0.4) !important;
+}
+
+

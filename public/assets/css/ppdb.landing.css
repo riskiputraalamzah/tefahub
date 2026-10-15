@@ -2322,3 +2322,137 @@ body.ppdb-body {
     }
 }
 
+/* ── Dark Mode Adaptation ────────────────────────────────────────── */
+[data-theme="dark"] {
+    --ppdb-dark: #f8fafc;
+    --ppdb-muted: #94a3b8;
+    --ppdb-light-bg: #0b0f19;
+    --ppdb-card-bg: #131b2e;
+    --ppdb-border: rgba(255, 255, 255, 0.08);
+    --ppdb-border-light: rgba(255, 255, 255, 0.06);
+}
+
+[data-theme="dark"] body.ppdb-body {
+    background-color: #0b0f19 !important;
+    background: #0b0f19 !important;
+    color: #f8fafc !important;
+}
+
+[data-theme="dark"] .ppdb-badge-pill {
+    background: rgba(37, 99, 235, 0.18) !important;
+    border-color: rgba(59, 130, 246, 0.3) !important;
+    color: #93c5fd !important;
+}
+
+[data-theme="dark"] .ppdb-badge-icon {
+    color: #60a5fa !important;
+}
+
+[data-theme="dark"] .ppdb-hero-title,
+[data-theme="dark"] .ppdb-section-title,
+[data-theme="dark"] .ppdb-heading,
+[data-theme="dark"] .ppdb-card-title,
+[data-theme="dark"] .ppdb-step-title,
+[data-theme="dark"] .ppdb-alur-step-title,
+[data-theme="dark"] .ppdb-jurusan-title,
+[data-theme="dark"] .ppdb-gelombang-title {
+    color: #ffffff !important;
+}
+
+[data-theme="dark"] .ppdb-hero-desc,
+[data-theme="dark"] .ppdb-section-desc,
+[data-theme="dark"] .ppdb-card-desc,
+[data-theme="dark"] .ppdb-step-desc,
+[data-theme="dark"] .ppdb-alur-step-desc,
+[data-theme="dark"] .ppdb-jurusan-desc,
+[data-theme="dark"] .ppdb-gelombang-desc {
+    color: #94a3b8 !important;
+}
+
+/* Value Strip Highlights */
+[data-theme="dark"] .ppdb-value-strip {
+    background: #131b2e !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.35) !important;
+}
+
+[data-theme="dark"] .ppdb-value-title {
+    color: #ffffff !important;
+}
+
+[data-theme="dark"] .ppdb-value-sub {
+    color: #94a3b8 !important;
+}
+
+[data-theme="dark"] .ppdb-value-icon-box {
+    background: rgba(37, 99, 235, 0.2) !important;
+    color: #60a5fa !important;
+}
+
+/* Cards & Alur */
+[data-theme="dark"] .ppdb-card,
+[data-theme="dark"] .ppdb-step-card,
+[data-theme="dark"] .ppdb-info-card,
+[data-theme="dark"] .ppdb-gelombang-card,
+[data-theme="dark"] .ppdb-faq-item {
+    background: #131b2e !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+    box-shadow: 0 10px 30px -8px rgba(0, 0, 0, 0.4) !important;
+}
+
+[data-theme="dark"] .ppdb-card:hover,
+[data-theme="dark"] .ppdb-step-card:hover,
+[data-theme="dark"] .ppdb-gelombang-card:hover {
+    background: #172138 !important;
+    border-color: rgba(59, 130, 246, 0.4) !important;
+}
+
+[data-theme="dark"] .ppdb-quote-card {
+    background: #131b2e !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+[data-theme="dark"] .ppdb-quote-text {
+    color: #60a5fa !important;
+}
+
+[data-theme="dark"] .ppdb-jurusan-card {
+    background: #131b2e !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+[data-theme="dark"] .ppdb-jurusan-card:hover {
+    background: #172138 !important;
+    border-color: rgba(59, 130, 246, 0.4) !important;
+}
+
+[data-theme="dark"] .ppdb-jurusan-tag {
+    background: rgba(255, 255, 255, 0.06) !important;
+    color: #cbd5e1 !important;
+}
+
+[data-theme="dark"] .ppdb-info-list-item {
+    color: #cbd5e1 !important;
+}
+
+[data-theme="dark"] .ppdb-alur-step-num {
+    background: rgba(37, 99, 235, 0.2) !important;
+    color: #60a5fa !important;
+}
+
+/* Quiz Banner */
+[data-theme="dark"] .quiz-banner-card {
+    background: linear-gradient(135deg, #1e3a8a 0%, #1e1b4b 100%) !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+[data-theme="dark"] .quiz-banner-title {
+    color: #ffffff !important;
+}
+
+[data-theme="dark"] .quiz-banner-desc {
+    color: #cbd5e1 !important;
+}
+
+
+

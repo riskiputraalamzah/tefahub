@@ -685,3 +685,138 @@ body.quiz-body {
         grid-template-columns: 1fr;
     }
 }
+
+/* ── Dark Mode Adaptation ────────────────────────────────────────── */
+[data-theme="dark"] {
+    --quiz-dark: #f8fafc;
+    --quiz-card-bg: #131b2e;
+    --quiz-border: rgba(255, 255, 255, 0.08);
+}
+
+[data-theme="dark"] body.quiz-body {
+    background: #0b0f19 !important;
+    color: #f8fafc !important;
+}
+
+[data-theme="dark"] .quiz-back-btn {
+    background: #131b2e !important;
+    border-color: rgba(255, 255, 255, 0.12) !important;
+    color: #cbd5e1 !important;
+}
+
+[data-theme="dark"] .quiz-back-btn:hover {
+    background: #172138 !important;
+    color: #ffffff !important;
+}
+
+/* 1. Intro Screen */
+[data-theme="dark"] .quiz-main-card,
+[data-theme="dark"] .quiz-question-box,
+[data-theme="dark"] .result-hero-card,
+[data-theme="dark"] .quiz-card {
+    background: #131b2e !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+    box-shadow: 0 10px 30px -8px rgba(0, 0, 0, 0.4) !important;
+}
+
+[data-theme="dark"] .quiz-intro-title {
+    color: #ffffff !important;
+}
+
+[data-theme="dark"] .quiz-intro-title span {
+    background: linear-gradient(135deg, #60a5fa 0%, #93c5fd 100%) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+}
+
+[data-theme="dark"] .quiz-intro-desc {
+    color: #cbd5e1 !important;
+}
+
+[data-theme="dark"] .quiz-intro-badge {
+    background: rgba(37, 99, 235, 0.18) !important;
+    border-color: rgba(59, 130, 246, 0.3) !important;
+    color: #93c5fd !important;
+}
+
+[data-theme="dark"] .quiz-feature-pill {
+    background: #0e1424 !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+    color: #cbd5e1 !important;
+}
+
+/* 2. Questions Screen */
+[data-theme="dark"] .quiz-progress-track {
+    background: #0e1424 !important;
+}
+
+[data-theme="dark"] #quizQuestionCountText {
+    color: #94a3b8 !important;
+}
+
+[data-theme="dark"] .quiz-question-title {
+    color: #ffffff !important;
+}
+
+[data-theme="dark"] .quiz-question-sub {
+    color: #94a3b8 !important;
+}
+
+[data-theme="dark"] .quiz-option-btn {
+    background: #0e1424 !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+    color: #ffffff !important;
+}
+
+[data-theme="dark"] .quiz-option-btn:hover {
+    background: #172138 !important;
+    border-color: rgba(59, 130, 246, 0.4) !important;
+}
+
+[data-theme="dark"] .quiz-option-btn.selected {
+    background: #172138 !important;
+    border-color: #2563eb !important;
+}
+
+[data-theme="dark"] .quiz-option-label {
+    color: #ffffff !important;
+}
+
+[data-theme="dark"] .quiz-option-desc {
+    color: #94a3b8 !important;
+}
+
+[data-theme="dark"] .quiz-option-btn.selected .quiz-option-desc {
+    color: #cbd5e1 !important;
+}
+
+/* 3. Results Screen */
+[data-theme="dark"] .result-hero-title,
+[data-theme="dark"] .result-jurusan-title,
+[data-theme="dark"] .result-reason-title {
+    color: #ffffff !important;
+}
+
+[data-theme="dark"] .result-hero-desc,
+[data-theme="dark"] .result-jurusan-desc,
+[data-theme="dark"] .result-reason-text {
+    color: #cbd5e1 !important;
+}
+
+[data-theme="dark"] .result-fit-badge {
+    background: rgba(37, 99, 235, 0.2) !important;
+    color: #93c5fd !important;
+}
+
+[data-theme="dark"] .result-reason-card {
+    background: #0e1424 !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+[data-theme="dark"] .career-pill {
+    background: rgba(255, 255, 255, 0.06) !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
+    color: #cbd5e1 !important;
+}
+
+

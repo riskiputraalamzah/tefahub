@@ -368,8 +368,14 @@ function initThemeToggle() {
         setTheme(current === "dark" ? "light" : "dark");
     };
 
-    if (desktopBtn) desktopBtn.addEventListener("click", toggle);
-    if (mobileBtn) mobileBtn.addEventListener("click", toggle);
+    if (desktopBtn && !desktopBtn._tefaThemeBound) {
+        desktopBtn.addEventListener("click", toggle);
+        desktopBtn._tefaThemeBound = true;
+    }
+    if (mobileBtn && !mobileBtn._tefaThemeBound) {
+        mobileBtn.addEventListener("click", toggle);
+        mobileBtn._tefaThemeBound = true;
+    }
 }
 
 // ── Image Lazy Loading & Async Decoding Acceleration ─────────────────────────
