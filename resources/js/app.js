@@ -519,10 +519,14 @@ function initHero3DParallax() {
         currY += (targetY - currY) * 0.08;
 
         if (bubbleArt) {
-            bubbleArt.style.transform = `translate3d(${(currX * 0.4).toFixed(2)}px, ${(currY * 0.4).toFixed(2)}px, 0)`;
+            const bx = (currX * 0.4).toFixed(2);
+            const by = (currY * 0.4).toFixed(2);
+            bubbleArt.style.setProperty("--hero-bubble-x", `${bx}px`);
+            bubbleArt.style.setProperty("--hero-bubble-y", `${by}px`);
+            bubbleArt.style.transform = `translate(-50%, -50%) translate3d(${bx}px, ${by}px, 0)`;
         }
         if (quote) {
-            quote.style.transform = `translate3d(${(currX * -0.4).toFixed(2)}px, ${(currY * -0.4).toFixed(2)}px, 0)`;
+            quote.style.transform = `rotate(5deg) translate3d(${(currX * -0.4).toFixed(2)}px, ${(currY * -0.4).toFixed(2)}px, 0)`;
         }
         if (students) {
             students.style.transform = `translate3d(${(currX * -0.2).toFixed(2)}px, ${(currY * -0.2).toFixed(2)}px, 0)`;
@@ -533,6 +537,17 @@ function initHero3DParallax() {
             requestAnimationFrame(updateParallax);
         } else {
             isTracking = false;
+            if (bubbleArt) {
+                bubbleArt.style.removeProperty("--hero-bubble-x");
+                bubbleArt.style.removeProperty("--hero-bubble-y");
+                bubbleArt.style.transform = "";
+            }
+            if (quote) {
+                quote.style.transform = "";
+            }
+            if (students) {
+                students.style.transform = "";
+            }
         }
     };
 

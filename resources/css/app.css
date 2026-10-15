@@ -269,6 +269,81 @@ html.lenis, html.lenis body {
     opacity: 0.9;
 }
 
+/* ── Hero Bubble Art Background Symmetrical & Rock-Solid Responsive Fix ── */
+.hero-bubble-art {
+    position: absolute !important;
+    top: 48% !important;
+    left: 50% !important;
+    transform: translate(calc(-50% + var(--hero-bubble-x, 0px)), calc(-50% + var(--hero-bubble-y, 0px))) !important;
+    width: 122% !important;
+    max-width: 650px !important;
+    height: 102% !important;
+    pointer-events: none !important;
+    z-index: 1 !important;
+    overflow: visible !important;
+    will-change: transform;
+}
+
+@media (max-width: 1024px) {
+    .hero-bubble-art {
+        top: 48% !important;
+        left: 50% !important;
+        width: 118% !important;
+        max-width: 580px !important;
+        height: 100% !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .hero-bubble-art {
+        top: 48% !important;
+        left: 50% !important;
+        width: 114% !important;
+        max-width: 460px !important;
+        height: 98% !important;
+    }
+}
+
+@media (max-width: 520px) {
+    .hero-bubble-art {
+        top: 47% !important;
+        left: 50% !important;
+        width: 112% !important;
+        max-width: 390px !important;
+        height: 96% !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero-bubble-art {
+        top: 46% !important;
+        left: 50% !important;
+        width: 110% !important;
+        max-width: 360px !important;
+        height: 94% !important;
+    }
+}
+
+@media (max-width: 400px) {
+    .hero-bubble-art {
+        top: 45% !important;
+        left: 50% !important;
+        width: 108% !important;
+        max-width: 310px !important;
+        height: 92% !important;
+    }
+}
+
+@media (max-width: 360px) {
+    .hero-bubble-art {
+        top: 44% !important;
+        left: 50% !important;
+        width: 105% !important;
+        max-width: 280px !important;
+        height: 90% !important;
+    }
+}
+
 /* ── Accessibility: Prefers Reduced Motion ─────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
     .scroll-layer-section,

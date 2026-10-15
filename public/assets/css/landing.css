@@ -1008,13 +1008,14 @@ body.onboarding-active {
     position: absolute;
     top: 48%;
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translate(calc(-50% + var(--hero-bubble-x, 0px)), calc(-50% + var(--hero-bubble-y, 0px)));
     width: 122%;
     max-width: 650px;
     height: 102%;
     pointer-events: none;
     z-index: 1;
     overflow: visible;
+    will-change: transform;
 }
 
 .hero-wave-svg {
@@ -3737,12 +3738,79 @@ body.search-modal-open { overflow: hidden !important; }
 .search-tags-wrap { display:flex; flex-wrap:wrap; gap:8px; }
 .search-tag-chip { padding:6px 14px; border-radius:9999px; background:#f1f5f9; border:1px solid #e2e8f0; font-family:inherit; font-size:12.5px; font-weight:600; color:#475569; cursor:pointer; transition:all 0.15s; white-space:nowrap; }
 .search-tag-chip:hover { background:#eff6ff; border-color:#93c5fd; color:#1d4ed8; }
-.hero-bubble-art { top: 48% !important; height: 102% !important; width: 122% !important; max-width: 650px !important; }
-@media (max-width: 768px) {
-    .hero-bubble-art { top: 48% !important; height: 98% !important; width: 114% !important; max-width: 460px !important; }
+/* ── Hero Bubble Art Background Symmetrical & Rock-Solid Responsive Fix ── */
+.hero-bubble-art {
+    position: absolute !important;
+    top: 48% !important;
+    left: 50% !important;
+    transform: translate(calc(-50% + var(--hero-bubble-x, 0px)), calc(-50% + var(--hero-bubble-y, 0px))) !important;
+    width: 122% !important;
+    max-width: 650px !important;
+    height: 102% !important;
+    pointer-events: none !important;
+    z-index: 1 !important;
+    overflow: visible !important;
+    will-change: transform;
 }
+
+@media (max-width: 1024px) {
+    .hero-bubble-art {
+        top: 48% !important;
+        left: 50% !important;
+        width: 118% !important;
+        max-width: 580px !important;
+        height: 100% !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .hero-bubble-art {
+        top: 48% !important;
+        left: 50% !important;
+        width: 114% !important;
+        max-width: 460px !important;
+        height: 98% !important;
+    }
+}
+
+@media (max-width: 520px) {
+    .hero-bubble-art {
+        top: 47% !important;
+        left: 50% !important;
+        width: 112% !important;
+        max-width: 390px !important;
+        height: 96% !important;
+    }
+}
+
 @media (max-width: 480px) {
-    .hero-bubble-art { top: 46% !important; height: 94% !important; width: 110% !important; max-width: 370px !important; }
+    .hero-bubble-art {
+        top: 46% !important;
+        left: 50% !important;
+        width: 110% !important;
+        max-width: 360px !important;
+        height: 94% !important;
+    }
+}
+
+@media (max-width: 400px) {
+    .hero-bubble-art {
+        top: 45% !important;
+        left: 50% !important;
+        width: 108% !important;
+        max-width: 310px !important;
+        height: 92% !important;
+    }
+}
+
+@media (max-width: 360px) {
+    .hero-bubble-art {
+        top: 44% !important;
+        left: 50% !important;
+        width: 105% !important;
+        max-width: 280px !important;
+        height: 90% !important;
+    }
 }
 @media (max-width:768px) {
     .search-modal-panel { margin: 52px 10px 0; border-radius:20px; }
