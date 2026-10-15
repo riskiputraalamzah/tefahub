@@ -30,7 +30,7 @@
     {{-- Unified Landing Header --}}
     <x-landing-header :active="'ppdb'" />
 
-    <main class="ppdb-daftar-container">
+    <main class="wrap ppdb-daftar-container">
 
         <!-- ─── Hero Banner with image copy 4.png ─── -->
         <div class="reg-hero-banner">

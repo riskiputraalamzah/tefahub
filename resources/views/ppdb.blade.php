@@ -632,15 +632,15 @@
          PPDB POSTER WELCOME POPUP (CAROUSEL: P1.WEBP & P2.WEBP)
          ═══════════════════════════════════════════════════════════ -->
     <div id="ppdbPosterModalOverlay" class="ppdb-poster-modal-overlay" role="dialog" aria-modal="true" tabindex="-1" style="display: none;">
-        <!-- Top Right Round Close Button -->
-        <button type="button" class="btn-poster-modal-close" onclick="closePpdbPosterModal()" aria-label="Tutup Poster PPDB">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                <line x1="18" y1="6" x2="6" y2="18"></line>
-                <line x1="6" y1="6" x2="18" y2="18"></line>
-            </svg>
-        </button>
-
         <div class="ppdb-poster-container">
+            <!-- Close Button Attached Directly to Card Top Right -->
+            <button type="button" class="btn-poster-modal-close" onclick="closePpdbPosterModal()" aria-label="Tutup Poster PPDB" title="Tutup">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+
             <div class="ppdb-poster-carousel" id="ppdbPosterCarousel">
                 <div class="ppdb-poster-slides" id="ppdbPosterSlides">
                     <!-- Slide 1: p2.webp (Muncul Pertama) -->

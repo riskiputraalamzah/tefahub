@@ -32,11 +32,15 @@ body.ppdb-daftar-body {
 }
 
 .ppdb-daftar-container {
-    width: 100%;
-    max-width: 1240px;
-    margin: 0 auto;
-    padding: 24px clamp(18px, 4vw, 40px) 64px;
-    box-sizing: border-box;
+    width: 100% !important;
+    max-width: 1440px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    padding-left: clamp(18px, 4vw, 64px) !important;
+    padding-right: clamp(18px, 4vw, 64px) !important;
+    padding-top: 24px !important;
+    padding-bottom: 64px !important;
+    box-sizing: border-box !important;
 }
 
 /* ─── Top Header Navigation Bar ─── */

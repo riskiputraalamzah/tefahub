@@ -26,7 +26,7 @@
     {{-- Unified Landing Header --}}
     <x-landing-header :active="'ppdb'" />
 
-    <main class="quiz-wrapper">
+    <main class="wrap quiz-wrapper">
 
         <!-- Top Navigation -->
         <div class="quiz-top-nav">

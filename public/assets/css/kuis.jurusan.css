@@ -27,11 +27,15 @@ body.quiz-body {
 }
 
 .quiz-wrapper {
-    width: 100%;
-    max-width: 960px;
-    margin: 0 auto;
-    padding: 24px clamp(18px, 4vw, 32px) 64px;
-    box-sizing: border-box;
+    width: 100% !important;
+    max-width: 1440px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    padding-left: clamp(18px, 4vw, 64px) !important;
+    padding-right: clamp(18px, 4vw, 64px) !important;
+    padding-top: 24px !important;
+    padding-bottom: 64px !important;
+    box-sizing: border-box !important;
 }
 
 /* ─── Quiz Navigation Bar ─── */
@@ -39,7 +43,8 @@ body.quiz-body {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 24px;
+    margin: 0 auto 24px auto;
+    max-width: 960px;
     gap: 16px;
     flex-wrap: wrap;
 }
@@ -98,6 +103,8 @@ body.quiz-body {
     box-shadow: 0 12px 35px -8px rgba(15, 23, 42, 0.08);
     position: relative;
     overflow: hidden;
+    max-width: 960px;
+    margin: 0 auto;
 }
 
 /* ─── 1. INTRO SCREEN ─── */

@@ -30,11 +30,14 @@ body.ppdb-body {
 }
 
 .ppdb-main-wrap {
-    width: 100%;
-    max-width: 1440px;
-    margin: 0 auto;
-    padding: 0 clamp(18px, 4vw, 64px) 56px;
-    box-sizing: border-box;
+    width: 100% !important;
+    max-width: 1440px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    padding-left: clamp(18px, 4vw, 64px) !important;
+    padding-right: clamp(18px, 4vw, 64px) !important;
+    padding-bottom: 56px !important;
+    box-sizing: border-box !important;
 }
 
 /* ═══════════════════════════════════════════════════════════
@@ -1681,40 +1684,49 @@ body.ppdb-body {
     opacity: 1;
 }
 
-/* Floating Close Button Top Right */
+/* Close Button Attached Directly to Card Top Right */
 .btn-poster-modal-close {
     position: absolute;
-    top: 24px;
-    right: 32px;
-    width: 46px;
-    height: 46px;
+    top: -16px;
+    right: -16px;
+    width: 44px;
+    height: 44px;
     border-radius: 50%;
-    background: rgba(30, 41, 59, 0.88);
-    backdrop-filter: blur(8px);
-    border: 1.5px solid rgba(255, 255, 255, 0.25);
+    background: #0f172a;
+    border: 2px solid rgba(255, 255, 255, 0.4);
     color: #FFFFFF;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    z-index: 10;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1);
+    z-index: 25;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.15);
     transition: all 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .btn-poster-modal-close:hover {
     background: #004AC6;
-    transform: scale(1.12) rotate(90deg);
+    transform: scale(1.1) rotate(90deg);
     border-color: #FFFFFF;
     box-shadow: 0 0 20px rgba(0, 74, 198, 0.6);
+}
+
+@media (max-width: 540px) {
+    .btn-poster-modal-close {
+        top: 10px;
+        right: 10px;
+        width: 38px;
+        height: 38px;
+        background: rgba(15, 23, 42, 0.85);
+        backdrop-filter: blur(8px);
+    }
 }
 
 /* Poster Card Container with Spring Elastic Entrance */
 .ppdb-poster-container {
     position: relative;
-    max-width: 460px;
+    max-width: min(500px, 92vw);
     width: 100%;
-    max-height: 90vh;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1734,10 +1746,12 @@ body.ppdb-body {
 .ppdb-poster-carousel {
     position: relative;
     width: 100%;
-    border-radius: 26px;
+    aspect-ratio: 1170 / 1463;
+    max-height: 82vh;
+    border-radius: 24px;
     overflow: hidden;
-    box-shadow: 0 30px 80px -15px rgba(0, 74, 198, 0.45), 0 0 35px rgba(59, 130, 246, 0.2), 0 0 0 1.5px rgba(255, 255, 255, 0.2);
-    background: #0F172A;
+    box-shadow: 0 30px 80px -15px rgba(0, 74, 198, 0.45), 0 0 35px rgba(59, 130, 246, 0.25), 0 0 0 1.5px rgba(255, 255, 255, 0.25);
+    background: transparent;
     line-height: 0;
 }
 
@@ -1769,12 +1783,15 @@ body.ppdb-body {
 .ppdb-poster-slides {
     position: relative;
     width: 100%;
+    height: 100%;
     overflow: hidden;
     display: flex;
 }
 
 .ppdb-poster-slide {
     min-width: 100%;
+    width: 100%;
+    height: 100%;
     display: none;
     align-items: center;
     justify-content: center;
@@ -1791,9 +1808,9 @@ body.ppdb-body {
 
 .ppdb-poster-image {
     width: 100%;
-    height: auto;
-    max-height: 82vh;
-    object-fit: contain;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
     display: block;
     user-select: none;
     -webkit-user-drag: none;
@@ -2440,18 +2457,318 @@ body.ppdb-body {
     color: #60a5fa !important;
 }
 
-/* Quiz Banner */
+/* ── PPDB Quiz Banner Card Dark Mode ── */
+[data-theme="dark"] .ppdb-quiz-banner-card,
 [data-theme="dark"] .quiz-banner-card {
-    background: linear-gradient(135deg, #1e3a8a 0%, #1e1b4b 100%) !important;
-    border-color: rgba(255, 255, 255, 0.1) !important;
+    background: linear-gradient(135deg, #131b2e 0%, #17223b 50%, #1a2544 100%) !important;
+    border-color: rgba(59, 130, 246, 0.28) !important;
+    box-shadow: 0 16px 36px -10px rgba(0, 0, 0, 0.55), 0 0 24px rgba(37, 99, 235, 0.14) !important;
+}
+
+[data-theme="dark"] .ppdb-quiz-banner-card:hover,
+[data-theme="dark"] .quiz-banner-card:hover {
+    border-color: rgba(96, 165, 250, 0.45) !important;
+    box-shadow: 0 20px 48px -10px rgba(0, 0, 0, 0.7), 0 0 32px rgba(37, 99, 235, 0.22) !important;
+}
+
+[data-theme="dark"] .ppdb-quiz-banner-card::before {
+    background: radial-gradient(circle, rgba(37, 99, 235, 0.22) 0%, rgba(19, 27, 46, 0) 70%) !important;
+}
+
+[data-theme="dark"] .ppdb-quiz-banner-card::after {
+    background: radial-gradient(circle, rgba(59, 130, 246, 0.18) 0%, rgba(19, 27, 46, 0) 70%) !important;
+}
+
+[data-theme="dark"] .quiz-banner-tag {
+    background: rgba(37, 99, 235, 0.2) !important;
+    border-color: rgba(59, 130, 246, 0.35) !important;
+    color: #93c5fd !important;
+}
+
+[data-theme="dark"] .quiz-tag-icon-circle {
+    background: #2563eb !important;
+    color: #ffffff !important;
 }
 
 [data-theme="dark"] .quiz-banner-title {
     color: #ffffff !important;
 }
 
+[data-theme="dark"] .quiz-banner-title .highlight-blue {
+    color: #60a5fa !important;
+    text-shadow: 0 0 14px rgba(96, 165, 250, 0.35);
+}
+
 [data-theme="dark"] .quiz-banner-desc {
     color: #cbd5e1 !important;
+}
+
+[data-theme="dark"] .btn-quiz-cta {
+    background: #facc15 !important;
+    color: #0f172a !important;
+    border: 1px solid rgba(250, 204, 21, 0.5) !important;
+    box-shadow: 0 6px 20px -4px rgba(234, 179, 8, 0.4) !important;
+}
+
+[data-theme="dark"] .btn-quiz-cta:hover {
+    background: #fbbf24 !important;
+    color: #0f172a !important;
+    box-shadow: 0 10px 24px -4px rgba(234, 179, 8, 0.55) !important;
+}
+
+[data-theme="dark"] .btn-quiz-icon-circle {
+    background: #0f172a !important;
+    color: #facc15 !important;
+}
+
+[data-theme="dark"] .quiz-banner-right-img {
+    filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.45)) !important;
+}
+
+/* ── PPDB Pilihan Jurusan Section Dark Mode ── */
+[data-theme="dark"] .ppdb-jurusan-section {
+    background: #131b2e !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+    box-shadow: 0 10px 30px -8px rgba(0, 0, 0, 0.4) !important;
+}
+
+[data-theme="dark"] .jurusan-main-title {
+    color: #ffffff !important;
+}
+
+[data-theme="dark"] .jurusan-main-sub {
+    color: #94a3b8 !important;
+}
+
+[data-theme="dark"] .link-lihat-semua-jurusan {
+    color: #60a5fa !important;
+}
+
+[data-theme="dark"] .link-lihat-semua-jurusan:hover {
+    color: #93c5fd !important;
+}
+
+[data-theme="dark"] .jurusan-card-item {
+    background: #172138 !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+[data-theme="dark"] .jurusan-card-item:hover {
+    background: #1e293b !important;
+    border-color: rgba(59, 130, 246, 0.4) !important;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4) !important;
+}
+
+[data-theme="dark"] .jurusan-icon-box {
+    background-color: rgba(37, 99, 235, 0.2) !important;
+    color: #60a5fa !important;
+    border: 1px solid rgba(59, 130, 246, 0.25) !important;
+}
+
+[data-theme="dark"] .jurusan-code-name {
+    color: #ffffff !important;
+}
+
+[data-theme="dark"] .jurusan-full-name {
+    color: #94a3b8 !important;
+}
+
+/* ── Informasi Pendaftaran (Info Boxes) ── */
+[data-theme="dark"] .info-box-item {
+    background: #172138 !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+[data-theme="dark"] .info-box-item:hover {
+    background: #1e293b !important;
+    border-color: rgba(59, 130, 246, 0.35) !important;
+}
+
+[data-theme="dark"] .info-box-icon {
+    background-color: rgba(37, 99, 235, 0.2) !important;
+    color: #60a5fa !important;
+    border: 1px solid rgba(59, 130, 246, 0.25) !important;
+}
+
+[data-theme="dark"] .info-box-label {
+    color: #94a3b8 !important;
+}
+
+[data-theme="dark"] .info-box-content {
+    color: #ffffff !important;
+}
+
+[data-theme="dark"] .info-box-badge-green {
+    background-color: rgba(16, 185, 129, 0.18) !important;
+    color: #34d399 !important;
+    border: 1px solid rgba(16, 185, 129, 0.3) !important;
+}
+
+[data-theme="dark"] .info-box-link {
+    color: #60a5fa !important;
+}
+
+[data-theme="dark"] .info-box-link:hover {
+    color: #93c5fd !important;
+}
+
+/* ── Alur Pendaftaran Flow ── */
+[data-theme="dark"] .step-title-text {
+    color: #ffffff !important;
+}
+
+[data-theme="dark"] .step-desc-text {
+    color: #94a3b8 !important;
+}
+
+[data-theme="dark"] .alur-step-arrow {
+    color: #64748b !important;
+}
+
+[data-theme="dark"] .alur-bottom-capsule {
+    background-color: #172138 !important;
+    border-color: rgba(59, 130, 246, 0.25) !important;
+}
+
+[data-theme="dark"] .capsule-promo-text {
+    color: #93c5fd !important;
+}
+
+/* ── Sidebar: Informasi Penting ── */
+[data-theme="dark"] .penting-title {
+    color: #ffffff !important;
+}
+
+[data-theme="dark"] .penting-subtitle {
+    color: #94a3b8 !important;
+}
+
+[data-theme="dark"] .penting-action-item {
+    background: #172138 !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+[data-theme="dark"] .penting-action-item:hover {
+    background: #1e293b !important;
+    border-color: rgba(59, 130, 246, 0.4) !important;
+}
+
+[data-theme="dark"] .action-item-icon {
+    color: #60a5fa !important;
+}
+
+[data-theme="dark"] .action-item-title {
+    color: #ffffff !important;
+}
+
+[data-theme="dark"] .action-item-desc {
+    color: #94a3b8 !important;
+}
+
+[data-theme="dark"] .action-chevron-icon {
+    color: #64748b !important;
+}
+
+/* ── Secondary & Download Buttons ── */
+[data-theme="dark"] .btn-download-brosur {
+    background-color: rgba(255, 255, 255, 0.06) !important;
+    border-color: rgba(255, 255, 255, 0.18) !important;
+    color: #93c5fd !important;
+}
+
+[data-theme="dark"] .btn-download-brosur:hover {
+    background-color: rgba(37, 99, 235, 0.2) !important;
+    border-color: #3b82f6 !important;
+    color: #ffffff !important;
+}
+
+[data-theme="dark"] .btn-ppdb-secondary {
+    background-color: rgba(255, 255, 255, 0.06) !important;
+    border-color: rgba(255, 255, 255, 0.18) !important;
+    color: #93c5fd !important;
+}
+
+[data-theme="dark"] .btn-ppdb-secondary:hover {
+    background-color: rgba(37, 99, 235, 0.2) !important;
+    border-color: #3b82f6 !important;
+    color: #ffffff !important;
+}
+
+/* ── Modals & Overlays ── */
+[data-theme="dark"] .ppdb-modal-card {
+    background: #131b2e !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
+    box-shadow: 0 25px 70px -12px rgba(0, 0, 0, 0.7) !important;
+}
+
+[data-theme="dark"] .ppdb-modal-header {
+    background: #0f172a !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+[data-theme="dark"] .ppdb-modal-title {
+    color: #ffffff !important;
+}
+
+[data-theme="dark"] .ppdb-modal-subtitle {
+    color: #94a3b8 !important;
+}
+
+[data-theme="dark"] .btn-ppdb-modal-close {
+    background: rgba(255, 255, 255, 0.08) !important;
+    border-color: rgba(255, 255, 255, 0.12) !important;
+    color: #94a3b8 !important;
+}
+
+[data-theme="dark"] .btn-ppdb-modal-close:hover {
+    background: rgba(255, 255, 255, 0.15) !important;
+    color: #ffffff !important;
+}
+
+[data-theme="dark"] .ppdb-modal-footer {
+    background: #0f172a !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+[data-theme="dark"] #ppdbModalBody {
+    color: #cbd5e1 !important;
+}
+
+[data-theme="dark"] #ppdbModalBody div[style*="background:#FAFCFF"],
+[data-theme="dark"] #ppdbModalBody div[style*="background: #FAFCFF"],
+[data-theme="dark"] #ppdbModalBody div[style*="background:#FFFFFF"],
+[data-theme="dark"] #ppdbModalBody div[style*="background: #FFFFFF"],
+[data-theme="dark"] #ppdbModalBody div[style*="background:#F8FAFC"],
+[data-theme="dark"] #ppdbModalBody div[style*="background: #F8FAFC"] {
+    background: #172138 !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+[data-theme="dark"] #ppdbModalBody div[style*="color:#0F172A"],
+[data-theme="dark"] #ppdbModalBody div[style*="color: #0F172A"],
+[data-theme="dark"] #ppdbModalBody strong[style*="color:#0F172A"],
+[data-theme="dark"] #ppdbModalBody strong[style*="color:#334155"],
+[data-theme="dark"] #ppdbModalBody strong[style*="color:#1E293B"] {
+    color: #ffffff !important;
+}
+
+[data-theme="dark"] #ppdbModalBody table {
+    background: #131b2e !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+[data-theme="dark"] #ppdbModalBody table tr[style*="background:#FAFCFF"],
+[data-theme="dark"] #ppdbModalBody table tr[style*="background:#FFFFFF"],
+[data-theme="dark"] #ppdbModalBody table tr[style*="background: #FAFCFF"],
+[data-theme="dark"] #ppdbModalBody table tr[style*="background: #FFFFFF"] {
+    background: #172138 !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+[data-theme="dark"] #ppdbModalBody table tr[style*="background:#EFF6FF"],
+[data-theme="dark"] #ppdbModalBody table tr[style*="background: #EFF6FF"] {
+    background: rgba(37, 99, 235, 0.18) !important;
+    border-color: rgba(59, 130, 246, 0.35) !important;
 }
 
 
