@@ -214,6 +214,60 @@
             }, { passive: true });
         }
 
+        // ── Smart Scroll-to-Top via Navbar (Modern Web Best Practice) ──
+        function scrollToPageTop() {
+            if (window.__lenis) {
+                window.__lenis.scrollTo(0, { duration: 0.65 });
+            } else if (window.lenis) {
+                window.lenis.scrollTo(0, { duration: 0.65 });
+            } else {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+        window.tefaScrollToTop = scrollToPageTop;
+
+        // 1. Click on Brand Logo: If on current page or root and scrolled down, smoothly scroll to top
+        const brandLink = header ? header.querySelector('.brand') : null;
+        if (brandLink) {
+            brandLink.addEventListener('click', function(e) {
+                const currentPath = window.location.pathname.replace(/\/+$/, '') || '/';
+                const targetPath = new URL(brandLink.href, window.location.origin).pathname.replace(/\/+$/, '') || '/';
+                const isScrolled = (window.pageYOffset || document.documentElement.scrollTop) > 20;
+
+                if (currentPath === targetPath && isScrolled) {
+                    e.preventDefault();
+                    scrollToPageTop();
+                }
+            });
+        }
+
+        // 2. Click on "Beranda" or current active link in navbar: smooth scroll to top instead of page reload
+        const headerNavLinks = header ? header.querySelectorAll('.nav-links a, .nav-dropdown-menu a') : [];
+        headerNavLinks.forEach(function(link) {
+            link.addEventListener('click', function(e) {
+                const href = link.getAttribute('href') || '';
+                if (!href || href.startsWith('#')) return;
+
+                const currentUrl = window.location.href.split('#')[0].replace(/\/+$/, '');
+                const targetUrl  = new URL(href, window.location.origin).href.split('#')[0].replace(/\/+$/, '');
+                const isScrolled = (window.pageYOffset || document.documentElement.scrollTop) > 20;
+
+                if (currentUrl === targetUrl && isScrolled) {
+                    e.preventDefault();
+                    scrollToPageTop();
+                }
+            });
+        });
+
+        // 3. Double-click or tap on empty area of Navbar: smooth scroll to top (like iOS/macOS top bar)
+        if (header) {
+            header.addEventListener('dblclick', function(e) {
+                if (!e.target.closest('a, button, input, select, textarea, .nav-dropdown-menu')) {
+                    scrollToPageTop();
+                }
+            });
+        }
+
         // Mobile drawer handlers
         function openDrawer() {
             if (drawer && backdrop) {

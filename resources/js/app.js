@@ -816,7 +816,10 @@ function initInteractiveParticles() {
 // ── Bootstrapping ────────────────────────────────────────────────────────────
 function boot() {
     let lenis = null;
-    try { lenis = initSmoothScroll(); } catch (e) { console.warn("SmoothScroll error:", e); }
+    try {
+        lenis = initSmoothScroll();
+        window.__lenis = lenis;
+    } catch (e) { console.warn("SmoothScroll error:", e); }
     try { initLayeredScrollEffects(false); } catch (e) { console.warn("ScrollEffects error:", e); }
     try { initScrollProgress(); } catch (e) { console.warn("ScrollProgress error:", e); }
     try { initBackToTop(lenis); } catch (e) { console.warn("BackToTop error:", e); }

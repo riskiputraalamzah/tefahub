@@ -43,7 +43,7 @@
         ['label' => 'PPDB 2026/2027', 'url' => '']
     ]" />
 
-    <main class="ppdb-main-wrap" id="mainContent">
+    <main class="wrap ppdb-main-wrap" id="mainContent">
 
         <!-- ═══════════════════════════════════════════════════════════
              1. HERO BANNER SECTION (WITH IMAGE COPY 7.WEBP)

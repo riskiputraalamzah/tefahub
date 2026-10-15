@@ -57,9 +57,9 @@ body > * {
 /* ── Container Wrap ── */
 .profil-wrap {
     width: 100% !important;
-    max-width: 1240px;
-    margin: 0 auto;
-    padding: 0 24px;
+    max-width: 1440px !important;
+    margin: 0 auto !important;
+    padding: 0 clamp(18px, 4vw, 64px) !important;
     box-sizing: border-box !important;
 }
 

@@ -31,9 +31,9 @@ body.ppdb-body {
 
 .ppdb-main-wrap {
     width: 100%;
-    max-width: 1260px;
+    max-width: 1440px;
     margin: 0 auto;
-    padding: 0 24px 56px;
+    padding: 0 clamp(18px, 4vw, 64px) 56px;
     box-sizing: border-box;
 }
 
@@ -1970,7 +1970,7 @@ body.ppdb-body {
 
 @media (max-width: 768px) {
     .ppdb-main-wrap {
-        padding: 0 16px 40px;
+        padding: 0 clamp(14px, 4vw, 20px) 40px;
     }
     .ppdb-hero-section {
         padding-top: 16px;

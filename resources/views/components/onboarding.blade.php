@@ -78,16 +78,27 @@
                 window.dispatchEvent(new CustomEvent('tefa-onboarding-done'));
             }
         }
-    }, 1600);
+    }, 2800);
 
     function runOnboardingSequence() {
-        // Step 1: Gentle fade-in emergence of Logo and Brand
+        // Step 1: Trigger rotating intro animation on both Circle badge & Logo image
         setTimeout(function() {
-            if (logoCircle) logoCircle.classList.add('is-popped', 'is-settled');
-            if (brandReveal) brandReveal.classList.add('is-revealed');
-        }, 80);
+            if (logoCircle) {
+                logoCircle.classList.add('is-popped', 'is-settled');
+            }
+            if (logoImg) {
+                logoImg.classList.add('is-spinning');
+            }
+        }, 50);
 
-        // Step 2: Smooth fade-out transition to page
+        // Step 2: As logo settles into the normal upright 'T' position, reveal the Brand Text
+        setTimeout(function() {
+            if (brandReveal) {
+                brandReveal.classList.add('is-revealed');
+            }
+        }, 650);
+
+        // Step 3: Smooth exit transition to the loaded page
         setTimeout(function() {
             onboardingEl.classList.add('is-exiting');
             document.body.classList.remove('onboarding-active');
@@ -96,13 +107,13 @@
                 window.dispatchEvent(new CustomEvent('tefa-onboarding-done'));
             }
 
-            // Remove from DOM after smooth fade-out
+            // Remove from DOM/view after smooth exit
             setTimeout(function() {
                 onboardingEl.classList.add('is-done');
                 onboardingEl.style.display = 'none';
                 onboardingEl.setAttribute('aria-hidden', 'true');
-            }, 450);
-        }, 900);
+            }, 500);
+        }, 1850);
     }
 
     if (document.readyState === 'loading') {

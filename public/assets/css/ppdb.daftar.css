@@ -33,9 +33,9 @@ body.ppdb-daftar-body {
 
 .ppdb-daftar-container {
     width: 100%;
-    max-width: calc(100% - 24px);
+    max-width: 1240px;
     margin: 0 auto;
-    padding: 16px 12px 64px;
+    padding: 24px clamp(18px, 4vw, 40px) 64px;
     box-sizing: border-box;
 }
 

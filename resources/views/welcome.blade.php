@@ -674,13 +674,6 @@
     {{-- Unified Reusable Landing Footer --}}
     <x-landing-footer />
 
-    {{-- Floating Back-to-Top Navigation Button --}}
-    <button type="button" class="back-to-top-btn" id="backToTopBtn" aria-label="Kembali ke atas" title="Kembali ke atas">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="18 15 12 9 6 15"></polyline>
-        </svg>
-    </button>
-
     {{-- Unified Reusable Tanya Tefa AI Widget --}}
     <x-ai-widget subtitle="Pusat Bantuan 24/7" />
 
